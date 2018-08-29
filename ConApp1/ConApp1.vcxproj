@@ -35,13 +35,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\aaaa_stdafx.h">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">stdafx.h.gch</ObjectFileName>
+    </ClCompile>
+    <ClInclude Include="Source\MyClass.h" />
+    <ClInclude Include="Source\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\MyClass.cpp" />
     <ClCompile Include="Source\stdafx.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\MyClass.h" />
-    <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6dcbd8b4-6e44-4cf7-9e08-d47257ae02ec}</ProjectGuid>
