@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConApp1", "ConApp1\ConApp1.vcxproj", "{6DCBD8B4-6E44-4CF7-9E08-D47257AE02EC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RisLib", "RisLib\RisLib.vcxproj", "{CD27243E-299E-4E44-AA52-4314CB2B9D98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -33,6 +35,22 @@ Global
 		{6DCBD8B4-6E44-4CF7-9E08-D47257AE02EC}.Release|x64.Build.0 = Release|x64
 		{6DCBD8B4-6E44-4CF7-9E08-D47257AE02EC}.Release|x86.ActiveCfg = Release|x86
 		{6DCBD8B4-6E44-4CF7-9E08-D47257AE02EC}.Release|x86.Build.0 = Release|x86
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|ARM.ActiveCfg = Debug|ARM
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|ARM.Build.0 = Debug|ARM
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|ARM64.Build.0 = Debug|ARM64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|x64.ActiveCfg = Debug|x64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|x64.Build.0 = Debug|x64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|x86.ActiveCfg = Debug|x86
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Debug|x86.Build.0 = Debug|x86
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|ARM.ActiveCfg = Release|ARM
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|ARM.Build.0 = Release|ARM
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|ARM64.ActiveCfg = Release|ARM64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|ARM64.Build.0 = Release|ARM64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|x64.ActiveCfg = Release|x64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|x64.Build.0 = Release|x64
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|x86.ActiveCfg = Release|x86
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
