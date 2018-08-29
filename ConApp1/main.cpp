@@ -2,6 +2,6 @@
 
 int main()
 {
-    printf("hello from ConApp1!\n");
+    printf("Hello from ConApp1!\n");
     return 0;
 }
