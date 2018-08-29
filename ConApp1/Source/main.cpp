@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "stdafx.h"
 #include "MyClass.h"
 
 int main()

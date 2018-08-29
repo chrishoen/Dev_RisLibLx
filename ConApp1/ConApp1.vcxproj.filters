@@ -6,15 +6,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Source\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="MyClass.cpp">
+    <ClCompile Include="Source\MyClass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyClass.h">
+    <ClInclude Include="Source\MyClass.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stdafx.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
