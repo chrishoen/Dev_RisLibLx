@@ -42,13 +42,17 @@
     <ClInclude Include="Source\logFiles.h" />
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
+    <ClInclude Include="Source\risAlphaDir.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
+    <ClInclude Include="Source\ris_priorities.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\logFiles_linux.cpp" />
     <ClCompile Include="Source\my_functions.cpp" />
+    <ClCompile Include="Source\risAlphaDir_linux.cpp" />
     <ClCompile Include="Source\risPortableCalls_linux.cpp" />
+    <ClCompile Include="Source\ris_priorities_linux.cpp" />
     <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -96,6 +100,7 @@
     <ClCompile>
       <AdditionalOptions>
       </AdditionalOptions>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
