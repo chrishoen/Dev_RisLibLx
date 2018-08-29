@@ -39,10 +39,15 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">stdafx.h.gch</ObjectFileName>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
+    <ClInclude Include="Source\logFiles.h" />
+    <ClInclude Include="Source\my_defs.h" />
+    <ClInclude Include="Source\my_functions.h" />
     <ClInclude Include="Source\risPortableCalls.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\logFiles_linux.cpp" />
+    <ClCompile Include="Source\my_functions.cpp" />
     <ClCompile Include="Source\risPortableCalls_linux.cpp" />
     <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>

@@ -12,6 +12,15 @@
     <ClInclude Include="Source\risPortableCalls.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\my_functions.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\logFiles.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\my_defs.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -21,6 +30,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\risPortableCalls_linux.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\my_functions.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\logFiles_linux.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
