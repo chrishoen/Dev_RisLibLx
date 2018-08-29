@@ -1,7 +1,11 @@
-#include <cstdio>
+#include <stdio.h>
+#include "MyClass.h"
 
 int main()
 {
-    printf("Hello from ConApp1!\n");
+    printf("ConApp1******************************************\n");
+
+    MyClass tMyInstance;
+    tMyInstance.doSomething();
     return 0;
 }
