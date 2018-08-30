@@ -6,9 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\aaaa_stdafx.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\logFiles.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -276,6 +273,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\aaaa_stdafx.h">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

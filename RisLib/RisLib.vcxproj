@@ -35,7 +35,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\aaaa_stdafx.h" />
+    <ClCompile Include="Source\aaaa_stdafx.h">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">stdafx.h.gch</ObjectFileName>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">EnableAllWarnings</WarningLevel>
+    </ClCompile>
     <ClInclude Include="Source\logFiles.h" />
     <ClInclude Include="Source\my_defs.h" />
     <ClInclude Include="Source\my_functions.h" />
