@@ -7,6 +7,20 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConApp1", "ConApp1\ConApp1.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RisLib", "RisLib\RisLib.vcxproj", "{CD27243E-299E-4E44-AA52-4314CB2B9D98}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B1F7A13D-E4B6-4E39-8131-05803A4B7408}"
+	ProjectSection(SolutionItems) = preProject
+		src\logFiles_linux.cpp = src\logFiles_linux.cpp
+		src\prnPrint_linux.cpp = src\prnPrint_linux.cpp
+		src\ris_priorities_linux.cpp = src\ris_priorities_linux.cpp
+		src\risAlphaDir_linux.cpp = src\risAlphaDir_linux.cpp
+		src\risPortableCalls_linux.cpp = src\risPortableCalls_linux.cpp
+		src\risSockets_linux.cpp = src\risSockets_linux.cpp
+		src\risThreadsProcess_linux.cpp = src\risThreadsProcess_linux.cpp
+		src\risThreadsSynch_linux.cpp = src\risThreadsSynch_linux.cpp
+		src\risThreadsThreads_linux.cpp = src\risThreadsThreads_linux.cpp
+		src\risThreadsTimer_linux.cpp = src\risThreadsTimer_linux.cpp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM

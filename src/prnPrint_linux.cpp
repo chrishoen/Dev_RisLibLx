@@ -10,6 +10,7 @@ Print utility
 #include <string.h>
 #include <stdarg.h>
 
+#include "risAlphaDir.h"
 #include "risPortableCalls.h"
 #include "risNetPortDef.h"
 #include "risNetUdpStringSocket.h"
@@ -34,6 +35,8 @@ namespace Prn
    int     rNumOfConsoles;
    bool    rSuppressFlag;
 
+   bool                        rConsoleFlag[cMaxConsoles];
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -47,8 +50,8 @@ void resetPrint()
    rNumOfConsoles=1;
    rSuppressFlag=true;
 
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
-   strncat(rSettingsFilePath,"prnPrintSettings.txt",cMaxNameSize);
+   char tBuffer[400];
+   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "prnPrintSettings.txt"));
 }
 
 //****************************************************************************
@@ -58,22 +61,24 @@ void resetPrint()
 
 void useSettingsFileDefault()
 {
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
-   strncat(rSettingsFilePath,"prnPrintSettings.txt",cMaxNameSize);
-   rUseSettingsFile=true;
+   char tBuffer[400];
+   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "prnPrintSettings.txt"));
+
+   rUseSettingsFile = true;
 }
 
 void useSettingsFileName(char* aSettingsFileName)
 {
-   strncpy(rSettingsFilePath,Ris::portableGetSettingsDir(),cMaxNameSize);
-   strncat(rSettingsFilePath,aSettingsFileName,cMaxNameSize);
-   rUseSettingsFile=true;
+   char tBuffer[400];
+   strcpy(rSettingsFilePath, Ris::getAlphaFilePath_Settings(tBuffer, aSettingsFileName));
+
+   rUseSettingsFile = true;
 }
 
 void useSettingsFilePath(char* aSettingsFilePath)
 {
-   strncpy(rSettingsFilePath,aSettingsFilePath,cMaxNameSize);
-   rUseSettingsFile=true;
+   strncpy(rSettingsFilePath, aSettingsFilePath, cMaxNameSize);
+   rUseSettingsFile = true;
 }
 
 void useSettingsFileSection(char*aSettingsFileSection)
@@ -81,10 +86,10 @@ void useSettingsFileSection(char*aSettingsFileSection)
    strncpy(rSettingsFileSection, aSettingsFileSection, cMaxNameSize);
 }
 
-void useConsoles(int aNumOfConsoles)
+void useConsole(int aConsole)
 {
-   rNumOfConsoles = aNumOfConsoles;
-   if (rNumOfConsoles > cMaxConsoles) rNumOfConsoles = cMaxConsoles;
+   if (aConsole > cMaxConsoles - 1) return;
+   rConsoleFlag[aConsole] = true;
 }
 
 //****************************************************************************
@@ -206,5 +211,8 @@ public:
 
 PrintResetClass gPrintResetClass;
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 } //namespace
 
