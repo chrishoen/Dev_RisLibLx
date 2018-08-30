@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B1F7A13D-E4B
 		src\risThreadsTimer_linux.cpp = src\risThreadsTimer_linux.cpp
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{1D1A4E6D-DCED-4030-98D0-F63437B663BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -65,6 +67,22 @@ Global
 		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|x64.Build.0 = Release|x64
 		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|x86.ActiveCfg = Release|x86
 		{CD27243E-299E-4E44-AA52-4314CB2B9D98}.Release|x86.Build.0 = Release|x86
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|ARM.ActiveCfg = Debug|ARM
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|ARM.Build.0 = Debug|ARM
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|ARM64.Build.0 = Debug|ARM64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|x64.ActiveCfg = Debug|x64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|x64.Build.0 = Debug|x64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|x86.ActiveCfg = Debug|x86
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Debug|x86.Build.0 = Debug|x86
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|ARM.ActiveCfg = Release|ARM
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|ARM.Build.0 = Release|ARM
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|ARM64.ActiveCfg = Release|ARM64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|ARM64.Build.0 = Release|ARM64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|x64.ActiveCfg = Release|x64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|x64.Build.0 = Release|x64
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|x86.ActiveCfg = Release|x86
+		{1D1A4E6D-DCED-4030-98D0-F63437B663BE}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
