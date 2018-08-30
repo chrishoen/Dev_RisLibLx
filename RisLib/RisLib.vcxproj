@@ -34,45 +34,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\aaaa_stdafx.h">
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">stdafx.h.gch</ObjectFileName>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">TurnOffAllWarnings</WarningLevel>
-    </ClCompile>
-    <ClInclude Include="Source\logFiles.h" />
-    <ClInclude Include="Source\my_defs.h" />
-    <ClInclude Include="Source\my_functions.h" />
-    <ClInclude Include="Source\risAlphaDir.h" />
-    <ClInclude Include="Source\risByteBuffer.h" />
-    <ClInclude Include="Source\risByteContent.h" />
-    <ClInclude Include="Source\risByteMsgMonkey.h" />
-    <ClInclude Include="Source\risCallPointer.h" />
-    <ClInclude Include="Source\risCmdLineCmd.h" />
-    <ClInclude Include="Source\risCmdLineExec.h" />
-    <ClInclude Include="Source\risCmdLineFile.h" />
-    <ClInclude Include="Source\risCmdLineParms.h" />
-    <ClInclude Include="Source\risCmdLineTables.h" />
-    <ClInclude Include="Source\risContainers.h" />
-    <ClInclude Include="Source\risContainers2.h" />
-    <ClInclude Include="Source\risPortableCalls.h" />
-    <ClInclude Include="Source\ris_priorities.h" />
-    <ClInclude Include="Source\stdafx.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\logFiles_linux.cpp" />
-    <ClCompile Include="Source\my_functions.cpp" />
-    <ClCompile Include="Source\risAlphaDir_linux.cpp" />
-    <ClCompile Include="Source\risByteBuffer.cpp" />
-    <ClCompile Include="Source\risByteMsgMonkey.cpp" />
-    <ClCompile Include="Source\risCmdLineCmd.cpp" />
-    <ClCompile Include="Source\risCmdLineExec.cpp" />
-    <ClCompile Include="Source\risCmdLineFile.cpp" />
-    <ClCompile Include="Source\risCmdLineParms.cpp" />
-    <ClCompile Include="Source\risCmdLineTables.cpp" />
-    <ClCompile Include="Source\risPortableCalls_linux.cpp" />
-    <ClCompile Include="Source\ris_priorities_linux.cpp" />
-    <ClCompile Include="Source\stdafx.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{cd27243e-299e-4e44-aa52-4314cb2b9d98}</ProjectGuid>
     <Keyword>Linux</Keyword>
