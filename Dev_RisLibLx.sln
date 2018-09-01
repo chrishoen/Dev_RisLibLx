@@ -32,6 +32,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{1FF92531
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parms", "Parms\Parms.vcxproj", "{5FAD8580-FC8B-4F30-AF45-676B54AFED5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98} = {CD27243E-299E-4E44-AA52-4314CB2B9D98}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
