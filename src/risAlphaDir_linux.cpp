@@ -51,9 +51,9 @@ char* getAlphaDirectory()
 char* getAlphaFilePath_X(char* aBuffer, char* aSubDirName, char* aFileName = 0)
 {
    strcpy(aBuffer, rAlphaDirPath);
-   strcat(aBuffer, "\\");
+   strcat(aBuffer, "/");
    strcat(aBuffer, aSubDirName);
-   strcat(aBuffer, "\\");
+   strcat(aBuffer, "/");
 
    if (aFileName == 0) return aBuffer;
 
@@ -91,7 +91,7 @@ class AlphaResetClass
 public:
    AlphaResetClass()
    {
-      strcpy(rAlphaDirPath, "C:\\Alpha");
+      strcpy(rAlphaDirPath, "/home/linaro/Alpha");
    }
 };
 
