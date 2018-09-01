@@ -126,7 +126,7 @@ void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeParms2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,"Run1");
-   gParms.setExplicitFileDir("C:\\Alpha\\Work");
+   gParms.setExplicitFileDir("~/Alpha/Work");
    gParms.reset();
    gParms.readSection("default");
    gParms.readSection(aCmd->argString(1));
