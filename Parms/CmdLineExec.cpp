@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <unistd.h>
+
 #include "CmdLineExec.h"
 #include "Parms.h"
 #include "someMyClass.h"
@@ -52,6 +54,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, "portableGetCurrentDir         %s", Ris::portableGetCurrentDir());
+   Prn::print(0, "portableGetProgramDir         %s", Ris::portableGetProgramDir());
 }
 
 //******************************************************************************
@@ -60,6 +64,23 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   char tBuffer[400];
+   readlink("/proc/self/exe", tBuffer, 400);
+   Prn::print(0, "/proc/self/exe  %s", tBuffer);
+
+   bool tGoing = true;
+   int tIndex = strlen(tBuffer)-1;
+   while (tGoing)
+   {
+      if (tBuffer[tIndex] == '/')
+      {
+         tBuffer[tIndex+1] = 0;
+         tGoing = false;
+      }
+      if (--tIndex == 0) tGoing = false;
+   }
+
+   Prn::print(0, "tBuffer         %s", tBuffer);
 }
 
 //******************************************************************************
