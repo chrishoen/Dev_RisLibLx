@@ -1,279 +1,96 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source">
-      <UniqueIdentifier>{47843820-5f02-4a64-8ea9-64681449d962}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="logFiles.h" />
+    <ClInclude Include="my_defs.h" />
+    <ClInclude Include="my_functions.h" />
+    <ClInclude Include="prnPrint.h" />
+    <ClInclude Include="prnPrintSettings.h" />
+    <ClInclude Include="ris_priorities.h" />
+    <ClInclude Include="risAlphaDir.h" />
+    <ClInclude Include="risByteBuffer.h" />
+    <ClInclude Include="risByteContent.h" />
+    <ClInclude Include="risByteMsgMonkey.h" />
+    <ClInclude Include="risCallPointer.h" />
+    <ClInclude Include="risCmdLineCmd.h" />
+    <ClInclude Include="risCmdLineConsole.h" />
+    <ClInclude Include="risCmdLineExec.h" />
+    <ClInclude Include="risCmdLineFile.h" />
+    <ClInclude Include="risCmdLineParms.h" />
+    <ClInclude Include="risCmdLineString.h" />
+    <ClInclude Include="risCmdLineTables.h" />
+    <ClInclude Include="risContainers.h" />
+    <ClInclude Include="risContainers2.h" />
+    <ClInclude Include="risLFIndex.h" />
+    <ClInclude Include="risLMPacketQueue.h" />
+    <ClInclude Include="risLogic.h" />
+    <ClInclude Include="risMemoryPtr.h" />
+    <ClInclude Include="risNanoTime.h" />
+    <ClInclude Include="risNetPortDef.h" />
+    <ClInclude Include="risNetSessionStateList.h" />
+    <ClInclude Include="risNetTcpMsgClientThread.h" />
+    <ClInclude Include="risNetTcpMsgServerThread.h" />
+    <ClInclude Include="risNetTcpMsgSocket.h" />
+    <ClInclude Include="risNetUdpMsgSocket.h" />
+    <ClInclude Include="risNetUdpMsgThread.h" />
+    <ClInclude Include="risNetUdpStringSocket.h" />
+    <ClInclude Include="risPointerStack.h" />
+    <ClInclude Include="risPortableCalls.h" />
+    <ClInclude Include="risPortableTypes.h" />
+    <ClInclude Include="risProgramTime.h" />
+    <ClInclude Include="risSockets.h" />
+    <ClInclude Include="risStatistics.h" />
+    <ClInclude Include="risThreadsProcess.h" />
+    <ClInclude Include="risThreadsQCall.h" />
+    <ClInclude Include="risThreadsQCallThread.h" />
+    <ClInclude Include="risThreadsQueue.h" />
+    <ClInclude Include="risThreadsSynch.h" />
+    <ClInclude Include="risThreadsThreads.h" />
+    <ClInclude Include="risThreadsTimer.h" />
+    <ClInclude Include="risThreadsTimerThread.h" />
+    <ClInclude Include="risThreadsTwoThread.h" />
+    <ClInclude Include="risTimeMarker.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\logFiles.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\my_defs.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\my_functions.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\prnPrint.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\prnPrintSettings.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ris_priorities.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risAlphaDir.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risByteBuffer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risByteContent.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risByteMsgMonkey.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCallPointer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCmdLineCmd.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCmdLineConsole.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCmdLineExec.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCmdLineFile.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCmdLineParms.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCmdLineString.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risCmdLineTables.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risContainers.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risContainers2.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risLFIndex.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risLMPacketQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risLogic.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risMemoryPtr.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNanoTime.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetPortDef.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetSessionStateList.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgClientThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgServerThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetTcpMsgSocket.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetUdpMsgSocket.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetUdpMsgThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risNetUdpStringSocket.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risPointerStack.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risPortableCalls.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risPortableTypes.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risProgramTime.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risSockets.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risStatistics.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsProcess.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsQCall.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsQCallThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsSynch.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsThreads.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsTimer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsTimerThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risThreadsTwoThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\risTimeMarker.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\stdafx.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\logFiles_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\my_functions.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\prnPrint_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\prnPrintSettings.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ris_priorities_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risAlphaDir_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risByteBuffer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risByteMsgMonkey.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risCmdLineCmd.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risCmdLineConsole.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risCmdLineExec.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risCmdLineFile.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risCmdLineParms.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risCmdLineString.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risCmdLineTables.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risLMPacketQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risLogic.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNanoTime.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetSessionStateList.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgClientThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgServerThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetTcpMsgSocket.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetUdpMsgSocket.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetUdpMsgThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risNetUdpStringSocket.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risPointerStack.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risPortableCalls_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risProgramTime.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risSockets_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risStatistics.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsProcess_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsQCallThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsSynch_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsThreads_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsTimer_linux.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsTimerThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risThreadsTwoThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\risTimeMarker.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\stdafx.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
+    <ClCompile Include="logFiles_linux.cpp" />
+    <ClCompile Include="my_functions.cpp" />
+    <ClCompile Include="prnPrint_linux.cpp" />
+    <ClCompile Include="prnPrintSettings.cpp" />
+    <ClCompile Include="ris_priorities_linux.cpp" />
+    <ClCompile Include="risAlphaDir_linux.cpp" />
+    <ClCompile Include="risByteBuffer.cpp" />
+    <ClCompile Include="risByteMsgMonkey.cpp" />
+    <ClCompile Include="risCmdLineCmd.cpp" />
+    <ClCompile Include="risCmdLineConsole.cpp" />
+    <ClCompile Include="risCmdLineExec.cpp" />
+    <ClCompile Include="risCmdLineFile.cpp" />
+    <ClCompile Include="risCmdLineParms.cpp" />
+    <ClCompile Include="risCmdLineString.cpp" />
+    <ClCompile Include="risCmdLineTables.cpp" />
+    <ClCompile Include="risLMPacketQueue.cpp" />
+    <ClCompile Include="risLogic.cpp" />
+    <ClCompile Include="risNanoTime.cpp" />
+    <ClCompile Include="risNetSessionStateList.cpp" />
+    <ClCompile Include="risNetTcpMsgClientThread.cpp" />
+    <ClCompile Include="risNetTcpMsgServerThread.cpp" />
+    <ClCompile Include="risNetTcpMsgSocket.cpp" />
+    <ClCompile Include="risNetUdpMsgSocket.cpp" />
+    <ClCompile Include="risNetUdpMsgThread.cpp" />
+    <ClCompile Include="risNetUdpStringSocket.cpp" />
+    <ClCompile Include="risPointerStack.cpp" />
+    <ClCompile Include="risPortableCalls_linux.cpp" />
+    <ClCompile Include="risProgramTime.cpp" />
+    <ClCompile Include="risSockets_linux.cpp" />
+    <ClCompile Include="risStatistics.cpp" />
+    <ClCompile Include="risThreadsProcess_linux.cpp" />
+    <ClCompile Include="risThreadsQCallThread.cpp" />
+    <ClCompile Include="risThreadsSynch_linux.cpp" />
+    <ClCompile Include="risThreadsThreads_linux.cpp" />
+    <ClCompile Include="risThreadsTimer_linux.cpp" />
+    <ClCompile Include="risThreadsTimerThread.cpp" />
+    <ClCompile Include="risThreadsTwoThread.cpp" />
+    <ClCompile Include="risTimeMarker.cpp" />
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
 </Project>
