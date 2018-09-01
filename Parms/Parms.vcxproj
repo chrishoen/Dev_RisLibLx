@@ -38,20 +38,25 @@
     <ClCompile Include="CmdLineExec.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainInit.cpp" />
+    <ClCompile Include="Parms.cpp" />
+    <ClCompile Include="someMyClass.cpp" />
+    <ClCompile Include="someMyClass_Parms.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLineExec.h" />
     <ClInclude Include="MainInit.h" />
+    <ClInclude Include="Parms.h" />
+    <ClInclude Include="someMyClass.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RisLib\RisLib.vcxproj">
-      <Project>{cd27243e-299e-4e44-aa52-4314cb2b9d98}</Project>
+      <Project>{d38a069e-c0fb-4fd4-a072-be0fe77b5314}</Project>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1d1a4e6d-dced-4030-98d0-f63437b663be}</ProjectGuid>
+    <ProjectGuid>{5FAD8580-FC8B-4F30-AF45-676B54AFED5B}</ProjectGuid>
     <Keyword>Linux</Keyword>
     <RootNamespace>Test</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
