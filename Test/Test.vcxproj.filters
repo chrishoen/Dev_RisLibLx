@@ -20,9 +20,6 @@
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\aaaa_stdafx.h">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>

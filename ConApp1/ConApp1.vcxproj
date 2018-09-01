@@ -35,10 +35,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\aaaa_stdafx.h">
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">stdafx.h.gch</ObjectFileName>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">TurnOffAllWarnings</WarningLevel>
-    </ClCompile>
     <ClInclude Include="Source\MyClass.h" />
     <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
@@ -91,6 +87,7 @@
     <ClCompile>
       <AdditionalOptions>
       </AdditionalOptions>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
