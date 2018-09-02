@@ -19,13 +19,8 @@ namespace Log
    bool openFile       (int aLogNum,char* aFileName);
    bool openFileAppend (int aLogNum,char* aFileName);
 
-   bool openFile       (int aLogNum,char* aFileDir,char* aFileName);
-   bool openFileAppend (int aLogNum,char* aFileDir,char* aFileName);
-
    void closeFile      (int aLogNum);
    void closeAllFiles ();
-
-   void enableTimeStamp(int aLogNum,bool aEnableFlag);
 
    //***************************************************************************
    //***************************************************************************
@@ -33,13 +28,6 @@ namespace Log
    // Write to log file
 
    void write (int aLogNum, const char* aFormat, ...);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Write to log file
-
-   void writeTimeStamp (int aLogNum, const char* aLabel);
 
 //******************************************************************************
 //******************************************************************************

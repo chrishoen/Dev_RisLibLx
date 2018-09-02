@@ -42,9 +42,19 @@ static char rProgramDir[400];
 
 char* portableGetProgramDir()
 {
-   getcwd(rProgramDir, 400);
-   strcat(rProgramDir, "/");
-   return rProgramDir;
+   readlink("/proc/self/exe", rProgramDir, 400);
+
+   bool tGoing = true;
+   int tIndex = strlen(rProgramDir) - 1;
+   while (tGoing)
+   {
+      if (rProgramDir[tIndex] == '/')
+      {
+         rProgramDir[tIndex + 1] = 0;
+         tGoing = false;
+      }
+      if (--tIndex == 0) tGoing = false;
+   }
 
    return rProgramDir;
 }

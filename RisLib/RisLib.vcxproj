@@ -87,7 +87,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="logFiles_linux.cpp" />
+    <ClCompile Include="logFiles.cpp" />
     <ClCompile Include="my_functions.cpp" />
     <ClCompile Include="prnPrintSettings.cpp" />
     <ClCompile Include="prnPrint_linux.cpp" />
