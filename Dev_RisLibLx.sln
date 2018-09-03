@@ -36,6 +36,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parms", "Parms\Parms.vcxpro
 		{CD27243E-299E-4E44-AA52-4314CB2B9D98} = {CD27243E-299E-4E44-AA52-4314CB2B9D98}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadSample", "ThreadSample\ThreadSample.vcxproj", "{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -128,6 +130,22 @@ Global
 		{5FAD8580-FC8B-4F30-AF45-676B54AFED5B}.Release|x64.Build.0 = Release|x64
 		{5FAD8580-FC8B-4F30-AF45-676B54AFED5B}.Release|x86.ActiveCfg = Release|x86
 		{5FAD8580-FC8B-4F30-AF45-676B54AFED5B}.Release|x86.Build.0 = Release|x86
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|ARM.Build.0 = Debug|ARM
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|ARM64.Build.0 = Debug|ARM64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|x64.ActiveCfg = Debug|x64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|x64.Build.0 = Debug|x64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|x86.ActiveCfg = Debug|x86
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Debug|x86.Build.0 = Debug|x86
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|ARM.ActiveCfg = Release|ARM
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|ARM.Build.0 = Release|ARM
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|ARM64.ActiveCfg = Release|ARM64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|ARM64.Build.0 = Release|ARM64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|x64.ActiveCfg = Release|x64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|x64.Build.0 = Release|x64
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|x86.ActiveCfg = Release|x86
+		{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
