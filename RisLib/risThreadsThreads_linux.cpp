@@ -8,10 +8,11 @@
 #include "stdafx.h"
 
 #include <pthread.h>
+#include <sched.h>
 #include <semaphore.h>
 #include <unistd.h>
 #include <time.h>
-#include <sched.h>
+#include <errno.h>
 #include <assert.h>
 
 #include "my_functions.h"
@@ -133,6 +134,33 @@ void BaseThread::launchThread()
       0,
       &BaseThread_Execute,
       (void*)this);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Set thread parameters.
+
+   if (mThreadPriority >= 0)
+   {
+      sched_param param;
+      param.sched_priority = mThreadPriority;
+      int ret = pthread_setschedparam(mBaseSpecific->mHandle, SCHED_FIFO, &param);
+      if (ret) printf("pthread_setschedparam ERROR1 %d\n",errno);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Set thread parameters.
+
+   if (mThreadAffinityMask != 0)
+   {
+      cpu_set_t set;
+      CPU_ZERO(&set);
+      CPU_SET(mThreadIdealProcessor, &set);
+      int ret = sched_setaffinity(getpid(), sizeof(set), &set);
+      if (ret) printf("sched_setaffinity ERROR %d\n",ret);
+   }
 }
 
 //******************************************************************************
@@ -225,7 +253,6 @@ void BaseThread::forceTerminateThread()
 
 int BaseThread::getThreadPriority()
 {
-   pthread_t tid;
    sched_param param;
    int policy;
 

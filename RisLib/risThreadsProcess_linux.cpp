@@ -4,6 +4,14 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "stdafx.h"
+
+#include <pthread.h>
+#include <sched.h>
+#include <unistd.h>
+#include <errno.h>
+#include <assert.h>
+
 #include "risThreadsProcess.h"
 
 namespace Ris
@@ -33,6 +41,10 @@ int  getProcessTimerResolution()
 
 void enterProcessHigh()
 {
+   sched_param param;
+   param.sched_priority = sched_get_priority_max(SCHED_FIFO);
+   int ret = sched_setscheduler(getpid(), SCHED_FIFO, &param);
+   if (ret) printf("sched_setschedparam ERROR %d\n", errno);
 }
 
 void exitProcess()
