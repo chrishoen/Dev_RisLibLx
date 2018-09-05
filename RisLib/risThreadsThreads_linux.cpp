@@ -165,6 +165,7 @@ void BaseThread::launchThread()
 
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
 // This is the function that is executed in the context of the created thread.
 // It calls a sequence of functions that are overloaded by inheritors.
 
@@ -251,29 +252,6 @@ void BaseThread::forceTerminateThread()
 //******************************************************************************
 //******************************************************************************
 
-int BaseThread::getThreadPriority()
-{
-   sched_param param;
-   int policy;
-
-   pthread_getschedparam(mBaseSpecific->mHandle, &policy, &param);
-
-   return param.sched_priority;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-int BaseThread::getThreadProcessorNumber()
-{
-   return sched_getcpu();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void BaseThread::waitForThreadTerminate()
 {
    pthread_join(mBaseSpecific->mHandle,NULL);
@@ -306,6 +284,66 @@ void BaseThreadWithTermSem::shutdownThread()
 {
    mTerminateSem.put();
    waitForThreadTerminate();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+int BaseThread::getThreadPriority()
+{
+   sched_param param;
+   int policy;
+
+   pthread_getschedparam(mBaseSpecific->mHandle, &policy, &param);
+
+   return param.sched_priority;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+int BaseThread::getThreadProcessorNumber()
+{
+   return sched_getcpu();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is the function that is executed in the context of the created thread.
+// It calls a sequence of functions that are overloaded by inheritors.
+
+void BaseThread::threadShowInfo(char* aLabel)
+{
+   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", aLabel);
+
+   int tMaxPriority = sched_get_priority_max(SCHED_FIFO);
+   int tMinPriority = sched_get_priority_min(SCHED_FIFO);
+
+   sched_param tThreadSchedParam;
+   int tThreadPolicy = 0;
+   pthread_getschedparam(mBaseSpecific->mHandle, &tThreadPolicy, &tThreadSchedParam);
+   int tThreadPriority = tThreadSchedParam.__sched_priority;
+
+
+   int tCurrentProcessorNumber = sched_getcpu();
+
+   unsigned long long tProcessAffinityMask = 0;
+   unsigned long long tSystemAffinityMask = 0;
+
+   printf("MaxPriority             %8d\n", tMaxPriority);
+   printf("MinPriority             %8d\n", tMinPriority);
+   printf("ThreadPolicy            %8d\n", tThreadPolicy);
+   printf("ThreadPriority          %8d\n", tThreadPriority);
+// printf("ProcessAffinityMask     %8X\n", (unsigned)tProcessAffinityMask);
+// printf("SystemAffinityMask      %8X\n", (unsigned)tSystemAffinityMask);
+// printf("ThreadAffinityMask      %8X\n", mThreadAffinityMask);
+// printf("ThreadIdealProcessor    %8d\n", mThreadIdealProcessor);
+// printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
+
+   printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
 }
 
 //******************************************************************************

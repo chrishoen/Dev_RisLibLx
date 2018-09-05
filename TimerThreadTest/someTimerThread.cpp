@@ -28,7 +28,7 @@ TimerThread::TimerThread()
    BaseClass::mThreadAffinityMask = 0x04;
    BaseClass::mThreadIdealProcessor = 2;
 
-   mFrequency = 1;
+   mFrequency = 20;
 
    // Set timer period
    BaseClass::mTimerPeriod = 1000 / mFrequency;
@@ -37,8 +37,18 @@ TimerThread::TimerThread()
 
    // Members
    mTPFlag = false;
-   mTestCode = 2;
+   mTestCode = 3;
+}
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TimerThread::threadInitFunction()
+{
+   if (mTestCode !=3) return;
+
+   BaseClass::threadShowInfo("TimerThread");
 }
 
 //******************************************************************************

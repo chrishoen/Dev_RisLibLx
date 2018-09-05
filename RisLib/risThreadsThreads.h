@@ -178,15 +178,6 @@ public:
    // Sleep for some milliseconds.
    void threadSleep(int aTicks); 
 
-   // Terminate the thread forcefully.
-   void forceTerminateThread();
-
-   // Return the thread priority.
-   int  getThreadPriority();
-
-   // Return the thread processor number.
-   int  getThreadProcessorNumber();
-
    // Set thread priority.
    void setThreadPriorityHigh();
    void setThreadPriorityLow();
@@ -195,8 +186,26 @@ public:
    //Wait for the thread to terminate.
    void waitForThreadTerminate();
 
+   // Terminate the thread forcefully.
+   void forceTerminateThread();
+
    // Get a pointer to the thread handle.
    void* getHandlePtr();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Return the thread priority.
+   int  getThreadPriority();
+
+   // Return the thread processor number.
+   int  getThreadProcessorNumber();
+
+   // Show thread configuration info.
+   void threadShowInfo(char* aLabel);
+
 };
 
 //******************************************************************************
