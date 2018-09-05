@@ -124,23 +124,47 @@ void BaseThread::launchThread()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Create thread, suspended
-   // Create the thread in a suspended state.
-   // The following threadFunction() is executed in 
-   // the context of the created thread.
+   // Create thread, with initialization parameters. The following
+   // threadFunction() is executed in the context of the created thread.
 
-   pthread_create(
+   int ret;
+
+   // Thread attributes, initialize.
+   pthread_attr_t tAttributes;
+   pthread_attr_init(&tAttributes);
+
+   // Thread attributes, thread priority.
+   sched_param tSchedParam;
+   ret = pthread_attr_setinheritsched(&tAttributes, PTHREAD_EXPLICIT_SCHED);
+   if (ret) printf("pthread_attr_setinheritsched FAIL %d\n",ret);
+
+   ret = pthread_attr_setschedpolicy(&tAttributes, SCHED_FIFO);
+   if (ret) printf("pthread_attr_setschedpolicy  FAIL  %d\n", ret);
+
+   ret = pthread_attr_getschedparam(&tAttributes, &tSchedParam);
+   if (ret) printf("pthread_attr_getschedparam   FAIL  %d\n", ret);
+
+   // tSchedParam.sched_priority = mThreadPriority;
+   ret = pthread_attr_setschedparam(&tAttributes, &tSchedParam);
+   if (ret) printf("pthread_attr_setschedparam   FAIL  %d\n", ret);
+
+   // Create the thread.
+   ret = pthread_create(
       &mBaseSpecific->mHandle,
-      0,
+      &tAttributes,
       &BaseThread_Execute,
       (void*)this);
+   if (ret) printf("pthread_create FAIL  %d\n", ret);
+
+   // Thread attributes, finalize.
+   pthread_attr_destroy(&tAttributes);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Set thread parameters.
 
-   if (mThreadPriority >= 0)
+   if (mThreadPriority >= 0 && false)
    {
       sched_param param;
       param.sched_priority = mThreadPriority;
@@ -153,7 +177,7 @@ void BaseThread::launchThread()
    //***************************************************************************
    // Set thread parameters.
 
-   if (mThreadAffinityMask != 0)
+   if (mThreadAffinityMask != 0 && false)
    {
       cpu_set_t set;
       CPU_ZERO(&set);
@@ -328,6 +352,7 @@ void BaseThread::threadShowInfo(char* aLabel)
    int tThreadPriority = tThreadSchedParam.__sched_priority;
 
 
+   int tNumProcessors = sysconf(_SC_NPROCESSORS_ONLN);
    int tCurrentProcessorNumber = sched_getcpu();
 
    unsigned long long tProcessAffinityMask = 0;
@@ -337,11 +362,13 @@ void BaseThread::threadShowInfo(char* aLabel)
    printf("MinPriority             %8d\n", tMinPriority);
    printf("ThreadPolicy            %8d\n", tThreadPolicy);
    printf("ThreadPriority          %8d\n", tThreadPriority);
-// printf("ProcessAffinityMask     %8X\n", (unsigned)tProcessAffinityMask);
+   printf("ThreadPriority          %8d\n", mThreadPriority);
+   // printf("ProcessAffinityMask     %8X\n", (unsigned)tProcessAffinityMask);
 // printf("SystemAffinityMask      %8X\n", (unsigned)tSystemAffinityMask);
 // printf("ThreadAffinityMask      %8X\n", mThreadAffinityMask);
 // printf("ThreadIdealProcessor    %8d\n", mThreadIdealProcessor);
-// printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
+   printf("NumProcessors           %8d\n", tNumProcessors);
+   printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
 
    printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
 }
