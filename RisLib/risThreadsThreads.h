@@ -184,6 +184,9 @@ public:
    // Return the thread priority.
    int  getThreadPriority();
 
+   // Return the thread processor number.
+   int  getThreadProcessorNumber();
+
    // Set thread priority.
    void setThreadPriorityHigh();
    void setThreadPriorityLow();

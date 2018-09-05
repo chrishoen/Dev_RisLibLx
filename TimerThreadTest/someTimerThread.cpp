@@ -7,6 +7,8 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
+#include "risProgramTime.h"
+
 #define  _SOMETIMERTHREAD_CPP_
 #include "someTimerThread.h"
 
@@ -19,8 +21,12 @@ namespace Some
 
 TimerThread::TimerThread()
 {
-   // Set base class thread priority
+   // Set base class thread parameters.
    BaseClass::setThreadPriorityHigh();
+   BaseClass::mThreadAffinityMask = 0x02;
+   BaseClass::mThreadIdealProcessor = 1;
+   BaseClass::mThreadAffinityMask = 0x04;
+   BaseClass::mThreadIdealProcessor = 2;
 
    mFrequency = 20;
 
@@ -32,6 +38,10 @@ TimerThread::TimerThread()
    // Members
    mTPFlag = false;
    mTestCode = 1;
+
+   // Overrides.
+   mFrequency = 10;
+   mTestCode  = 2;
 }
 
 //******************************************************************************
@@ -55,18 +65,13 @@ void TimerThread::executeOnTimer(int aTimeCount)
 
 void TimerThread::executeTest1(int aTimeCount)
 {
-// Prn::print(Prn::ThreadRun2, "executeOnTimer %d",aTimeCount);
-
-   //---------------------------------------------------------------------------
-   // Time marker
-
    mTimeMarker.doStop();
    mTimeMarker.doStart();
 
    if (mTimeMarker.mStatistics.mEndOfPeriod)
    {
       double tPeriodUS = mTimerPeriod*1000.0;
-//    tPeriodUS=0.0;
+//    tPeriodUS = 0.0;
       Prn::print(Prn::ThreadRun1, "TEST %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
          mTimeMarker.mStatistics.mSize,
          mTimeMarker.mStatistics.mMean   - tPeriodUS,
@@ -83,33 +88,14 @@ void TimerThread::executeTest1(int aTimeCount)
 
 void TimerThread::executeTest2(int aTimeCount)
 {
-   int tCount = 10000;
-
-   Ris::Threads::MutexSemaphore tMutex;
-
-   mTimeMarker.initialize(tCount);
-
-   while(true)
-   {
-      mTimeMarker.doStart();
-
-      tMutex.lock();
-      tMutex.unlock();
-
-      mTimeMarker.doStop();
-
-      if (mTimeMarker.mStatistics.mEndOfPeriod)
-      {
-         break;
-      }
-   }
-
-   Prn::print(Prn::ThreadRun1, "TEST2 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+   Prn::print(Prn::ThreadRun1, "TEST2 %5d $$ %3d %10.4f",
       aTimeCount,
-      mTimeMarker.mStatistics.mMean,
-      mTimeMarker.mStatistics.mStdDev,
-      mTimeMarker.mStatistics.mMinX,
-      mTimeMarker.mStatistics.mMaxX);
+      BaseClass::getThreadProcessorNumber(),
+      Ris::getCurrentProgramTime());
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 }//namespace

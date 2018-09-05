@@ -39,6 +39,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadSample", "ThreadSample\ThreadSample.vcxproj", "{F6F5F3CA-DB75-475D-B415-75DAE7C25C8F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TimerThreadTest", "TimerThreadTest\TimerThreadTest.vcxproj", "{1397A7C0-D79D-4F11-B7D8-070A204D54E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CD27243E-299E-4E44-AA52-4314CB2B9D98} = {CD27243E-299E-4E44-AA52-4314CB2B9D98}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,14 +7,16 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize
+// Initialize.
 
 void main_initialize(int argc,char** argv)
 {
-   // Enter process
+   // Enter process.
+   Ris::Threads::setProcessTimerResolution(10);
+   Ris::Threads::setProcessAffinityMask(0x0E);
    Ris::Threads::enterProcessHigh();
 
-   // Initialize print facility
+   // Initialize print facility.
    Prn::resetPrint();
    Prn::initializePrint();
 
@@ -41,23 +43,25 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ViewRun3,    false,1);
    Prn::setFilter(Prn::ViewRun4,    true, 1);
 
-   Prn::print(0,"ThreadTest*******************************************BEGIN");
+   Prn::print(0,"TimerThreadTest*******************************************BEGIN");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Finalize
+// Finalize.
 
 void main_finalize()
 {
-   Prn::print(0,"ThreadTest*******************************************END");
+   Prn::print(0,"TimerThreadTest*******************************************END");
 
    // Close print
    Prn::finalizePrint();
 
    // Exit process
    Ris::Threads::exitProcess();
-
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
