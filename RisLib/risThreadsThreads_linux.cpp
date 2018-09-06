@@ -155,6 +155,15 @@ void BaseThread::launchThread()
    ret = pthread_attr_setschedparam(&tAttributes, &tSchedParam);
    chkerror(ret, "pthread_attr_setschedparam");
 
+   cpu_set_t tAffinityMask;
+   CPU_ZERO(&tAffinityMask);
+   if (mThreadAffinityMask & 1) CPU_SET(0, &tAffinityMask);
+   if (mThreadAffinityMask & 2) CPU_SET(1, &tAffinityMask);
+   if (mThreadAffinityMask & 4) CPU_SET(2, &tAffinityMask);
+   if (mThreadAffinityMask & 8) CPU_SET(3, &tAffinityMask);
+   ret = pthread_attr_setaffinity_np(&tAttributes, sizeof(tAffinityMask), &tAffinityMask);
+   chkerror(ret, "pthread_attr_setaffinity_np");
+
    // Create the thread.
    ret = pthread_create(
       &mBaseSpecific->mHandle,
@@ -358,12 +367,16 @@ void BaseThread::threadShowInfo(char* aLabel)
    pthread_getschedparam(mBaseSpecific->mHandle, &tThreadPolicy, &tThreadSchedParam);
    int tThreadPriority = tThreadSchedParam.__sched_priority;
 
-
    int tNumProcessors = sysconf(_SC_NPROCESSORS_ONLN);
    int tCurrentProcessorNumber = sched_getcpu();
 
-   unsigned long long tProcessAffinityMask = 0;
-   unsigned long long tSystemAffinityMask = 0;
+   cpu_set_t tAffinityMask;
+   pthread_getaffinity_np(mBaseSpecific->mHandle, sizeof(tAffinityMask), &tAffinityMask);
+   unsigned tUMask = 0;
+   if (CPU_ISSET(0, &tAffinityMask)) tUMask |= 1;
+   if (CPU_ISSET(1, &tAffinityMask)) tUMask |= 2;
+   if (CPU_ISSET(2, &tAffinityMask)) tUMask |= 4;
+   if (CPU_ISSET(3, &tAffinityMask)) tUMask |= 8;
 
    printf("NumProcessors           %8d\n", tNumProcessors);
    printf("MaxPriority             %8d\n", tMaxPriority);
@@ -371,11 +384,11 @@ void BaseThread::threadShowInfo(char* aLabel)
    printf("\n");
    printf("ThreadPolicy            %8d\n", tThreadPolicy);
    printf("ThreadPriority          %8d\n", tThreadPriority);
-   printf("ThreadPriority          %8d\n", mThreadPriority);
-   // printf("ProcessAffinityMask     %8X\n", (unsigned)tProcessAffinityMask);
-// printf("SystemAffinityMask      %8X\n", (unsigned)tSystemAffinityMask);
-// printf("ThreadAffinityMask      %8X\n", mThreadAffinityMask);
-// printf("ThreadIdealProcessor    %8d\n", mThreadIdealProcessor);
+   printf("mThreadPriority         %8d\n", mThreadPriority);
+   printf("\n");
+   printf("ThreadAffinityMask      %8X\n", tUMask);
+   printf("mThreadAffinityMask     %8X\n", mThreadAffinityMask);
+   printf("\n");
    printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
 
    printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
