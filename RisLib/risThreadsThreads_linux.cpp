@@ -112,6 +112,13 @@ void BaseThread::setThreadPriority(int aThreadPriority)
 //******************************************************************************
 //******************************************************************************
 
+void chkerror(int aRet, char* aLabel)
+{
+   if (aRet == 0)return;
+   printf("FAIL %s %d\n", aLabel,aRet);
+   exit(1);
+}
+
 void BaseThread::launchThread()
 {
    //***************************************************************************
@@ -132,21 +139,21 @@ void BaseThread::launchThread()
    // Thread attributes, initialize.
    pthread_attr_t tAttributes;
    pthread_attr_init(&tAttributes);
-
+   
    // Thread attributes, thread priority.
-   sched_param tSchedParam;
+   ret = pthread_attr_setscope(&tAttributes, PTHREAD_SCOPE_SYSTEM);
+   chkerror(ret, "pthread_attr_setscope");
+
    ret = pthread_attr_setinheritsched(&tAttributes, PTHREAD_EXPLICIT_SCHED);
-   if (ret) printf("pthread_attr_setinheritsched FAIL %d\n",ret);
+   chkerror(ret, "pthread_attr_setinheritsched");
 
    ret = pthread_attr_setschedpolicy(&tAttributes, SCHED_FIFO);
-   if (ret) printf("pthread_attr_setschedpolicy  FAIL  %d\n", ret);
+   chkerror(ret, "pthread_attr_setschedpolicy");
 
-   ret = pthread_attr_getschedparam(&tAttributes, &tSchedParam);
-   if (ret) printf("pthread_attr_getschedparam   FAIL  %d\n", ret);
-
-   // tSchedParam.sched_priority = mThreadPriority;
+   sched_param tSchedParam;
+   tSchedParam.sched_priority = mThreadPriority;
    ret = pthread_attr_setschedparam(&tAttributes, &tSchedParam);
-   if (ret) printf("pthread_attr_setschedparam   FAIL  %d\n", ret);
+   chkerror(ret, "pthread_attr_setschedparam");
 
    // Create the thread.
    ret = pthread_create(
@@ -154,7 +161,7 @@ void BaseThread::launchThread()
       &tAttributes,
       &BaseThread_Execute,
       (void*)this);
-   if (ret) printf("pthread_create FAIL  %d\n", ret);
+   chkerror(ret, "pthread_create");
 
    // Thread attributes, finalize.
    pthread_attr_destroy(&tAttributes);
