@@ -23,10 +23,10 @@ TimerThread::TimerThread()
 {
    // Set base class thread parameters.
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadAffinityMask = 0x04;
-   BaseClass::mThreadIdealProcessor = 2;
    BaseClass::mThreadAffinityMask = 0x02;
    BaseClass::mThreadIdealProcessor = 1;
+   BaseClass::mThreadAffinityMask = 0x04;
+   BaseClass::mThreadIdealProcessor = 2;
 
    mFrequency = 20;
 

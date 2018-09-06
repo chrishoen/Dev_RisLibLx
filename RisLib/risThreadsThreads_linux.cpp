@@ -131,16 +131,19 @@ void BaseThread::launchThread()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Create thread, with initialization parameters. The following
-   // threadFunction() is executed in the context of the created thread.
-
-   int ret;
+   // Thread attributes.
 
    // Thread attributes, initialize.
    pthread_attr_t tAttributes;
    pthread_attr_init(&tAttributes);
    
+   int ret;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Thread attributes, thread priority.
+
    ret = pthread_attr_setscope(&tAttributes, PTHREAD_SCOPE_SYSTEM);
    chkerror(ret, "pthread_attr_setscope");
 
@@ -155,16 +158,23 @@ void BaseThread::launchThread()
    ret = pthread_attr_setschedparam(&tAttributes, &tSchedParam);
    chkerror(ret, "pthread_attr_setschedparam");
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Thread attributes, affinity mask.
+
    cpu_set_t tAffinityMask;
    CPU_ZERO(&tAffinityMask);
-   if (mThreadAffinityMask & 1) CPU_SET(0, &tAffinityMask);
-   if (mThreadAffinityMask & 2) CPU_SET(1, &tAffinityMask);
-   if (mThreadAffinityMask & 4) CPU_SET(2, &tAffinityMask);
-   if (mThreadAffinityMask & 8) CPU_SET(3, &tAffinityMask);
+   for(int i=0;i<32;i++) if (mThreadAffinityMask & (1<<i)) CPU_SET(i, &tAffinityMask);
    ret = pthread_attr_setaffinity_np(&tAttributes, sizeof(tAffinityMask), &tAffinityMask);
    chkerror(ret, "pthread_attr_setaffinity_np");
 
-   // Create the thread.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Create the thread. The following threadRunFunction will execute
+   // in the context of the created thread.
+
    ret = pthread_create(
       &mBaseSpecific->mHandle,
       &tAttributes,
@@ -172,35 +182,12 @@ void BaseThread::launchThread()
       (void*)this);
    chkerror(ret, "pthread_create");
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Thread attributes, finalize.
+
    pthread_attr_destroy(&tAttributes);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Set thread parameters.
-
-   if (mThreadPriority >= 0 && false)
-   {
-      sched_param param;
-      param.sched_priority = mThreadPriority;
-      int ret = pthread_setschedparam(mBaseSpecific->mHandle, SCHED_FIFO, &param);
-      if (ret) printf("pthread_setschedparam ERROR1 %d\n",errno);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Set thread parameters.
-
-   if (mThreadAffinityMask != 0 && false)
-   {
-      cpu_set_t set;
-      CPU_ZERO(&set);
-      CPU_SET(mThreadIdealProcessor, &set);
-      int ret = sched_setaffinity(getpid(), sizeof(set), &set);
-      if (ret) printf("sched_setaffinity ERROR %d\n",ret);
-   }
 }
 
 //******************************************************************************
@@ -373,10 +360,7 @@ void BaseThread::threadShowInfo(char* aLabel)
    cpu_set_t tAffinityMask;
    pthread_getaffinity_np(mBaseSpecific->mHandle, sizeof(tAffinityMask), &tAffinityMask);
    unsigned tUMask = 0;
-   if (CPU_ISSET(0, &tAffinityMask)) tUMask |= 1;
-   if (CPU_ISSET(1, &tAffinityMask)) tUMask |= 2;
-   if (CPU_ISSET(2, &tAffinityMask)) tUMask |= 4;
-   if (CPU_ISSET(3, &tAffinityMask)) tUMask |= 8;
+   for (int i = 0; i < 32; i++) if (CPU_ISSET(i, &tAffinityMask)) (tUMask |= (1 << i));
 
    printf("NumProcessors           %8d\n", tNumProcessors);
    printf("MaxPriority             %8d\n", tMaxPriority);
