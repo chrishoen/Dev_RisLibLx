@@ -365,8 +365,10 @@ void BaseThread::threadShowInfo(char* aLabel)
    unsigned long long tProcessAffinityMask = 0;
    unsigned long long tSystemAffinityMask = 0;
 
+   printf("NumProcessors           %8d\n", tNumProcessors);
    printf("MaxPriority             %8d\n", tMaxPriority);
    printf("MinPriority             %8d\n", tMinPriority);
+   printf("\n");
    printf("ThreadPolicy            %8d\n", tThreadPolicy);
    printf("ThreadPriority          %8d\n", tThreadPriority);
    printf("ThreadPriority          %8d\n", mThreadPriority);
@@ -374,7 +376,6 @@ void BaseThread::threadShowInfo(char* aLabel)
 // printf("SystemAffinityMask      %8X\n", (unsigned)tSystemAffinityMask);
 // printf("ThreadAffinityMask      %8X\n", mThreadAffinityMask);
 // printf("ThreadIdealProcessor    %8d\n", mThreadIdealProcessor);
-   printf("NumProcessors           %8d\n", tNumProcessors);
    printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
 
    printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");
