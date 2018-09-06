@@ -41,8 +41,7 @@ public:
    //and some are used by threadFunction.
    int    mThreadStackSize;
    int    mThreadPriority;
-   int    mThreadAffinityMask;
-   int    mThreadIdealProcessor;
+   int    mThreadSingleProcessor;
    int    mThreadUseInitSem;
 
    //Init semaphore.

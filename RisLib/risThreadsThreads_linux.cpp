@@ -59,9 +59,7 @@ BaseThread::BaseThread()
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle    = 0;
    mThreadPriority = get_default_thread_priority();
-   mThreadAffinityMask    = 0;
-   mThreadIdealProcessor  = -1;
-
+   mThreadSingleProcessor  = -1;
    mThreadStackSize = 0;
 }
 
@@ -163,11 +161,14 @@ void BaseThread::launchThread()
    //***************************************************************************
    // Thread attributes, affinity mask.
 
-   cpu_set_t tAffinityMask;
-   CPU_ZERO(&tAffinityMask);
-   for(int i=0;i<32;i++) if (mThreadAffinityMask & (1<<i)) CPU_SET(i, &tAffinityMask);
-   ret = pthread_attr_setaffinity_np(&tAttributes, sizeof(tAffinityMask), &tAffinityMask);
-   chkerror(ret, "pthread_attr_setaffinity_np");
+   if (mThreadSingleProcessor >= 0)
+   {
+      cpu_set_t tAffinityMask;
+      CPU_ZERO(&tAffinityMask);
+      CPU_SET(mThreadSingleProcessor, &tAffinityMask);
+      ret = pthread_attr_setaffinity_np(&tAttributes, sizeof(tAffinityMask), &tAffinityMask);
+      chkerror(ret, "pthread_attr_setaffinity_np");
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -371,8 +372,7 @@ void BaseThread::threadShowInfo(char* aLabel)
    printf("mThreadPriority         %8d\n", mThreadPriority);
    printf("\n");
    printf("ThreadAffinityMask      %8X\n", tUMask);
-   printf("mThreadAffinityMask     %8X\n", mThreadAffinityMask);
-   printf("\n");
+   printf("mThreadSingleProcessor  %8X\n", mThreadSingleProcessor);
    printf("CurrentProcessorNumber  %8d\n", tCurrentProcessorNumber);
 
    printf("ThreadInfo<<<<<<<<<<<<<<<<<<<<<<<<<<END\n");

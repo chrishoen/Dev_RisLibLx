@@ -23,14 +23,10 @@ TimerThread::TimerThread()
 {
    // Set base class thread parameters.
    BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadAffinityMask = 0x02;
-   BaseClass::mThreadIdealProcessor = 1;
-   BaseClass::mThreadAffinityMask = 0x04;
-   BaseClass::mThreadIdealProcessor = 2;
-
-   mFrequency = 20;
+   BaseClass::mThreadSingleProcessor = 2;
 
    // Set timer period
+   mFrequency = 20;
    BaseClass::mTimerPeriod = 1000 / mFrequency;
 
    mTimeMarker.initialize(5*mFrequency);
