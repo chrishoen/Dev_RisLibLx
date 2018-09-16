@@ -75,6 +75,7 @@ public:
    void finishTrial();
    void show();
    void show2();
+   void showEUMM(int aPF, char* aLabel);
 
    // Put input value
    void put(double aX);

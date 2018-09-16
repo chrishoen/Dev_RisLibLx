@@ -129,9 +129,7 @@ void write (int aLogNum, const char* aFormat, ...)
    //-----------------------------------------------------
    // Print the string
 
-   char tOutputString[cMaxStringSize];
-   strcat(tOutputString,tPrintString);
-   fputs(tOutputString,mFile[aLogNum]);
+   fputs(tPrintString,mFile[aLogNum]);
 }
 
 //******************************************************************************

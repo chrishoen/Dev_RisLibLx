@@ -9,6 +9,7 @@ Description:
 #include "stdafx.h"
 
 #include "my_functions.h"
+#include "prnPrint.h"
 
 #include <math.h>
 #include <string.h>
@@ -288,6 +289,16 @@ void TrialStatistics::show2()
 {
    printf("%3llud $$ %8.6f %8.6f %8.6f  %8.6f\n",
       mPutCount,
+      mEX,
+      mUX,
+      mMinX,
+      mMaxX);
+}
+
+void TrialStatistics::showEUMM(int aPF, char* aLabel)
+{
+   Prn::print(aPF, "%-10s $$ %12.6f %12.6f %12.6f %12.6f",
+      aLabel,
       mEX,
       mUX,
       mMinX,
