@@ -1,4 +1,4 @@
-# Dev_RisLib
+# Dev_RisLibLx
 ### real time infrastructure library, C++, vstudio, linux
 
 This is the Linux version of RisLib.
