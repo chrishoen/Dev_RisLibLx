@@ -19,7 +19,7 @@ filter index are stored in the filter table.
 //******************************************************************************
 //******************************************************************************
 
-#include "prnPrintSettings.h"
+#include "prnPrintFilters.h"
 
 namespace Prn
 {
@@ -28,26 +28,16 @@ namespace Prn
 //******************************************************************************
 // Initializes the print facility.
 //
-// The Reset method is called to reset settings to deafults.
-// The Settings methods are called to override defaults.
-// The Initialize method does the initialization.
-// The Finalize method shuts down any PrintView processes that were launched.
+// The resetPrint method is called to reset settings to defaults.
+// The InitializePrint method does the initialization.
+// The finalizePrint method shuts down any PrintView processes that were
+// launched.
 //
-// aSettingsFileName is read from the default settings directory. 
-// aSettingsFilePath is read from an absolute filepath. 
-//
-// aSettingsFileSection is the settings file section that each application
-// extracts its settings from.
-//
-// aConsole specifies a print view console to use. If it is greater
+// useConsole specifies a print view console to use. If it is greater
 // than zero then additional PrintView console applications are launched
 // and prints are redirected to them via sockets.
 
 void resetPrint              ();
-void useSettingsFileDefault  ();
-void useSettingsFileName     (char* aSettingsFileName);
-void useSettingsFilePath     (char* aSettingsFilePath);
-void useSettingsFileSection  (char* aSettingsFileSection);
 void useConsole              (int   aConsole);
 void initializePrint         ();
 void finalizePrint           ();
@@ -72,13 +62,20 @@ void print (int aFilter, const char* aFormat, ...);
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Filters.
+
 // Set a filter in the filter table.
 //
 // aFilter is the index of the filter.
-// aEnablePrint is the value stored in the table at the filter index.
+// aEnable is the value stored in the table at the filter index.
 // aConsole is the console index stored in the table at the filter index.
+void  setFilter(int aFilter, bool aEnable, int aConsole = 0);
 
-void  setFilter(int aFilter, bool aEnablePrint, int aConsole = 0);
+// Enable a filter in the filter table.
+//
+// aFilter is the index of the filter.
+// aEnable is the value stored in the table at the filter index.
+void enableFilter(int aFilter, bool aEnable);
 
 //******************************************************************************
 //******************************************************************************

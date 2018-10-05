@@ -61,7 +61,7 @@ public:
    char mExplicitFileDir[cMaxStringSize];
    bool mUseExplicitFileDir;
 
-   // Name, used as an identifier.
+   // General name.
    char mName[cMaxStringSize];
 
    // File name for files that contain default paramters.
@@ -69,6 +69,9 @@ public:
 
    // File name for files that contain override paramters.
    char mOverrideFileName[cMaxStringSize];
+
+   // Enable error prints.
+   bool mEnablePrint;
 
    //***************************************************************************
    //***************************************************************************

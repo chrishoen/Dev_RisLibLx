@@ -1,67 +1,86 @@
 #pragma once
 
 /*==============================================================================
-Command line file processor
-
-This processes text files that contain a sequence of command lines.
-It enters a loop that reads each line in the file and applies a given command
-line executive to it.
+Byte content message network socket class.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include <stdio.h>
 
-#include "risCmdLineExec.h"
+#include "risByteContent.h"
+#include "risByteMsgMonkey.h"
+#include "risThreadsQCall.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is a command line processor for text files that contain a sequence
-// of command lines. It opens a command line file and applies an executive
-// to process all of the commands in the file, one at a time, as if they were
-// commands typed into a console command line interface. If an "EXIT" command
-// is encountered then no further commands are processed.
 
 namespace Ris
 {
+namespace Net
+{
 
-class CmdLineFile
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class encapsulates network socket settings. They are used to configure
+// the various socket classes.
+
+class Settings
 {
 public:
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members. 
-
-   // File handle
-   FILE*  mFile;
-
-   // Current line number.
-   int  mLineNumber;
-
-   // Nested anchor. This is used to manage files that contain nested records,
-   // which are processed by nested executives.
-   CmdLineExecNestedAnchor mNestedAnchor;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. 
+   // Members.
 
-   // Open the command line file.
-   bool open (char* aFilename);
+   // IP address.
+   char mLocalIpAddr[20];
 
-   // Apply a command line executive to each of the command lines in the file.
-   void execute (BaseCmdLineExec* aExec);
+   // IP port.
+   int mLocalIpPort;
 
-   // Close the command line file/
-   void close ();
+   // IP address.
+   char mRemoteIpAddr[20];
+
+   // IP port.
+   int mRemoteIpPort;
+
+   // Max number of tcp server sessions.
+   int mMaxSessions;
+
+   // Socket flags.
+   int mFlags;
+
+   // Message monkey creator.
+   BaseMsgMonkeyCreator* mMonkeyCreator;
+
+   // Session callback qcall.
+   Ris::Threads::QCall1<bool>     mClientSessionQCall;
+   Ris::Threads::QCall2<int,bool> mServerSessionQCall;
+
+   // Receive byte content message callback qcall.
+   Ris::Threads::QCall1<Ris::ByteContent*> mRxMsgQCall;
+   Ris::Threads::QCall2<int,Ris::ByteContent*> mServerRxMsgQCall;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   Settings();
+
+   // Set member.
+   void setLocalIp (char* aIpAddr, int aIpPort);
+   void setRemoteIp(char* aIpAddr, int aIpPort);
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+}//namespace
 }//namespace
 

@@ -16,26 +16,44 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor.
 
 UdpRxMsgSocket::UdpRxMsgSocket()
 {
+   mRxMemory = 0;
+   mMemorySize = 0;
    mRxLength = 0;
    mRxCount = 0;
    mValidFlag = false;
    mMonkey = 0;
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 UdpRxMsgSocket::~UdpRxMsgSocket()
 {
-   if (mMonkey != 0)
-   {
-      delete mMonkey;
-      mMonkey = 0;
-   }
+   if (mRxMemory) free(mRxMemory);
+   if (mMonkey) delete mMonkey;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Initialize variables.
+
+void UdpRxMsgSocket::initialize(Settings& aSettings)
+{
+   // Store the settings pointer.
+   mSettings = aSettings;
+
+   // Create a message monkey.
+   mMonkey = mSettings.mMonkeyCreator->createMonkey();
+
+   // Allocate memory for byte buffers.
+   mMemorySize = mMonkey->getMaxBufferSize();
+   mRxMemory = (char*)malloc(mMemorySize);
+
+   // Metrics.
+   mRxCount = 0;
+   mRxLength = 0;
 }
 
 //******************************************************************************
@@ -43,74 +61,81 @@ UdpRxMsgSocket::~UdpRxMsgSocket()
 //******************************************************************************
 // Configure the socket.
 
-void UdpRxMsgSocket::configure(
-   BaseMsgMonkeyCreator* aMonkeyCreator,
-   char*                 aLocalIpAddr,
-   int                   aLocalIpPort)
+void UdpRxMsgSocket::configure()
 {
-   mRxCount = 0;
-   mRxLength = 0;
+   // Configure the socket.
+   BaseClass::mLocal.set(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
+   BaseClass::doSocket();
+   BaseClass::doBind();
 
-   mLocal.set(aLocalIpAddr, aLocalIpPort);
-   mMonkey = aMonkeyCreator->createMonkey();
+   // Set valid flag from base class results.
+   mValidFlag = BaseClass::mStatus == 0;
 
-   doSocket();
-   doBind();
-
-   if (mStatus == 0)
+   // Show.
+   if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d",
-         mLocal.mIpAddr.mString,
-         mLocal.mPort);
+      Prn::print(Prn::SocketInit1, "UdpRxMsgSocket          %16s : %5d",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpRxMsgSocket     $ %16s : %d $ %d %d",
-         mLocal.mIpAddr.mString,
-         mLocal.mPort,
-         mStatus,
-         mError);
+      Prn::print(Prn::SocketError1, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
    }
-
-   mValidFlag = mStatus == 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive a datagram from the socket into a byte buffer and then extract a 
-// message from it.
+// Receive a message from the socket with a blocking recv call into a
+// byte buffer and extract a message from the byte buffer. Return the
+// message and true if successful. As part of the termination process,
+// returning false means that the socket was closed or that there was
+// an error.
 
 bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 {
-   //---------------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize.
+
+   // Do this first.
    aMsg = 0;
 
    // Guard.
-   if (!mValidFlag) return false;
+   if (!mValidFlag)
+   {
+      Prn::print(Prn::SocketError1, "ERROR UdpRxMsgSocket INVALID SOCKET");
+      return false;
+   }
 
-   // Create a byte buffer.
-   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
+   // Create a byte buffer from preallocated memory.
+   ByteBuffer tByteBuffer(mRxMemory, mMemorySize);
 
    // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tBuffer);
-   tBuffer.setCopyFrom();
+   mMonkey->configureByteBuffer(&tByteBuffer);
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Read the message into the receive buffer.
 
-   doRecvFrom(mFromAddress, tBuffer.getBaseAddress(), mRxLength, mMonkey->getMaxBufferSize());
+   tByteBuffer.setCopyFrom();
+   BaseClass::doRecvFrom(mFromAddress, tByteBuffer.getBaseAddress(), mRxLength, mMemorySize);
 
    // Guard.
    // If bad status then return false.
    // Returning true  means socket was not closed.
    // Returning false means socket was closed.
-
    if (mRxLength <= 0)
    {
-      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR  %d %d", mStatus, mError);
-      if (mStatus < 0)
+      Prn::print(Prn::SocketRun2, "ERROR UdpRxMsgSocket %d %d", mStatus, mError);
+      if (BaseClass::mStatus < 0)
          switch (mError)
          {
          case 0: return false; break;
@@ -123,13 +148,16 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    Prn::print(Prn::SocketRun2, "UdpRxMsgSocket rx message %d", mRxLength);
 
    // Set the buffer length.
-   tBuffer.setLength(mRxLength);
+   tByteBuffer.setLength(mRxLength);
 
-   //---------------------------------------------------------------------------
-   // Copy from the receive buffer into the message monkey object and validate
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Copy from the receive buffer into the message monkey and validate
    // the header.
 
-   mMonkey->extractMessageHeaderParms(&tBuffer);
+   // Extract the header.
+   mMonkey->extractMessageHeaderParms(&tByteBuffer);
 
    Prn::print(Prn::SocketRun3, "UdpRxMsgSocket rx header %d %d",
       mMonkey->mHeaderValidFlag,
@@ -138,27 +166,29 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID HEADER", mStatus, mError);
+      Prn::print(Prn::SocketError1, "ERROR UdpRxMsgSocket INVALID HEADER", mStatus, mError);
       return false;
    }
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // At this point the buffer contains the complete message. Extract the
    // message from the byte buffer into a new message object and return it.
 
-   tBuffer.rewind();
-   aMsg = mMonkey->getMsgFromBuffer(&tBuffer);
+   // Extract the message.
+   tByteBuffer.rewind();
+   aMsg = mMonkey->getMsgFromBuffer(&tByteBuffer);
 
    // Test for errors.
    if (aMsg == 0)
    {
-      Prn::print(Prn::SocketRun1, "UdpRxMsgSocket ERROR INVALID MESSAGE", mStatus, mError);
-      mStatus = tBuffer.getError();
+      Prn::print(Prn::SocketError1, "ERROR UdpRxMsgSocket INVALID MESSAGE", mStatus, mError);
+      mStatus = tByteBuffer.getError();
       return false;
    }
 
-   // Returning true  means socket was not closed.
-   // Returning false means socket was closed.
+   // Done.
    mRxCount++;
    return true;
 }
@@ -169,6 +199,8 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
 
 UdpTxMsgSocket::UdpTxMsgSocket()
 {
+   mTxMemory = 0;
+   mMemorySize = 0;
    mTxCount = 0;
    mTxLength = 0;
    mValidFlag = false;
@@ -181,7 +213,30 @@ UdpTxMsgSocket::UdpTxMsgSocket()
 
 UdpTxMsgSocket::~UdpTxMsgSocket()
 {
+   if (mTxMemory) free(mTxMemory);
    if (mMonkey) delete mMonkey;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Initialize variables.
+
+void UdpTxMsgSocket::initialize(Settings& aSettings)
+{
+   // Store the settings.
+   mSettings = aSettings;
+
+   // Create a message monkey.
+   mMonkey = mSettings.mMonkeyCreator->createMonkey();
+
+   // Allocate memory for byte buffers.
+   mMemorySize = mMonkey->getMaxBufferSize();
+   mTxMemory = (char*)malloc(mMemorySize);
+
+   // Metrics.
+   mTxCount = 0;
+   mTxLength = 0;
 }
 
 //******************************************************************************
@@ -189,75 +244,84 @@ UdpTxMsgSocket::~UdpTxMsgSocket()
 //******************************************************************************
 // Configure the socket.
 
-void UdpTxMsgSocket::configure(
-   BaseMsgMonkeyCreator* aMonkeyCreator,
-   char*                 aRemoteIpAddr,
-   int                   aRemoteIpPort)
+void UdpTxMsgSocket::configure()
 {
-   mTxCount = 0;
+   // Configure the socket.
+   BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::doSocket();
 
-   mRemote.set(aRemoteIpAddr, aRemoteIpPort);
-   mMonkey = aMonkeyCreator->createMonkey();
+   // Set valid flag from base class results.
+   mValidFlag = BaseClass::mStatus == 0;
 
-   doSocket();
-
-   if (mStatus == 0)
+   // Show.
+   if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d",
-         mRemote.mIpAddr.mString,
-         mRemote.mPort);
+      Prn::print(Prn::SocketInit1, "UdpTxMsgSocket          %16s : %5d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpTxMsgSocket     $ %16s : %d $ %d %d",
-         mRemote.mIpAddr.mString,
-         mRemote.mPort,
-         mStatus,
-         mError);
+      Prn::print(Prn::SocketError1, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
    }
-
-   mValidFlag = mStatus == 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy a message into a byte buffer and then send the byte buffer out the 
-// socket.
+// Copy a message into a byte buffer and then send the byte buffer to the
+// socket with a blocking send call. Return true if successful.
+// It is protected by the transmit mutex.
 
 bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 {
    // Guard.
-   if (!mValidFlag) return false;
-
-   // Create a byte buffer.
-   ByteBuffer tBuffer(mMonkey->getMaxBufferSize());
-
-   // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tBuffer);
-   tBuffer.setCopyTo();
-
-   // Copy the message to the buffer.
-   mMonkey->putMsgToBuffer(&tBuffer, aMsg);
-
-   // Delete the message.
-   delete aMsg;
+   if (!mValidFlag)
+   {
+      Prn::print(Prn::SocketError1, "ERROR UdpTxMsgSocket INVALID SOCKET");
+      delete aMsg;
+      return false;
+   }
 
    // Mutex.
    mTxMutex.lock();
 
-   // Transmit the buffer.
-   mTxLength = tBuffer.getLength();
-   doSendTo(mRemote, tBuffer.getBaseAddress(), mTxLength);
+   // Create a byte buffer from preallocated memory.
+   ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
 
-   Prn::print(Prn::SocketRun2, "UdpTxMsgSocket tx message %d", mTxLength);
+   // Configure the byte buffer.
+   mMonkey->configureByteBuffer(&tByteBuffer);
+   tByteBuffer.setCopyTo();
+
+   // Copy the message to the buffer.
+   mMonkey->putMsgToBuffer(&tByteBuffer, aMsg);
+
+   // Delete the message.
+   delete aMsg;
+
+   // Transmit the buffer.
+   mTxLength = tByteBuffer.getLength();
+   bool tRet = doSendTo(mRemote, tByteBuffer.getBaseAddress(), mTxLength);
+   mTxCount++;
 
    // Mutex.
    mTxMutex.unlock();
 
+   if (tRet)
+   {
+      Prn::print(Prn::SocketRun2, "UdpTxMsgSocket tx message %d", mTxLength);
+   }
+   else
+   {
+      Prn::print(Prn::SocketError1, "ERROR UdpTxMsgSocket INVALID SEND");
+   }
+
    // Done.
-   mTxCount++;
-   return true;
+   return tRet;
 }
 
 //******************************************************************************

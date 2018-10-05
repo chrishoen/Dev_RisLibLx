@@ -35,10 +35,56 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="logFiles.cpp" />
+    <ClCompile Include="my_functions.cpp" />
+    <ClCompile Include="prnPrintFilterTable.cpp" />
+    <ClCompile Include="prnPrintSettings.cpp" />
+    <ClCompile Include="prnPrint_linux.cpp" />
+    <ClCompile Include="risAlphaDir_linux.cpp" />
+    <ClCompile Include="risByteBuffer.cpp" />
+    <ClCompile Include="risByteMsgMonkey.cpp" />
+    <ClCompile Include="risCmdLineCmd.cpp" />
+    <ClCompile Include="risCmdLineConsole.cpp" />
+    <ClCompile Include="risCmdLineExec.cpp" />
+    <ClCompile Include="risCmdLineFile.cpp" />
+    <ClCompile Include="risCmdLineParms.cpp" />
+    <ClCompile Include="risCmdLineString.cpp" />
+    <ClCompile Include="risCmdLineTables.cpp" />
+    <ClCompile Include="risLMPacketQueue.cpp" />
+    <ClCompile Include="risLogic.cpp" />
+    <ClCompile Include="risNanoTime.cpp" />
+    <ClCompile Include="risNetSessionStateList.cpp" />
+    <ClCompile Include="risNetSettings.cpp" />
+    <ClCompile Include="risNetTcpMsgClientThread.cpp" />
+    <ClCompile Include="risNetTcpMsgServerThread.cpp" />
+    <ClCompile Include="risNetTcpMsgSocket.cpp" />
+    <ClCompile Include="risNetTcpServerHubSocket.cpp" />
+    <ClCompile Include="risNetUdpMsgSocket.cpp" />
+    <ClCompile Include="risNetUdpMsgThread.cpp" />
+    <ClCompile Include="risNetUdpStringSocket.cpp" />
+    <ClCompile Include="risPointerStack.cpp" />
+    <ClCompile Include="risPortableCalls_linux.cpp" />
+    <ClCompile Include="risProgramTime.cpp" />
+    <ClCompile Include="risSockets_linux.cpp" />
+    <ClCompile Include="risStatistics.cpp" />
+    <ClCompile Include="risThreadsProcess_linux.cpp" />
+    <ClCompile Include="risThreadsQCallThread.cpp" />
+    <ClCompile Include="risThreadsSynch_linux.cpp" />
+    <ClCompile Include="risThreadsThreads_linux.cpp" />
+    <ClCompile Include="risThreadsTimerThread.cpp" />
+    <ClCompile Include="risThreadsTimer_linux.cpp" />
+    <ClCompile Include="risThreadsTwoThread.cpp" />
+    <ClCompile Include="risTimeMarker.cpp" />
+    <ClCompile Include="ris_priorities_linux.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="logFiles.h" />
     <ClInclude Include="my_defs.h" />
     <ClInclude Include="my_functions.h" />
     <ClInclude Include="prnPrint.h" />
+    <ClInclude Include="prnPrintFilters.h" />
+    <ClInclude Include="prnPrintFilterTable.h" />
     <ClInclude Include="prnPrintSettings.h" />
     <ClInclude Include="risAlphaDir.h" />
     <ClInclude Include="risByteBuffer.h" />
@@ -61,9 +107,11 @@
     <ClInclude Include="risNanoTime.h" />
     <ClInclude Include="risNetPortDef.h" />
     <ClInclude Include="risNetSessionStateList.h" />
+    <ClInclude Include="risNetSettings.h" />
     <ClInclude Include="risNetTcpMsgClientThread.h" />
     <ClInclude Include="risNetTcpMsgServerThread.h" />
     <ClInclude Include="risNetTcpMsgSocket.h" />
+    <ClInclude Include="risNetTcpServerHubSocket.h" />
     <ClInclude Include="risNetUdpMsgSocket.h" />
     <ClInclude Include="risNetUdpMsgThread.h" />
     <ClInclude Include="risNetUdpStringSocket.h" />
@@ -85,47 +133,6 @@
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="ris_priorities.h" />
     <ClInclude Include="stdafx.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="logFiles.cpp" />
-    <ClCompile Include="my_functions.cpp" />
-    <ClCompile Include="prnPrintSettings.cpp" />
-    <ClCompile Include="prnPrint_linux.cpp" />
-    <ClCompile Include="risAlphaDir_linux.cpp" />
-    <ClCompile Include="risByteBuffer.cpp" />
-    <ClCompile Include="risByteMsgMonkey.cpp" />
-    <ClCompile Include="risCmdLineCmd.cpp" />
-    <ClCompile Include="risCmdLineConsole.cpp" />
-    <ClCompile Include="risCmdLineExec.cpp" />
-    <ClCompile Include="risCmdLineFile.cpp" />
-    <ClCompile Include="risCmdLineParms.cpp" />
-    <ClCompile Include="risCmdLineString.cpp" />
-    <ClCompile Include="risCmdLineTables.cpp" />
-    <ClCompile Include="risLMPacketQueue.cpp" />
-    <ClCompile Include="risLogic.cpp" />
-    <ClCompile Include="risNanoTime.cpp" />
-    <ClCompile Include="risNetSessionStateList.cpp" />
-    <ClCompile Include="risNetTcpMsgClientThread.cpp" />
-    <ClCompile Include="risNetTcpMsgServerThread.cpp" />
-    <ClCompile Include="risNetTcpMsgSocket.cpp" />
-    <ClCompile Include="risNetUdpMsgSocket.cpp" />
-    <ClCompile Include="risNetUdpMsgThread.cpp" />
-    <ClCompile Include="risNetUdpStringSocket.cpp" />
-    <ClCompile Include="risPointerStack.cpp" />
-    <ClCompile Include="risPortableCalls_linux.cpp" />
-    <ClCompile Include="risProgramTime.cpp" />
-    <ClCompile Include="risSockets_linux.cpp" />
-    <ClCompile Include="risStatistics.cpp" />
-    <ClCompile Include="risThreadsProcess_linux.cpp" />
-    <ClCompile Include="risThreadsQCallThread.cpp" />
-    <ClCompile Include="risThreadsSynch_linux.cpp" />
-    <ClCompile Include="risThreadsThreads_linux.cpp" />
-    <ClCompile Include="risThreadsTimerThread.cpp" />
-    <ClCompile Include="risThreadsTimer_linux.cpp" />
-    <ClCompile Include="risThreadsTwoThread.cpp" />
-    <ClCompile Include="risTimeMarker.cpp" />
-    <ClCompile Include="ris_priorities_linux.cpp" />
-    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{cd27243e-299e-4e44-aa52-4314cb2b9d98}</ProjectGuid>

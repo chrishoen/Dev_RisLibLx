@@ -26,7 +26,7 @@ namespace Net
 // sessions.
 //
 // It can be thought of as a set of ordered pairs from two sets: session
-// indices and session identifiers {index,ident}.
+// indices and session identifiers {index,identifier}.
 //
 // This is used by code that organizes collections of sessions by assigning
 // each session a session index and by maintaining arrays of state variables
@@ -43,8 +43,8 @@ public:
    //***************************************************************************
    // Constants.
 
-   enum {MaxSessions  = 20};
-   enum {InvalidValue = -1};
+   static const int cMaxSessions  = 20;
+   static const int cInvalidValue = -1;
 
    //***************************************************************************
    //***************************************************************************
@@ -54,15 +54,15 @@ public:
    // These arrays are indexed by a session index.
    
    // Identifier for a session index.
-   int  mIdent[MaxSessions];      
+   int  mIdent[cMaxSessions];      
 
    // Peer session index for a session index.
    // It is the session index of the peer to which this session
    // is associated.
-   int  mPeer[MaxSessions];
+   int  mPeer[cMaxSessions];
 
    // State code for a session index.
-   int  mStateCode[MaxSessions];
+   int  mStateCode[cMaxSessions];
 
    // Number of sessions in the list.
    int  mNumSessions;
@@ -70,7 +70,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
    SessionStateList();
@@ -101,7 +101,7 @@ public:
 
    // Helpers.
    bool isEmpty(){return mNumSessions==0;}
-   bool isFull() {return mNumSessions==MaxSessions;}
+   bool isFull() {return mNumSessions==cMaxSessions;}
 
    // Show.
    void show(char* aLabel);

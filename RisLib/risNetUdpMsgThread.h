@@ -1,19 +1,16 @@
 #pragma once
 
 /*==============================================================================
-Udp receiver thread.
-==========================================================================*/
+Udp message thread.
+==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risCallPointer.h"
-#include "risContainers.h"
-#include "risSockets.h"
-#include "risThreadsThreads.h"
 #include "risThreadsQCallThread.h"
 #include "risNetUdpMsgSocket.h"
+#include "risNetSettings.h"
 
 namespace Ris
 {
@@ -25,11 +22,15 @@ namespace Net
 //******************************************************************************
 // Udp message thread.
 //
-// This is a thread that provides the execution context for a udp peer that 
-// communicates with another udp peer.
+// This is a thread that provides the execution context for a udp peer that
+// that communicates byte content messages with another udp peer.
 //
 // It contains a receive  udp socket that is bound to a local address.
 // It contains a transmit udp socket that is bound to a remote address.
+//
+// The data that is communicated via the sockets is encapsulated according to
+// the byte content messaging scheme. It sends and receives byte content
+// messages.
 //
 // The thread is structured around a while loop that does a recvfrom
 // call to receive a message on the socket.
@@ -37,6 +38,12 @@ namespace Net
 // The thread provides serialized access to the socket and associated 
 // state variables and it provides the context for the blocking of the 
 // recv call.
+//
+// An instance of this thread is created as a child thread of a parent thread
+// that performs message processing. The parent creates the child and
+// registers a receive message qcall callback to it. When the child thread
+// receives a message it invokes the message qcall to pass it to the parent
+// for processing.
 
 class UdpMsgThread : public Ris::Threads::BaseThreadWithTermFlag
 {
@@ -48,53 +55,25 @@ public:
    //***************************************************************************
    // Members.
 
-   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
-
-   // This is a qcall callback that is called when a message is received.
-   RxMsgQCall mRxMsgQCall;
-
-   // Socket address that socket instance connects to.
-   char  mLocalIpAddress[40];
-   int   mLocalIpPort;
-   char  mRemoteIpAddress[40];
-   int   mRemoteIpPort;
+   // Settings.
+   Settings mSettings;
 
    // Socket instance.
    UdpRxMsgSocket mRxSocket;
    UdpTxMsgSocket mTxSocket;
 
-   // Message monkey creator, this is used by the two sockets to create an
-   // instance of a message monkey.
-   BaseMsgMonkeyCreator* mMonkeyCreator;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Infastrcture.
-
-   // Constructor.
-   UdpMsgThread();
+   // This is a qcall callback that is invoked when a message is received.
+   // It is registered by the parent thread at initialzation.
+   typedef Ris::Threads::QCall1<Ris::ByteContent*> RxMsgQCall;
+   RxMsgQCall mRxMsgQCall;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Configure the thread.
-   // aMonkeyCreator  creates a message monkey to be used on messages
-   // aLocalIpAddr    is the ip address of the local  interface bound to
-   // aLocalIpPort    is the ip port    of the local  interface bound to
-   // aRemoteIpAddr   is the ip address of the remote interface bound to
-   // aRemoteIpPort   is the ip port    of the remote interface bound to
-   // aRxMsgQCall     is a qcall for receive messages
-
-   void configure(
-      Ris::BaseMsgMonkeyCreator* aMonkeyCreator, 
-      char*                      aLocalIpAddress,
-      int                        aLocalIpPort,
-      char*                      aRemoteIpAddress,
-      int                        aRemoteIpPort,
-      RxMsgQCall*                aRxMsgQCall);
+   // Constructor.
+   UdpMsgThread(Settings& aSettings);
 
    //***************************************************************************
    //***************************************************************************
@@ -120,15 +99,20 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Process a received message. This is called by the threadRunFunction.
-   // It invokes the mRxMsgQCall that is passed in at configure to pass the
-   // message to the thread owner.
-   void processRxMsg (Ris::ByteContent* aMsg);
+   // Pass a received message to the parent thread. This is called by the
+   // threadRunFunction when a message is received. It invokes the
+   // mRxMsgQCall that is registered at initialization.
+   virtual void processRxMsg(Ris::ByteContent* aMsg);
 
-   // Send a transmit message through the socket. It executes a blocking send
-   // call in the context of the caller.
-   void sendMsg (Ris::ByteContent* aMsg);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
+   // Send a transmit message through the socket to the peer. It executes a
+   // blocking send call in the context of the calling thread. It is protected
+   // by a mutex semaphore.
+   void sendMsg(Ris::ByteContent* aMsg);
 };
 
 //******************************************************************************

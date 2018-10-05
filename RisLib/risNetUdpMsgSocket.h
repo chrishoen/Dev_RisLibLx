@@ -11,8 +11,9 @@ UDP transmit message socket.
 
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
+#include "risThreadsSynch.h"
+#include "risNetSettings.h"
 #include "risSockets.h"
-#include "risThreadsThreads.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -26,76 +27,124 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Udp receive message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp receive message socket. This class encapsulates a udp socket that
+// receives messages that are based on the byte content message encapsulation
+// scheme.
 
 class UdpRxMsgSocket : public Sockets::BaseUdpSocket
 {
 public:
+   typedef Sockets::BaseUdpSocket BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // The recvfrom address is stored here.
-   Sockets::SocketAddress mFromAddress;
+   // Settings.
+   Settings mSettings;
 
-   // Number of bytes received.
-   int mRxLength;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // This is a message monkey that is used to get details about a message 
-   // from a message header that is contained in a byte buffer. It allows the 
-   // receive method to receive and extract a message from a byte buffer
-   // without the having the message code visible to it.
+   // Receive memory. Allocated at initialization.
+   char* mRxMemory;
+
+   // Size of allocated memory.
+   int mMemorySize;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // This a message monkey that is used to manage the details about messages
+   // and message headers while hiding the underlying specific message set code.
+   // For received  messages, the message monkey allows the receive method to
+   // extract message header details from a byte buffer and it allows it to 
+   // then extract full messages from the byte buffer. For transmited messages,
+   // the message monkey allows the send method to set header data before the
+   // message is sent. A specific message monkey is provided by the parent 
+   // thread at initialization.
    BaseMsgMonkey* mMonkey;
 
    // True if the socket is valid.
    bool mValidFlag;
 
+   // The recvfrom address is stored here.
+   Sockets::SocketAddress mFromAddress;
+
    // Metrics.
+   int mRxLength;
    int mRxCount;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infastrcture.
+   // Methods.
 
    // Constructor.
    UdpRxMsgSocket(); 
    ~UdpRxMsgSocket(); 
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
+   // Initialize variables.
+   void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
-   void configure(
-      BaseMsgMonkeyCreator* aMonkeyCreator,
-      char*                 aLocalIpAddr,
-      int                   aLocalIpPort);
+   void configure();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Receive a message from the socket via blocking recvfrom calls.
-   // Return true if successful.
+   // Receive a message from the socket with a blocking recv call into a
+   // byte buffer and extract a message from the byte buffer. Return the
+   // message and true if successful. As part of the termination process,
+   // returning false means that the socket was closed or that there was
+   // an error.
    bool doReceiveMsg (ByteContent*& aRxMsg);
-
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Udp transmit message socket.
-// Messages are based on the ByteContent message encapsulation scheme.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Udp transmit message socket. This class encapsulates a udp socket that
+// transmits messages that are based on the byte content message encapsulation
+// scheme.
 
 class UdpTxMsgSocket : public Sockets::BaseUdpSocket
 {
 public:
+   typedef Sockets::BaseUdpSocket BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Settings.
+   Settings mSettings;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Transmit memory. Allocated at initialization.
+   char* mTxMemory;
+
+   // Size of allocated memory.
+   int mMemorySize;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -114,39 +163,33 @@ public:
    bool mValidFlag;
 
    // Metrics.
-   int mTxCount;
    int mTxLength;
+   int mTxCount;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infastrcture.
+   // Methods.
 
    // Constructor.
    UdpTxMsgSocket(); 
    ~UdpTxMsgSocket(); 
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
+   // Initialize variables.
+   void initialize(Settings& aSettings);
 
    // Configure the socket. This does socket and bind calls.
-   void configure(
-      BaseMsgMonkeyCreator* aMonkeyCreator,
-      char*                 aRemoteIpAddr,
-      int                   aRemoteIpPort);
+   void configure();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Send a message over the socket via a blocking send call.
-   // Return true if successful.
+   // Copy a message into a byte buffer and then send the byte buffer to the
+   // socket with a blocking send call. Return true if successful.
    // It is protected by the transmit mutex.
    bool doSendMsg(ByteContent* aMsg);
-
 };
 
 //******************************************************************************

@@ -1,67 +1,72 @@
 #pragma once
 
 /*==============================================================================
-Command line file processor
 
-This processes text files that contain a sequence of command lines.
-It enters a loop that reads each line in the file and applies a given command
-line executive to it.
+Tcp message server hub socket.
+
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include <stdio.h>
 
-#include "risCmdLineExec.h"
+#include "risThreadsQCallThread.h"
+#include "risNetSettings.h"
+#include "risNetTcpMsgSocket.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class is a command line processor for text files that contain a sequence
-// of command lines. It opens a command line file and applies an executive
-// to process all of the commands in the file, one at a time, as if they were
-// commands typed into a console command line interface. If an "EXIT" command
-// is encountered then no further commands are processed.
 
 namespace Ris
 {
+namespace Net
+{
 
-class CmdLineFile
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Tcp server hub socket, it is used to manage client connections.
+// It does listen and accept socket calls into tcp stream sockets in response
+// to client connect calls. 
+
+class TcpServerHubSocket : public Sockets::BaseTcpServerHubSocket
 {
 public:
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members. 
-
-   // File handle
-   FILE*  mFile;
-
-   // Current line number.
-   int  mLineNumber;
-
-   // Nested anchor. This is used to manage files that contain nested records,
-   // which are processed by nested executives.
-   CmdLineExecNestedAnchor mNestedAnchor;
+   typedef Sockets::BaseTcpServerHubSocket BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods. 
+   // Members.
 
-   // Open the command line file.
-   bool open (char* aFilename);
+   // Settings.
+   Settings mSettings;
 
-   // Apply a command line executive to each of the command lines in the file.
-   void execute (BaseCmdLineExec* aExec);
+   // General purpose valid flag.
+   bool mValidFlag;
 
-   // Close the command line file/
-   void close ();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Constructor.
+   TcpServerHubSocket();
+
+   // Initialize variables.
+   void initialize(Settings& aSettings);
+
+   // Configure the socket. This does socket and bind calls.
+   void configure();
+
+   // Reconfigure the socket. This does socket and bind calls.
+   void reconfigure();
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+}//namespace
 }//namespace
 

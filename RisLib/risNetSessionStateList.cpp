@@ -27,11 +27,11 @@ namespace Net
 SessionStateList::SessionStateList()
 {
    mNumSessions=0;
-   for (int index=0;index<MaxSessions;index++)
+   for (int index=0;index<cMaxSessions;index++)
    {
-      mIdent[index]=InvalidValue;
-      mPeer[index]=InvalidValue;
-      mStateCode[index]=InvalidValue;
+      mIdent[index] = cInvalidValue;
+      mPeer[index] = cInvalidValue;
+      mStateCode[index]= cInvalidValue;
    }
 }
 
@@ -49,7 +49,7 @@ void SessionStateList::add(int aIndex,int aIdent)
 // Remove an ordered pair from the list
 void SessionStateList::remove(int aIndex)
 {
-   mIdent[aIndex]=InvalidValue;
+   mIdent[aIndex] = cInvalidValue;
    mNumSessions--;
 }
 
@@ -62,34 +62,34 @@ int SessionStateList::getIdent(int aIndex)
 // Get the session index associated with an identifier
 int SessionStateList::getIndex(int aIdent)
 {
-   for (int index=0;index<MaxSessions;index++)
+   for (int index=0;index<cMaxSessions;index++)
    {
       if (mIdent[index]==aIdent)
       {
          return index;
       }
    }
-   return InvalidValue; 
+   return cInvalidValue; 
 }
 
 // Get any identifier, used when clients request a zero ident 
 int SessionStateList::getAnyIdent()
 {
-   for (int index=0;index<MaxSessions;index++)
+   for (int index=0;index<cMaxSessions;index++)
    {
-      if (mIdent[index]!=InvalidValue)
+      if (mIdent[index]!=cInvalidValue)
       {
          return mIdent[index];
       }
    }
-   return InvalidValue; 
+   return cInvalidValue; 
 }
 
 // Is session index valid ?
 bool SessionStateList::isValidIndex(int aIndex)
 {
    if (aIndex<0) return false;
-   return (mIdent[aIndex]!=InvalidValue);
+   return (mIdent[aIndex]!=cInvalidValue);
 }
 
 //******************************************************************************
@@ -102,10 +102,10 @@ void SessionStateList::show(char* aLabel)
 
    Prn::print(0,"mNumSessions %d",mNumSessions);
 
-   for (int index=0;index<MaxSessions;index++)
+   for (int index=0;index<cMaxSessions;index++)
    {
       int ident = mIdent[index];
-      if (ident!=InvalidValue)
+      if (ident!=cInvalidValue)
       {
          Prn::print(0,"index,ident %d %d",index,ident);
       }

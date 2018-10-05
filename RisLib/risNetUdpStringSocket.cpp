@@ -19,52 +19,98 @@ namespace Net
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
 
 UdpRxStringSocket::UdpRxStringSocket()
 {
-   mRxString[0]=0;
-   mRxLength=0;
-   mRxCount=0;
-   mValidFlag=false;
+   mRxString[0] = 0;
+   mRxLength = 0;
+   mRxCount = 0;
+   mValidFlag = false;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// configure the socket
+// Initialize variables.
 
-void UdpRxStringSocket::configure(int aPort)
+void UdpRxStringSocket::initialize(Settings& aSettings)
 {
-   Sockets::SocketAddress tLocal;
-   tLocal.set("127.0.0.1",aPort);
-   configure(tLocal);
+   // Store the settings pointer.
+   mSettings = aSettings;
+
+   // Variables.
+   mRxString[0] = 0;
+   mRxLength = 0;
+   mRxCount = 0;
+   mValidFlag = false;
 }
 
-void UdpRxStringSocket::configure(Sockets::SocketAddress aLocal)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// configure the socket.
+
+void UdpRxStringSocket::configure()
 {
-   mRxCount=0;
+   // Configure the socket.
+   BaseClass::mLocal.set(mSettings.mLocalIpAddr, mSettings.mLocalIpPort);
+   BaseClass::doSocket();
+   BaseClass::doBind();
 
-   mLocal = aLocal;
+   // Set valid flag from base class results.
+   mValidFlag = BaseClass::mStatus == 0;
 
-   doSocket();
-   doBind();
-
-   if (mStatus==0)
+   // Show.
+   if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpRxStringSocket     $ %16s : %d",
-         aLocal.mIpAddr.mString,
-         aLocal.mPort);
+      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpRxStringSocket     $ %16s : %d $ %d %d",
-         aLocal.mIpAddr.mString,
-         aLocal.mPort,
-         mStatus,
-         mError);
+      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d $ %d %d",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
    }
+}
 
-   mValidFlag=mStatus==0;
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// configure the socket at the local address at a port number.
+
+void UdpRxStringSocket::configureLocal(int aPort)
+{
+   // Configure the socket.
+   BaseClass::mLocal.set("127.0.0.1", aPort);
+   BaseClass::doSocket();
+   BaseClass::doBind();
+
+   // Set valid flag from base class results.
+   mValidFlag = BaseClass::mStatus == 0;
+
+   // Show.
+   if (mValidFlag)
+   {
+      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort);
+   }
+   else
+   {
+      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d $ %d %d",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
+   }
 }
 
 //******************************************************************************
@@ -75,18 +121,25 @@ void UdpRxStringSocket::configure(Sockets::SocketAddress aLocal)
 
 bool UdpRxStringSocket::doRecvString ()
 {
-   //-------------------------------------------------------------------------
-   // Initialize
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize.
+
+   // Do this first.
    mRxString[0]=0;
    mRxLength=0;
 
-   // Guard
+   // Guard.
    if (!mValidFlag) return false;
 
-   //-------------------------------------------------------------------------
-   // Read the message into the receive buffer
-   
-   doRecvFrom (mFromAddress,mRxString,mRxLength,cStringSize);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read the string into the receive buffer.
+
+   // Read from the socket.
+   BaseClass::doRecvFrom(mFromAddress,mRxString,mRxLength,cStringSize);
 
    // Guard
    // If bad status then return false.
@@ -95,21 +148,25 @@ bool UdpRxStringSocket::doRecvString ()
 
    if (mRxLength<=0)
    {
-      if (mStatus<0)
+      if (mStatus < 0)
+      {
          switch (mError)
          {
-            case 0              : return false  ;break;
-            default             : return false  ;break;
-         }   
+         case 0:  return false; break;
+         default: return false; break;
+         }
+      }
       else
+      {
          return false;
+      }
    }
 
-   // Null terminator
+   // Add null terminator.
    mRxString[mRxLength] = 0;
 
-   // Returning true  means socket was not closed
-   // Returning false means socket was closed
+   // Returning true  means socket was not closed.
+   // Returning false means socket was closed.
    mRxCount++;
    return true;
 }
@@ -117,56 +174,102 @@ bool UdpRxStringSocket::doRecvString ()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
 
 UdpTxStringSocket::UdpTxStringSocket()
 {
-   mTxLength=0;
-   mTxCount=0;
+   mValidFlag = false;
+   mTxLength = 0;
+   mTxCount = 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Configure the socket. Use with the next doSendMsg.
+// Initialize variables.
 
-void UdpTxStringSocket::configure(int aPort)
+void UdpTxStringSocket::initialize(Settings& aSettings)
 {
-   Sockets::SocketAddress tLocal;
-   tLocal.set("127.0.0.1",aPort);
-   configure(tLocal);
+   // Store the settings pointer.
+   mSettings = aSettings;
+
+   // Variables.
+   mTxLength = 0;
+   mTxCount = 0;
+   mValidFlag = false;
 }
 
-void UdpTxStringSocket::configure(Sockets::SocketAddress aRemote)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Configure the socket.
+
+void UdpTxStringSocket::configure()
 {
-   mTxCount=0;
+   // Configure the socket.
+   BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
+   BaseClass::doSocket();
 
-   mRemote = aRemote;
+   // Set valid flag from base class results.
+   mValidFlag = BaseClass::mStatus == 0;
 
-   doSocket();
-
-   if (mStatus==0)
+   // Show.
+   if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpTxStringSocket     $ %16s : %d",
-         aRemote.mIpAddr.mString,
-         aRemote.mPort);
+      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpTxStringSocket     $ %16s : %d $ %d %d",
-         aRemote.mIpAddr.mString,
-         aRemote.mPort,
-         mStatus,
-         mError);
+      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d $ %d %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
    }
-
-   mValidFlag=mStatus==0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This copies a message into a byte buffer and then sends the byte buffer 
-// out the socket. Use with the previous configure.
+// Configure the socket at the local address at a port number.
+
+void UdpTxStringSocket::configureLocal(int aPort)
+{
+   // Configure the socket.
+   BaseClass::mRemote.set("127.0.0.1", aPort);
+   BaseClass::doSocket();
+
+   // Set valid flag from base class results.
+   mValidFlag = BaseClass::mStatus == 0;
+
+   // Show.
+   if (mValidFlag)
+   {
+      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort);
+   }
+   else
+   {
+      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d $ %d %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Send a string over the socket via a blocking send call.
+// It returns true if successful.
+// It is protected by the transmit mutex.
 
 bool UdpTxStringSocket::doSendString(char* aString)
 {
