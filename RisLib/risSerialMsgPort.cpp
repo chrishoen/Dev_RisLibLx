@@ -8,6 +8,7 @@
 #include "stdafx.h"
 
 #include "my_functions.h"
+//#include "risPortableCalls.h"
 #include "prnPrint.h"
 
 #include "risSerialMsgPort.h"

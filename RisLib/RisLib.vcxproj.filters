@@ -32,6 +32,11 @@
     <ClCompile Include="risPointerStack.cpp" />
     <ClCompile Include="risPortableCalls_linux.cpp" />
     <ClCompile Include="risProgramTime.cpp" />
+    <ClCompile Include="risSerialHeaderBuffer.cpp" />
+    <ClCompile Include="risSerialMsgPort.cpp" />
+    <ClCompile Include="risSerialMsgThread.cpp" />
+    <ClCompile Include="risSerialPort_linux.cpp" />
+    <ClCompile Include="risSerialSettings.cpp" />
     <ClCompile Include="risSockets_linux.cpp" />
     <ClCompile Include="risStatistics.cpp" />
     <ClCompile Include="risThreadsProcess_linux.cpp" />
@@ -43,11 +48,6 @@
     <ClCompile Include="risThreadsTwoThread.cpp" />
     <ClCompile Include="risTimeMarker.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="risSerialHeaderBuffer.cpp" />
-    <ClCompile Include="risSerialMsgPort_wxlx.cpp" />
-    <ClCompile Include="risSerialMsgThread.cpp" />
-    <ClCompile Include="risSerialPort_linux.cpp" />
-    <ClCompile Include="risSerialSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logFiles.h" />
@@ -91,6 +91,11 @@
     <ClInclude Include="risPortableCalls.h" />
     <ClInclude Include="risPortableTypes.h" />
     <ClInclude Include="risProgramTime.h" />
+    <ClInclude Include="risSerialHeaderBuffer.h" />
+    <ClInclude Include="risSerialMsgPort.h" />
+    <ClInclude Include="risSerialMsgThread.h" />
+    <ClInclude Include="risSerialPort.h" />
+    <ClInclude Include="risSerialSettings.h" />
     <ClInclude Include="risSockets.h" />
     <ClInclude Include="risStatistics.h" />
     <ClInclude Include="risThreadsProcess.h" />
@@ -104,10 +109,5 @@
     <ClInclude Include="risThreadsTwoThread.h" />
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="risSerialHeaderBuffer.h" />
-    <ClInclude Include="risSerialMsgPort.h" />
-    <ClInclude Include="risSerialMsgThread.h" />
-    <ClInclude Include="risSerialPort.h" />
-    <ClInclude Include="risSerialSettings.h" />
   </ItemGroup>
 </Project>

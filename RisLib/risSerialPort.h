@@ -76,7 +76,7 @@ public:
    void doClose();
    void doPurge();
 
-   // True if open and valid
+   // True if open and valid.
    bool isValid();
 
    //***************************************************************************
@@ -101,14 +101,8 @@ public:
    // Receive data, fixed number of bytes.
    int  doReceiveBytes(char *aData, int aNumBytes);
 
-   // Receive data, terminated with CR/LF.
-   int  doReceiveUntilCRLF (char *aData, int aMaxNumBytes);
-
-   // Receive data, terminated with CR (\r,13).
-   int  doReceiveUntilCR(char *aData, int aMaxNumBytes);
-
-   // Receive data, terminated with LF(\n,10).
-   int  doReceiveUntilLF(char *aData, int aMaxNumBytes);
+   // Receive data, terminated with end of line(\n,10).
+   int  doReceiveUntilEOL(char *aData, int aMaxNumBytes);
 
    // Receive one byte.
    int  doReceiveOne(char *aData);

@@ -66,7 +66,7 @@
     <ClCompile Include="risPortableCalls_linux.cpp" />
     <ClCompile Include="risProgramTime.cpp" />
     <ClCompile Include="risSerialHeaderBuffer.cpp" />
-    <ClCompile Include="risSerialMsgPort_wxlx.cpp" />
+    <ClCompile Include="risSerialMsgPort.cpp" />
     <ClCompile Include="risSerialMsgThread.cpp" />
     <ClCompile Include="risSerialPort_linux.cpp" />
     <ClCompile Include="risSerialSettings.cpp" />

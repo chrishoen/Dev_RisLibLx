@@ -8,7 +8,6 @@ Print utility
 
 #include "stdafx.h"
 
-#include <windows.h>
 #include <stdarg.h>
 
 #include "risAlphaDir.h"
@@ -23,8 +22,6 @@ Print utility
 
 namespace Prn
 {
-
-HANDLE rCreatePrintView(int aConsole);
 
 //****************************************************************************
 //****************************************************************************
@@ -51,9 +48,6 @@ Ris::Net::UdpTxStringSocket rConsoleSocket[cMaxConsoles];
 // The port number for the print view console.
 int rConsolePort[cMaxConsoles];
 
-// The process handle for the print view console.
-HANDLE rConsoleHandle [cMaxConsoles];
-
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -67,7 +61,6 @@ void resetVariables()
    {
       rConsoleFlag[i] = false;
       rConsolePort[i] = gPrintSettings.mPrintViewHostIPPort + i;
-      rConsoleHandle[i] = 0;
    }
    // rConsoleFlag[0] = true;
 }
@@ -115,8 +108,6 @@ void initializePrint()
    {
       if (rConsoleFlag[i])
       {
-         // Create a process for the PrintView console.
-         rConsoleHandle[i] = rCreatePrintView(i);
          // Create a socket to send to the PrintView console.
          Ris::Net::Settings tSettings;
          tSettings.setRemoteIp(
@@ -138,10 +129,6 @@ void finalizePrint()
    // Terminate PrintView processes that were created. 
    for (int i = 1; i < cMaxConsoles; i++)
    {
-      if (rConsoleHandle[i] != 0)
-      {
-         TerminateProcess(rConsoleHandle[i], 0);
-      }
       rConsoleSocket[i].doClose();
    }
 }
@@ -252,82 +239,6 @@ void unsuppressPrint()
 void toggleSuppressPrint()
 {
    rSuppressFlag = !rSuppressFlag;
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Launch a new process for a PrintView console application.
-
-HANDLE rCreatePrintView(int aConsole)
-{
-   //*************************************************************************
-   //*************************************************************************
-   //*************************************************************************
-   // File path.
-
-   bool tFileFound = false;
-   char tFilePath[200];
-   char tBuffer[200];
-
-   strcpy(tFilePath, Ris::getAlphaFilePath_Bin(tBuffer,"PrintView.exe"));
-
-   if (Ris::portableFilePathExists(tFilePath))
-   {
-      tFileFound = true;
-   }
-
-   if (!tFileFound)
-   {
-      printf("PrintView1.exe NOT FOUND");
-      return 0;
-   }
-
-   //*************************************************************************
-   //*************************************************************************
-   //*************************************************************************
-   // Create process.
-
-   STARTUPINFO si;
-   PROCESS_INFORMATION pi;
-
-   ZeroMemory( &si, sizeof(si) );
-   si.cb = sizeof(si);
-   ZeroMemory( &pi, sizeof(pi) );
-   si.dwFlags = STARTF_USESHOWWINDOW;
-   si.wShowWindow = SW_SHOWNA;
-
-   char tCommandLine[200];
-   sprintf(tCommandLine,"%s  %d",tFilePath,rConsolePort[aConsole]);
-
-   char tConsoleTitle[50];
-   sprintf(tConsoleTitle,"PRINTVIEW%d",aConsole);
-   si.lpTitle = tConsoleTitle;
-
-   // Start the child process. 
-   BOOL status = CreateProcess(
-      NULL,           // Module name  
-      tCommandLine,   // Command Line
-      NULL,           // Process handle not inheritable
-      NULL,           // Thread handle not inheritable
-      FALSE,          // Set handle inheritance to FALSE
-      CREATE_NEW_CONSOLE, // Creation flags
-      NULL,           // Use parent's environment block
-      NULL,           // Use parent's starting directory 
-      &si,            // Pointer to STARTUPINFO structure
-      &pi);           // Pointer to PROCESS_INFORMATION structure
-
-   if (status)
-   {
-      Sleep(1000);
-   }
-   else
-   {
-      printf( "CreateProcess failed (%d).\n", GetLastError() );
-      return 0;
-   }
-
-   return pi.hProcess;
 }
 
 //******************************************************************************
