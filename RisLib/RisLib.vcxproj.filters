@@ -43,6 +43,11 @@
     <ClCompile Include="risThreadsTwoThread.cpp" />
     <ClCompile Include="risTimeMarker.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="risSerialHeaderBuffer.cpp" />
+    <ClCompile Include="risSerialMsgPort_wxlx.cpp" />
+    <ClCompile Include="risSerialMsgThread.cpp" />
+    <ClCompile Include="risSerialPort_linux.cpp" />
+    <ClCompile Include="risSerialSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logFiles.h" />
@@ -99,5 +104,10 @@
     <ClInclude Include="risThreadsTwoThread.h" />
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="risSerialHeaderBuffer.h" />
+    <ClInclude Include="risSerialMsgPort.h" />
+    <ClInclude Include="risSerialMsgThread.h" />
+    <ClInclude Include="risSerialPort.h" />
+    <ClInclude Include="risSerialSettings.h" />
   </ItemGroup>
 </Project>
