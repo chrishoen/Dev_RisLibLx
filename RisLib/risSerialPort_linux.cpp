@@ -10,6 +10,9 @@
 #include <termios.h>
 #include <unistd.h>
 
+#include <sys/ioctl.h>
+#include <linux/usbdevice_fs.h>
+
 #include "my_functions.h"
 #include "risThreadsThreads.h"
 #include "prnPrint.h"
@@ -27,7 +30,7 @@ namespace Ris
 class SerialPort::Specific
 {
 public:
-   int mFD;
+   int mDesc;
 };
 
 //******************************************************************************
@@ -37,7 +40,7 @@ public:
 SerialPort::SerialPort()
 {
    mSpecific = new Specific;
-   mSpecific->mFD = 0;
+   mSpecific->mDesc = 0;
 }
 
 SerialPort::~SerialPort(void)
@@ -67,13 +70,13 @@ void SerialPort::doOpen()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // open.
+   // Open the port.
 
    while (1)
    {
-      mSpecific->mFD = open(mSettings.mPortDevice, O_RDWR | O_NOCTTY | O_SYNC);
+      mSpecific->mDesc = open(mSettings.mPortDevice, O_RDWR | O_NOCTTY | O_SYNC);
 
-      if (mSpecific->mFD < 0)
+      if (mSpecific->mDesc < 0)
       {
          Prn::print(Prn::SerialError1, "serial_create_error_1 %d",errno);
          Ris::Threads::threadSleep(2000);
@@ -83,6 +86,18 @@ void SerialPort::doOpen()
          break;
       }
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Configure the port for raw data.
+
+   struct termios tOptions;
+   tcgetattr(mSpecific->mDesc, &tOptions);
+   tOptions.c_iflag &= ~(INLCR | IGNCR | ICRNL | IXON | IXOFF);
+   tOptions.c_oflag &= ~(ONLCR | OCRNL);
+   tOptions.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+   tcsetattr(mSpecific->mDesc, TCSANOW, &tOptions);
 
    //***************************************************************************
    //***************************************************************************
@@ -111,21 +126,26 @@ void SerialPort::doOpen()
 
 void SerialPort::doClose()
 {
+   int tRet = 0;
    if (!mValidFlag) return;
 
    Prn::print(Prn::SerialInit1, "SerialPort::doClose %s", mSettings.mPortDevice);
 
-   // Close the file.
-   int tRet = close(mSpecific->mFD);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Close the port.
+
+   tRet = close(mSpecific->mDesc);
 
    // Test the return code.
    if (tRet != 0)
    {
-      Prn::print(Prn::SerialError1, "serial_close_error_1 %d", errno);
+      Prn::print(Prn::SerialError1, "serial_close_error_2 %d", errno);
    }
 
    // Done.
-   mSpecific->mFD = 0;
+   mSpecific->mDesc = 0;
    mValidFlag = false;
 }
 
@@ -137,7 +157,7 @@ void SerialPort::doClose()
 void SerialPort::doPurge()
 {
    return;
-   tcflush(mSpecific->mFD, TCIFLUSH);
+   tcflush(mSpecific->mDesc, TCIFLUSH);
 }
 
 //******************************************************************************
@@ -155,7 +175,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
    int tRet  = 0;
 
    // Write bytes to the port.
-   tRet = write(mSpecific->mFD, aData, aNumBytes);
+   tRet = write(mSpecific->mDesc, aData, aNumBytes);
 
    // Test the return code.
    if (tRet < 0)
@@ -272,9 +292,24 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Locals.
    int tRet  = 0;
    
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Set the number of bytes to read.
+
+   struct termios tOptions;
+   tcgetattr(mSpecific->mDesc, &tOptions);
+   tOptions.c_cc[VMIN] = aNumBytes;
+   tcsetattr(mSpecific->mDesc, TCSANOW, &tOptions);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Read from port.
+
+   // Read.
    Prn::print(Prn::SerialRun3, "SerialPort::doReceiveBytes START %d",aNumBytes);
-   tRet = (int)read(mSpecific->mFD, aData, (size_t)aNumBytes);
+   tRet = (int)read(mSpecific->mDesc, aData, (size_t)aNumBytes);
 
    // Test the return code.
    if (tRet < 0)
@@ -289,7 +324,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       return cRetCodeError;
    }
 
-   // Write was successful. Return the number of bytes written.
+   // Read was successful. Return the number of bytes read.
    Prn::print(Prn::SerialRun3, "SerialPort::doReceiveBytes PASS1 %d", aNumBytes);
    return tRet;
 }
