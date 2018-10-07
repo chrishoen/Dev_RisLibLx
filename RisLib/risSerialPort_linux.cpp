@@ -109,9 +109,10 @@ void SerialPort::doOpen()
 
    struct termios tOptions;
    tcgetattr(mSpecific->mPortFd, &tOptions);
-   tOptions.c_iflag &= ~(INLCR | IGNCR | ICRNL | IXON | IXOFF);
-   tOptions.c_oflag &= ~(ONLCR | OCRNL);
-   tOptions.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+   cfmakeraw(&tOptions);
+// tOptions.c_iflag &= ~(INLCR | IGNCR | ICRNL | IXON | IXOFF);
+// tOptions.c_oflag &= ~(ONLCR | OCRNL);
+// tOptions.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
    tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
 
    //***************************************************************************
