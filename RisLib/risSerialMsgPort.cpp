@@ -119,7 +119,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    mTxMutex.unlock();
 
    // Test for errors.
-   if (tRet)
+   if (tRet<0)
    {
       Prn::print(Prn::SerialError2, "ERROR SerialMsgPort::doSendMsg FAIL");
       return false;
