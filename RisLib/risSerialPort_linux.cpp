@@ -136,6 +136,7 @@ void SerialPort::doClose()
 
 void SerialPort::doPurge()
 {
+   return;
    tcflush(mSpecific->mFD, TCIFLUSH);
 }
 
@@ -272,6 +273,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    int tRet  = 0;
    
    // Read from port.
+   Prn::print(Prn::SerialRun3, "SerialPort::doReceiveBytes START %d",aNumBytes);
    tRet = (int)read(mSpecific->mFD, aData, (size_t)aNumBytes);
 
    // Test the return code.
