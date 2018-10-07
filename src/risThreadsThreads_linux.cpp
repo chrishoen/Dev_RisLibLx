@@ -391,9 +391,30 @@ int countsPerOneSecond()
 //******************************************************************************
 //******************************************************************************
 
+void threadSleep(int aTicks)
+{
+   // Calculate timespec variables
+   int tMs = aTicks;
+   int tSec = tMs / 1000;
+   int tNs = (tMs - tSec * 1000) * 1000000;
+   if (tNs > 999999999) tNs = 999999999;
+
+   timespec tTime;
+   tTime.tv_sec = tSec;
+   tTime.tv_nsec = tNs;
+
+   // Nanosleep
+   nanosleep(&tTime, &tTime);
+   //sleep(aTicks);  
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void halt(char* aPrintStr)
 {
-   printf("HALTING %s\n",aPrintStr);
+   printf("HALTING %s\n", aPrintStr);
    exit(1);
 }
 
