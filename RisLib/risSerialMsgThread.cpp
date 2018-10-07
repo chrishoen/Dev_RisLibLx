@@ -47,7 +47,7 @@ SerialMsgThread::~SerialMsgThread()
 
 void SerialMsgThread::threadInitFunction()
 {
-   Prn::print(Prn::SerialInit1, "SerialMsgThread::threadInitFunction");
+   Prn::print(Prn::SerialInitM1, "SerialMsgThread::threadInitFunction");
 
    // Initialize and open the serial port.
    mSerialMsgPort.initialize(mSettings);
@@ -63,7 +63,7 @@ void SerialMsgThread::threadInitFunction()
 
 void  SerialMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SerialRun1, "SerialRxMsgThread::threadRunFunction %d",mSerialMsgPort.mValidFlag);
+   Prn::print(Prn::SerialInitM1, "SerialRxMsgThread::threadRunFunction %d",mSerialMsgPort.mValidFlag);
    
    bool tGoing=mSerialMsgPort.mValidFlag;
  
@@ -105,7 +105,7 @@ void  SerialMsgThread::threadRunFunction()
 
 void SerialMsgThread::threadExitFunction()
 {
-   Prn::print(Prn::SerialInit1, "SerialMsgThread::threadExitFunction");
+   Prn::print(Prn::SerialInitM1, "SerialMsgThread::threadExitFunction");
 }
 
 //******************************************************************************
