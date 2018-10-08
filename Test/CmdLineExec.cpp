@@ -59,7 +59,14 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-  
+   char tString[200];
+
+   while (true)
+   {
+      fgets(tString, 200, stdin);
+      printf("CMD %d %s", (int)strlen(tString), tString);
+      if (strcmp(tString, "e\n") == 0) break;
+   }
 }
 
 //******************************************************************************
