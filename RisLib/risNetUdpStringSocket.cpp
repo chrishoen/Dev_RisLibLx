@@ -67,13 +67,13 @@ void UdpRxStringSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d",
+      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -99,13 +99,13 @@ void UdpRxStringSocket::configureLocal(int aPort)
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d",
+      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpRxStringSocket  $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -219,13 +219,13 @@ void UdpTxStringSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d",
+      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d $ %d %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
@@ -250,13 +250,13 @@ void UdpTxStringSocket::configureLocal(int aPort)
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d",
+      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketInit2, "UdpTxStringSocket  $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d $ %d %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,

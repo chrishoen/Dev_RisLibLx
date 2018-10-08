@@ -40,15 +40,13 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 
 void UdpMsgThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInit2, "UdpMsgThread::threadInitFunction BEGIN");
+   Prn::print(Prn::SocketInitT1, "UdpMsgThread::threadInitFunction");
 
    // Initialize and configure the sockets.
    mRxSocket.initialize(mSettings);
    mRxSocket.configure();
    mTxSocket.initialize(mSettings);
    mTxSocket.configure();
-
-   Prn::print(Prn::SocketInit2, "UdpMsgThread::threadInitFunction END");
 }
 
 //******************************************************************************
@@ -59,7 +57,7 @@ void UdpMsgThread::threadInitFunction()
 
 void  UdpMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketRun1, "UdpRxMsgThread::threadRunFunction");
+   Prn::print(Prn::SocketInitT2, "UdpRxMsgThread::threadRunFunction");
    
    bool tGoing=mRxSocket.mValidFlag;
 
@@ -95,7 +93,7 @@ void  UdpMsgThread::threadRunFunction()
 
 void UdpMsgThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInit2, "UdpMsgThread::threadExitFunction");
+   Prn::print(Prn::SocketInitT1, "UdpMsgThread::threadExitFunction");
 }
 
 //******************************************************************************
