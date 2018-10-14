@@ -21,7 +21,7 @@ class PortDef
 {
 public:
 
-   static const int cPrintView = 58001;
+   static const int cPrintView = 58000;
 };
 
 //******************************************************************************

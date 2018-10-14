@@ -28,6 +28,7 @@ PrintSettings::PrintSettings()
 {
    strcpy(mPrintViewHostIPAddress, "none");
    mPrintViewHostIPPort = 99;
+   mCode1 = 0;
 }
 
 void PrintSettings::reset()
@@ -39,6 +40,8 @@ void PrintSettings::reset()
 
    strcpy(mPrintViewHostIPAddress,"127.0.0.1");
    mPrintViewHostIPPort = Ris::Net::PortDef::cPrintView;
+
+   mCode1 = 0;
 }
 
 //******************************************************************************
@@ -52,6 +55,7 @@ void PrintSettings::show()
    printf("PrintSettings************************************************ %s\n", mTargetSection);
 
    printf("PrintViewHost           %16s : %5d\n", mPrintViewHostIPAddress, mPrintViewHostIPPort);
+   printf("Code1                   %5d\n", mCode1);
 
    printf("PrintSettings************************************************\n");
    printf("\n");
@@ -74,6 +78,7 @@ void PrintSettings::execute(Ris::CmdLineCmd* aCmd)
       mPrintViewHostIPPort = aCmd->argInt(2);
    }
 
+   if (aCmd->isCmd("Code1")) mCode1 = aCmd->argInt(1);
 }
 
 //******************************************************************************

@@ -154,9 +154,6 @@ public:
    // Configure the socket. This does socket and bind calls.
    void configure();
 
-   // Configure the socket to the local address at a port number.
-   void configureLocal(int aPort);
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

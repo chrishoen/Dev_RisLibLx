@@ -1,7 +1,6 @@
 #pragma once
 
 /*==============================================================================
-Prototype communications message classes.
 Parameters class whose values are read from a command file. 
 ==============================================================================*/
 
@@ -67,6 +66,9 @@ public:
    // Default is 127.0.0.1 58001.
    char mPrintViewHostIPAddress[cMaxStringSize];
    int  mPrintViewHostIPPort;
+
+   // Test code.
+   int mCode1;
 
    //***************************************************************************
    //***************************************************************************

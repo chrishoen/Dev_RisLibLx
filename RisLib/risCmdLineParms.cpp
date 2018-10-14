@@ -381,7 +381,6 @@ bool BaseCmdLineParms::readOverride(char* aSection)
 void BaseCmdLineParms::setExplicitFileDir(char* aFileDir)
 {
    strcpy(mExplicitFileDir, aFileDir);
-   strcat(mExplicitFileDir, "\\");
    mUseExplicitFileDir = true;
 }
 

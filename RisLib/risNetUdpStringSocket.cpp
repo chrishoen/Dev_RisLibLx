@@ -89,7 +89,7 @@ void UdpRxStringSocket::configure()
 void UdpRxStringSocket::configureLocal(int aPort)
 {
    // Configure the socket.
-   BaseClass::mLocal.set("127.0.0.1", aPort);
+   BaseClass::mLocal.set("0.0.0.0", aPort);
    BaseClass::doSocket();
    BaseClass::doBind();
 
@@ -211,37 +211,6 @@ void UdpTxStringSocket::configure()
 {
    // Configure the socket.
    BaseClass::mRemote.set(mSettings.mRemoteIpAddr, mSettings.mRemoteIpPort);
-   BaseClass::doSocket();
-
-   // Set valid flag from base class results.
-   mValidFlag = BaseClass::mStatus == 0;
-
-   // Show.
-   if (mValidFlag)
-   {
-      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d",
-         BaseClass::mRemote.mIpAddr.mString,
-         BaseClass::mRemote.mPort);
-   }
-   else
-   {
-      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d $ %d %d",
-         BaseClass::mRemote.mIpAddr.mString,
-         BaseClass::mRemote.mPort,
-         BaseClass::mStatus,
-         BaseClass::mError);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Configure the socket at the local address at a port number.
-
-void UdpTxStringSocket::configureLocal(int aPort)
-{
-   // Configure the socket.
-   BaseClass::mRemote.set("127.0.0.1", aPort);
    BaseClass::doSocket();
 
    // Set valid flag from base class results.

@@ -74,7 +74,6 @@ void resetPrint()
 {
    // Read from settings file.
    gPrintSettings.reset();
-   gPrintSettings.mEnablePrint = false;
    gPrintSettings.readSection("default");
 
    // Reset variables.
