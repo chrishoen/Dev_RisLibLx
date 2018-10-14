@@ -28,7 +28,6 @@ BaseMsgMonkey::BaseMsgMonkey(CreateMsgFunctionT aCreate, DestroyMsgFunctionT aDe
    mMessageType=0;
    mPayloadLength=0;
    mHeaderValidFlag=false;
-   mNetworkOrder=false;
 
    mCreateMsgFunction = aCreate;
 
@@ -40,21 +39,6 @@ BaseMsgMonkey::BaseMsgMonkey(CreateMsgFunctionT aCreate, DestroyMsgFunctionT aDe
    {
       mDestroyMsgFunction = &defaultDestroy;
    }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Buffer management.
-
-void BaseMsgMonkey::setNetworkOrder (bool aNetworkOrder)
-{
-   mNetworkOrder=aNetworkOrder;
-}
-
-void BaseMsgMonkey::configureByteBuffer(ByteBuffer* aBuffer)
-{
-   aBuffer->setNetworkOrder(mNetworkOrder);
 }
 
 //******************************************************************************

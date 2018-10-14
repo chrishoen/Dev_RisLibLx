@@ -117,9 +117,6 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Create a byte buffer from preallocated memory.
    ByteBuffer tByteBuffer(mRxMemory, mMemorySize);
 
-   // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tByteBuffer);
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -292,10 +289,6 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 
    // Create a byte buffer from preallocated memory.
    ByteBuffer tByteBuffer(mTxMemory, mMemorySize);
-
-   // Configure the byte buffer.
-   mMonkey->configureByteBuffer(&tByteBuffer);
-   tByteBuffer.setCopyTo();
 
    // Copy the message to the buffer.
    mMonkey->putMsgToBuffer(&tByteBuffer, aMsg);

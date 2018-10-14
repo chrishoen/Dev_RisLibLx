@@ -19,26 +19,6 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Here is a global flag that gets assigned a value at load time.
-// If the machine that this executes on is little endian then it is true
-// else it is false
-
-   unsigned int gByteBuffer_ThisMachineIsLittleEndian_TestValue = 0x01020304;
-
-   bool gByteBuffer_ThisMachineIsLittleEndian =
-      *((char*)&gByteBuffer_ThisMachineIsLittleEndian_TestValue)==0x04;
-
-// Here is a global flag that gets assigned a value at load time.
-// It sets the default for byte swapping to non network order.
-
-   bool gByteBuffer_DoByteSwapping = !gByteBuffer_ThisMachineIsLittleEndian;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Constructors.
 
 ByteBuffer::ByteBuffer ()
@@ -50,7 +30,6 @@ ByteBuffer::ByteBuffer ()
    mMemAllocCode  = 0;
    mCopyDirection = cCopyTo;
    mError         = 0;
-   mByteSwapping  = gByteBuffer_DoByteSwapping;
 }
 
 ByteBuffer::ByteBuffer (int aSize)
@@ -58,7 +37,6 @@ ByteBuffer::ByteBuffer (int aSize)
    memAlloc(aSize);
    mCopyDirection = cCopyTo;
    mError = 0;
-   mByteSwapping=gByteBuffer_DoByteSwapping;
 }
 
 ByteBuffer::ByteBuffer (char* aAddress,int aSize)
@@ -70,7 +48,6 @@ ByteBuffer::ByteBuffer (char* aAddress,int aSize)
    mMemAllocCode  = 0;
    mCopyDirection = cCopyTo;
    mError         = 0;
-   mByteSwapping  = gByteBuffer_DoByteSwapping;
 }
 
 ByteBuffer::~ByteBuffer ()
@@ -291,18 +268,6 @@ bool ByteBuffer::isCopyFrom ()
    return mCopyDirection==cCopyFrom;
 }
 
-void ByteBuffer::setNetworkOrder (bool aNetworkOrder)
-{
-   if (gByteBuffer_ThisMachineIsLittleEndian)
-   {
-      mByteSwapping = aNetworkOrder;
-   }
-   else
-   {
-      mByteSwapping = !aNetworkOrder;
-   }
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -311,7 +276,7 @@ void ByteBuffer::setNetworkOrder (bool aNetworkOrder)
 //******************************************************************************
 // Copy operations.
 
-static void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
+inline void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
 {
    //***************************************************************************
    //***************************************************************************
@@ -350,26 +315,13 @@ static void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
       // Source pointer.
       char* tSource = (char*)aValue;
 
-      // Destination Buffer pointer.
+      // Destination pointer.
       char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
 
-      if (aBuffer->mByteSwapping)
+      // Copy bytes to buffer.
+      for (int i = 0; i < aSize; i++)
       {
-         // Copy bytes to buffer, swapping bytes.
-         for (int i = 0; i < aSize; i++)
-         {
-            tBytes[i] = tSource[aSize - i - 1];
-         }
-      }
-      else
-      {
-         // Copy bytes to buffer, not swapping bytes.
-         char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
-
-         for (int i = 0; i < aSize; i++)
-         {
-            tBytes[i] = tSource[i];
-         }
+         tBytes[i] = tSource[i];
       }
 
       // Adjust buffer members.
@@ -381,28 +333,16 @@ static void BB_copyValue(ByteBuffer* aBuffer, void* aValue, int aSize)
    //***************************************************************************
    else
    {
+      // Source pointer.
+      char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
+
       // Destination pointer.
       char* tDestin = (char*)aValue;
 
-      // Source Buffer pointer.
-      char* tBytes = &aBuffer->mBaseBytes[aBuffer->mWorkingIndex];
-      int   tWorkingIndex = aBuffer->mWorkingIndex;
-
-      // Copy bytes from buffer, swapping bytes.
-      if (aBuffer->mByteSwapping)
+      // Copy bytes from buffer.
+      for (int i = 0; i < aSize; i++)
       {
-         for (int i = 0; i < aSize; i++)
-         {
-            tDestin[i] = tBytes[aSize - i - 1];
-         }
-      }
-      else
-      {
-         // Copy bytes from buffer, not swapping bytes.
-         for (int i = 0; i < aSize; i++)
-         {
-            tDestin[i] = tBytes[i];
-         }
+         tDestin[i] = tBytes[i];
       }
 
       // Adjust members.

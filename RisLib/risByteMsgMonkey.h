@@ -41,9 +41,6 @@ public:
    int  mPayloadLength;
    bool mHeaderValidFlag;
 
-   // Endian network order.
-   bool mNetworkOrder;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -108,14 +105,6 @@ public:
 
    // Return a contant max buffer size.
    virtual int getMaxBufferSize()=0;
-
-   // Endianess for buffers associated with the monkey.
-   // If true then the messages will be sent in network order,
-   // big endian. If false, then little endian.
-   void setNetworkOrder (bool aNetworkOrder);
-
-   // Configure a byte buffer endianess.
-   void configureByteBuffer(ByteBuffer* aBuffer);
 
    //***************************************************************************
    //***************************************************************************

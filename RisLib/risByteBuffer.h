@@ -23,27 +23,28 @@ variables from the buffer, binary decoding them.
 
 The binary encoding/decoding of a message class is defined by the copyToFrom.
 
+ByteBuffer data items are always encoded in little endian.
 ==============================================================================*/
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//*****************************************************************************
+//*****************************************************************************
+//*****************************************************************************
 
 namespace Ris
 {
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is a base class for classes that can be copied to/from ByteBuffers.
 // Each inheriting class supplies a copyToFrom member function that can be
 // called by ByteBuffer put and get functions to copy it.
 
 class ByteContent;
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This class encapsualtes byte buffers. It represents memory sections. It
 // provides member functions to do some simple memory management for a buffer.
 // It provides primitive data type put and get operations that allow primitives
@@ -88,11 +89,6 @@ public:
    static const int cBufferOverflow   = 1;
    static const int cBadPointer       = 2;
    int mError;
-
-   // Byte swapping. This determines if copy operations do byte swapping. The 
-   // default for little endian machines is to not do byte swapping and the
-   // default for big endian machines is to do byte swapping.
-   bool mByteSwapping;
 
    // Memory allocation code, itdetermines if the destructor does a memFree.
    int mMemAllocCode;
@@ -186,26 +182,6 @@ public:
 
    bool isCopyTo ();
    bool isCopyFrom ();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods, network order.
-
-   // Set the network order (endianness) of the buffer and whether or
-   // not byte swapping happens.
-   //
-   // If network order is true then bytes are copied into the 
-   // buffer in network order, big endian. If false then little
-   // endian.
-   //
-   // If network order is true and the machine is little endian
-   // then byte swapping happens. If netwok order is true and
-   // the machine is big endian then byte swapping does not 
-   // happen. The other two cases follow.
-   //
-   // The default is non network order. (little endian)
-   void setNetworkOrder (bool aNetworkOrder);
 
    //***************************************************************************
    //***************************************************************************

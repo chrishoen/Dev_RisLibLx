@@ -73,7 +73,7 @@ void UdpRxStringSocket::configure()
    }
    else
    {
-      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  FAIL $ %16s : %d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -105,7 +105,31 @@ void UdpRxStringSocket::configureLocal(int aPort)
    }
    else
    {
-      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket  $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInitS1, "UdpRxStringSocket FAIL $ %16s : %d $ %d %d",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// configure the socket at the local address at a port number.
+
+void UdpRxStringSocket::show()
+{
+   // Show.
+   if (mValidFlag)
+   {
+      printf("UdpRxStringSocket  $ %16s : %d\n",
+         BaseClass::mLocal.mIpAddr.mString,
+         BaseClass::mLocal.mPort);
+   }
+   else
+   {
+      printf("UdpRxStringSocket FAIL $ %16s : %d $ %d %d\n",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -225,7 +249,31 @@ void UdpTxStringSocket::configure()
    }
    else
    {
-      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  $ %16s : %d $ %d %d",
+      Prn::print(Prn::SocketInitS1, "UdpTxStringSocket  FAIL $ %16s : %d $ %d %d",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort,
+         BaseClass::mStatus,
+         BaseClass::mError);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Show.
+
+void UdpTxStringSocket::show()
+{
+   // Show.
+   if (mValidFlag)
+   {
+      printf("UdpTxStringSocket  $ %16s : %d\n",
+         BaseClass::mRemote.mIpAddr.mString,
+         BaseClass::mRemote.mPort);
+   }
+   else
+   {
+      printf("UdpTxStringSocket  FAIL $ %16s : %d $ %d %d\n",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
