@@ -138,7 +138,7 @@ void SerialMsgThread::shutdownThread()
 void SerialMsgThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Guard.
-   if (!mRxMsgQCall.mExecuteCallPointer.isValid()) return;
+   if (!mRxMsgQCall.isValid()) return;
 
    // Invoke the receive callback qcall.
    mRxMsgQCall(aMsg);

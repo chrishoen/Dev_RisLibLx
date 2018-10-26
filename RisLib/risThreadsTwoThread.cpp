@@ -34,7 +34,6 @@ namespace Threads
 
 TwoThreadShortThread::TwoThreadShortThread()
 {
-   // Timer
    mTimerPeriod = 1000;
    mTimerCompletionDownCounter = 0;
    mTimerCompletionCode = 0;
@@ -47,45 +46,45 @@ TwoThreadShortThread::~TwoThreadShortThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// BaseClass overload
+// BaseClass overload.
 
 void TwoThreadShortThread::threadInitFunction() 
 {
-   // Call the call pointer
-   if (mThreadInitCallPointer.isValid()) mThreadInitCallPointer();
+   // Call the call pointer.
+   if (mThreadInitCallPointer) mThreadInitCallPointer();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// BaseClass overload
+// BaseClass overload.
 
 void TwoThreadShortThread::threadExitFunction() 
 {
-   // Call the call pointer
-   if (mThreadExitCallPointer.isValid()) mThreadExitCallPointer();
+   // Call the call pointer.
+   if (mThreadExitCallPointer) mThreadExitCallPointer();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// BaseClass overload
+// BaseClass overload.
 
 void TwoThreadShortThread::threadExceptionFunction(char* aStr)
 {
-   // Call the call pointer
-   if (mThreadExceptionCallPointer.isValid()) mThreadExceptionCallPointer(aStr);
+   // Call the call pointer.
+   if (mThreadExceptionCallPointer) mThreadExceptionCallPointer(aStr);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// BaseClass overload
+// BaseClass overload.
 
 void TwoThreadShortThread::executeOnTimer(int aTimerCount)
 {
    // Post to the timer completion semaphore,
-   // If the down counter counts down to zero
+   // If the down counter counts down to zero.
    if (mTimerCompletionDownCounter != 0)
    {
       if (--mTimerCompletionDownCounter == 0)
@@ -94,8 +93,8 @@ void TwoThreadShortThread::executeOnTimer(int aTimerCount)
       }
    }
 
-   // Call the call pointer
-   if (mThreadExecuteOnTimerCallPointer.isValid()) mThreadExecuteOnTimerCallPointer(aTimerCount);
+   // Call the call pointer.
+   if (mThreadExecuteOnTimerCallPointer) mThreadExecuteOnTimerCallPointer(aTimerCount);
 }
 
 //******************************************************************************
@@ -104,20 +103,20 @@ void TwoThreadShortThread::executeOnTimer(int aTimerCount)
 
 int TwoThreadShortThread::threadWaitForTimerCompletion(int aTimerCount) 
 {
-   // Guard
+   // Guard.
    if (aTimerCount==0) return 0;
 
-   // Initialize completion code
+   // Initialize completion code.
    mTimerCompletionCode = TimerCompletion_Timeout;
-   // Reset timer completion
+   // Reset timer completion.
    mTimerCompletionSem.reset();
-   // Set the down counter, -1 means infinite timeout
+   // Set the down counter, -1 means infinite timeout.
    mTimerCompletionDownCounter = aTimerCount != -1 ? aTimerCount : 0;
    
-   // Wait for timer completion
+   // Wait for timer completion.
    mTimerCompletionSem.get();
 
-   // Return completion code
+   // Return completion code.
    return mTimerCompletionCode;
 }
 
@@ -127,13 +126,13 @@ int TwoThreadShortThread::threadWaitForTimerCompletion(int aTimerCount)
 
 void TwoThreadShortThread::threadAbortTimerCompletion()
 {
-   // Set completion code
+   // Set completion code.
    mTimerCompletionCode = TimerCompletion_Aborted;
-   // Clear down counter
+   // Clear down counter.
    mTimerCompletionDownCounter = 0;
 
-   // Post to timer completion
-   // This wakes up the above wait
+   // Post to timer completion.
+   // This wakes up the above wait.
    mTimerCompletionSem.put();
 }
 
@@ -143,13 +142,13 @@ void TwoThreadShortThread::threadAbortTimerCompletion()
 
 void TwoThreadShortThread::threadForceTimerCompletion()
 {
-   // Set completion code
+   // Set completion code.
    mTimerCompletionCode = TimerCompletion_Forced;
-   // Clear down counter
+   // Clear down counter.
    mTimerCompletionDownCounter = 0;
 
-   // Post to timer completion
-   // This wakes up the above wait
+   // Post to timer completion.
+   // This wakes up the above wait.
    mTimerCompletionSem.put();
 }
 
@@ -159,13 +158,13 @@ void TwoThreadShortThread::threadForceTimerCompletion()
 
 void TwoThreadShortThread::threadForceTimerCompletionWithError()
 {
-   // Set completion code
+   // Set completion code.
    mTimerCompletionCode = TimerCompletion_ForcedError;
-   // Clear down counter
+   // Clear down counter.
    mTimerCompletionDownCounter = 0;
 
-   // Post to timer completion
-   // This wakes up the above wait
+   // Post to timer completion.
+   // This wakes up the above wait.
    mTimerCompletionSem.put();
 }
 
@@ -178,7 +177,7 @@ void TwoThreadShortThread::threadForceTimerCompletionWithError()
 
 BaseTwoThread::BaseTwoThread()
 {
-   // Create thread objects
+   // Create thread objects.
    mShortThread = new TwoThreadShortThread;
    mLongThread  = new TwoThreadLongThread;
 
@@ -186,8 +185,7 @@ BaseTwoThread::BaseTwoThread()
    mLongThread->mThreadPriority = get_default_long_thread_priority();
    mLongThread->mTimerPeriod = 0;
 
-
-   // Default exception codes
+   // Default exception codes.
    mTimerCompletionAbortException   = 666;
    mTimerCompletionTimeoutException = 667;   
    mTimerCompletionErrorException   = 668;
@@ -261,7 +259,7 @@ int BaseTwoThread::waitForTimer(int aTimeout)
    // Test for abort flag.
    if (mLongThread->mQCallAbortFlag)
    {
-      // Throw exception for abort
+      // Throw exception for abort.
       if (mTimerCompletionAbortException != 0)
       {
          throw mTimerCompletionAbortException;
@@ -271,25 +269,25 @@ int BaseTwoThread::waitForTimer(int aTimeout)
    // Exit if zero.
    if (aTimeout==0) return TwoThreadShortThread::TimerCompletion_Timeout;
 
-   // Timer count from timeout
+   // Timer count from timeout.
    int tTimerCount = aTimeout/mShortThread->mTimerPeriod + 1;
    if (aTimeout < 0) tTimerCount = -1;
 
-   // Wait for timer completion
+   // Wait for timer completion.
    int tTimerCompletionCode = mShortThread->threadWaitForTimerCompletion(tTimerCount);
 
-   // Process timer completion
+   // Process timer completion.
    switch (tTimerCompletionCode)
    {
       case TwoThreadShortThread::TimerCompletion_Aborted :
-         // Throw exception for abort
+         // Throw exception for abort.
          if (mTimerCompletionAbortException != 0)
          {
             throw mTimerCompletionAbortException;
          }
          break;
       case TwoThreadShortThread::TimerCompletion_ForcedError :
-         // Throw exception for abort
+         // Throw exception for abort.
          if (mTimerCompletionErrorException != 0)
          {
             throw mTimerCompletionErrorException;
@@ -297,7 +295,7 @@ int BaseTwoThread::waitForTimer(int aTimeout)
          break;
    }
 
-   // Return timer completion code
+   // Return timer completion code.
    return tTimerCompletionCode;
 }
 
@@ -310,7 +308,7 @@ void BaseTwoThread::resetNotify()
    // Test for abort flag.
    if (mLongThread->mQCallAbortFlag)
    {
-      // Throw exception for abort
+      // Throw exception for abort.
       if (mTimerCompletionAbortException != 0)
       {
          throw mTimerCompletionAbortException;
@@ -332,39 +330,39 @@ int BaseTwoThread::waitForNotify(int aTimeout)
    // Test for abort flag.
    if (mLongThread->mQCallAbortFlag)
    {
-      // Throw exception for abort
+      // Throw exception for abort.
       if (mTimerCompletionAbortException != 0)
       {
          throw mTimerCompletionAbortException;
       }
    }
 
-   // Timer count from timeout
+   // Timer count from timeout.
    int tTimerCount = aTimeout/mShortThread->mTimerPeriod + 1;
    if (aTimeout < 0) tTimerCount = -1;
 
-   // Wait for timer completion
+   // Wait for timer completion.
    int tTimerCompletionCode = mShortThread->threadWaitForTimerCompletion(tTimerCount);
 
-   // Process timer completion
+   // Process timer completion.
    switch (tTimerCompletionCode)
    {
       case TwoThreadShortThread::TimerCompletion_Aborted :
-         // Throw exception for abort
+         // Throw exception for abort.
          if (mTimerCompletionAbortException != 0)
          {
             throw mTimerCompletionAbortException;
          }
          break;
       case TwoThreadShortThread::TimerCompletion_Timeout :
-         // Throw exception for abort
+         // Throw exception for abort.
          if (mTimerCompletionTimeoutException != 0)
          {
             throw mTimerCompletionTimeoutException;
          }
          break;
       case TwoThreadShortThread::TimerCompletion_ForcedError :
-         // Throw exception for abort
+         // Throw exception for abort.
          if (mTimerCompletionErrorException != 0)
          {
             throw mTimerCompletionErrorException;
@@ -372,7 +370,7 @@ int BaseTwoThread::waitForNotify(int aTimeout)
          break;
    }
 
-   // Return timer completion code
+   // Return timer completion code.
    return tTimerCompletionCode;
 }
 
@@ -385,16 +383,16 @@ int BaseTwoThread::waitForNotify(int aTimeout)
 
 void BaseTwoThread::waitForNotify(int aTimeout, int aIndex)
 {
-   // Set the notification latch mask
+   // Set the notification latch mask,
    mNotifyLatch.setMaskBit(aIndex);
 
-   // Set flag to wait for any notification
+   // Set flag to wait for any notification.
    mWaitingForNotifyAny = true;
 
    // Return if the latch bit is already set.
    if (mNotifyLatch.isAny()) return;
 
-   // Wait for notication
+   // Wait for notication.
    waitForNotify(aTimeout);
 }
 
@@ -407,7 +405,7 @@ void BaseTwoThread::waitForNotify(int aTimeout, int aIndex)
 
 void BaseTwoThread::waitForNotifyAny(int aTimeout, int aNumArgs, ...)
 {
-   // Set the notification latch mask from variable arguments
+   // Set the notification latch mask from variable arguments.
    va_list valist;
    va_start(valist,aNumArgs);
    for (int i=0;i<aNumArgs;i++)
@@ -417,10 +415,10 @@ void BaseTwoThread::waitForNotifyAny(int aTimeout, int aNumArgs, ...)
    }
    va_end(valist);
 
-   // Set flag to wait for any notification
+   // Set flag to wait for any notification.
    mWaitingForNotifyAny = true;
 
-   // Wait for notication
+   // Wait for notication.
    waitForNotify(aTimeout);
 }
 
@@ -433,7 +431,7 @@ void BaseTwoThread::waitForNotifyAny(int aTimeout, int aNumArgs, ...)
 
 void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
 {
-   // Set the notification latch mask from variable arguments
+   // Set the notification latch mask from variable arguments.
    va_list valist;
    va_start(valist,aNumArgs);
    for (int i=0;i<aNumArgs;i++)
@@ -443,10 +441,10 @@ void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
    }
    va_end(valist);
 
-   // Set flag to wait for all notifications
+   // Set flag to wait for all notifications.
    mWaitingForNotifyAny = false;
 
-   // Wait for notication
+   // Wait for notication.
    waitForNotify(aTimeout);
 }
 
@@ -458,33 +456,33 @@ void BaseTwoThread::waitForNotifyAll(int aTimeout, int aNumArgs, ...)
 
 void BaseTwoThread::notify(int aIndex)
 {
-   // Test for notification error
+   // Test for notification error.
    if (aIndex == 999)
    {
       mShortThread->threadForceTimerCompletionWithError();
       return;
    }
 
-   // Set notification latch element
+   // Set notification latch element.
    mNotifyLatch.setLatchBit(aIndex);
 
-   // Temp
+   // Temp.
    bool tNotify=false;
 
-   // If waiting for any
+   // If waiting for any.
    if (mWaitingForNotifyAny)
    {
-      // If any notification in the latch
+      // If any notification in the latch.
       if (mNotifyLatch.isAny()) tNotify=true;
    }
-   // If waiting for any
+   // If waiting for any.
    else
    {
-      // If all notifications are in the latch
+      // If all notifications are in the latch.
       if (mNotifyLatch.isAll()) tNotify=true;
    }
 
-   // Notify
+   // Notify.
    if (tNotify)
    {
       mShortThread->threadForceTimerCompletion();
@@ -499,13 +497,13 @@ void BaseTwoThread::notify(int aIndex)
 
 void BaseTwoThread::executeSendNotify(int aIndex,int aStatus,void* aData)
 {
-   // If the status is okay
+   // If the status is okay.
    if (aStatus == 0)
    {
       // Notify the long term thread.
       notify(aIndex);
    }
-   // If the status is an error
+   // If the status is an error.
    else
    {   
       // Notify the long term thread that there was an error.

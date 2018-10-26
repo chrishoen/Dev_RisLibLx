@@ -20,18 +20,16 @@ namespace Threads
 
 BaseQCallThread::BaseQCallThread()
 {
-   // Logic
+   mThreadPriority = get_default_qcall_thread_priority();
+
    mTerminateFlag = false;
    mCallQueSize=100;
    mQCallAbortFlag = false;
 
-   // Timer
    mTimerExecuteFlag = false;
    mTimerPeriod = 1000;
    mCurrentTimeCount = 0;
    mTimerCurrentTimeCount = 0;
-
-   mThreadPriority = get_default_qcall_thread_priority();
 }
 
 BaseQCallThread::~BaseQCallThread()
@@ -44,7 +42,7 @@ BaseQCallThread::~BaseQCallThread()
 
 void BaseQCallThread::threadResourceInitFunction()
 {
-   // Initialize the call queue
+   // Initialize the call queue.
    BaseQCallTarget::initializeCallQueue(mCallQueSize);
 }
 
@@ -54,13 +52,15 @@ void BaseQCallThread::threadResourceInitFunction()
 
 void BaseQCallThread::threadTimerInitFunction()
 {
-   // Guard
+   using namespace std::placeholders;
+
+   // Guard.
    if (mTimerPeriod == 0) return;
 
-   // Bind timer callback
-   mThreadTimerCall.bind (this,&BaseQCallThread::threadExecuteOnTimer);
+   // Bind timer callback.
+   mThreadTimerCall = std::bind (&BaseQCallThread::threadExecuteOnTimer, this, _1);
 
-   // Start timer
+   // Start timer.
    mThreadTimer.startTimer(mThreadTimerCall,mTimerPeriod);
 }
 
@@ -70,11 +70,11 @@ void BaseQCallThread::threadTimerInitFunction()
 
 void BaseQCallThread::threadExecuteOnTimer(int aCurrentTimeCount)
 {
-   // Update timer variables
+   // Update timer variables.
    mTimerCurrentTimeCount++;
    mTimerExecuteFlag=true;
 
-   // Use central semaphore to wake up the thread
+   // Use central semaphore to wake up the thread.
    mCentralSem.put();
 }
 
@@ -97,28 +97,16 @@ void BaseQCallThread::threadRunFunction()
    Prn::print(Prn::QCallRun1, "BaseQCallThread::threadRunFunction");
    while (true)
    {
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      // Wait for the central thread semaphore
-
+      // Wait for the central thread semaphore.
       mCentralSem.get();
 
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      // Test for terminate
-
+      // Test for termination..
       if(mTerminateFlag) return;
 
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
       // Test for timer. 
       // When the timer service routine is called, it sets
       // TimerExecuteFlag true, increments mCurrentTimeCount, and
       // puts to mCentralSem. 
-
       if(mTimerExecuteFlag)
       {
          mTimerExecuteFlag=false;
@@ -130,35 +118,21 @@ void BaseQCallThread::threadRunFunction()
          executeOnTimer(mCurrentTimeCount);
       }
 
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      //----------------------------------------------------------
-      // Not timer, was from the thread call queue.
-
+      // Not timer, the semaphore was from the thread call queue.
       else
       {
-         //----------------------------------------------------------
-         //----------------------------------------------------------
-         //----------------------------------------------------------
-         // Get QCall from queue
+         // Try to read a qcall from the queue.
+         BaseQCall* tQCall = (BaseQCall*)mCallQueue.tryRead();
 
-         int tIndex;
-         BaseQCall* tQCall = (BaseQCall*)mCallQueue.startRead(&tIndex);
-
-         //----------------------------------------------------------
-         //----------------------------------------------------------
-         //----------------------------------------------------------
-         // Execute QCall
-
-         // If there is a QCall available
+         // Test the read.
          if (tQCall)
          {
             // Set the abort flag false for each qcall.
             mQCallAbortFlag = false;
-            // Execute QCall
+            // Execute the qcall.
             tQCall->execute();
-            // Release it
-            mCallQueue.finishRead(tIndex);
+            // Delete the qcall.
+            delete tQCall;
          }
       }
    }
@@ -173,30 +147,32 @@ void BaseQCallThread::threadResourceExitFunction()
 {
    Prn::print(Prn::QCallInit1, "BaseQCallThread::threadResourceExitFunction");
 
-   // Finalize the call queue
+   // Finalize the call queue.
    BaseQCallTarget::initializeCallQueue(mCallQueSize);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Shutdown
+// Shutdown the thread.
 
 void BaseQCallThread::shutdownThread()
 {
    Prn::print(Prn::QCallInit1, "BaseQCallThread::shutdownThread");
 
-   // Set termination flag
+   // Set termination flag.
    mTerminateFlag=true;
-   // Post to the call sem to wake up thread if blocked on it
+   // Post to the call sem to wake up thread if blocked on it.
    mCentralSem.put();
-   // Wait for thread terminate
+   // Wait for thread terminate.
    waitForThreadTerminate();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Post to the central semahore. It is called by qcall invokations after
+// a qcall has been enqueued to the call queue.
 
 void BaseQCallThread::notifyQCallAvailable()
 {

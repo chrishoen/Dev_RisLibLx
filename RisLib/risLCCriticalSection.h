@@ -1,7 +1,6 @@
 #pragma once
+
 /*==============================================================================
-This defines a stack of void* pointers. It can be used by specialized heaps
-and pools as an allocator. It is not thread safe.
 ==============================================================================*/
 
 //******************************************************************************
@@ -14,43 +13,28 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// These functions provide a synchronization lock that is used to protect
+// access to critical sections of code. These should be used around short
+// sections that do not block. These functions are intended to be cross
+// platform. They use a void* general purpose variable.
 
-class PointerStack
-{
-public:
-   //---------------------------------------------------------------------------
-   // Methods
+// Created a critical section. Pass the returned code to the following
+// functions.
+void* createCriticalSection();
 
-   // Constructor
-   PointerStack();
-  ~PointerStack();
+// Enter a critical section. This is used to lock a resource for a short
+// time interval.
+void enterCriticalSection(void* aCriticalSection);
 
-   // Initialize and allocate memory for the stack.
-   void initialize(int aAllocate);
+// Leave a critical section. This is used to unlock a resource.
+void leaveCriticalSection(void* aCriticalSection);
 
-   // Push an element onto the stack.
-   // Return false if stack is full.
-   bool  push(void* aPointer);
-
-   // Pop an element off of the stack
-   // Return null if stack is empty.
-   void* pop();
-
-   //---------------------------------------------------------------------------
-   // Members
-
-   // Array of void*
-   void** mArray;
-
-   // Index into the array
-   int mIndex;
-
-   // Size of the array
-   int mAllocate;
-};
+// Destroy a critical section.
+void destroyCriticalSection(void* aCriticalSection);
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace
+
 

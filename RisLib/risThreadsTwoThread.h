@@ -13,6 +13,7 @@ used as a thread that can send a command somewhere and wait for a response.
 //******************************************************************************
 
 #include <atomic>
+#include <functional>
 #include "risLogic.h"
 #include "risThreadsQCallThread.h"
 
@@ -61,10 +62,10 @@ public:
    // they are bound. They are bound to functions by the instantiator before
    // the thread is launched. Any that are not bound result in a no op for the
    // thread run function.
-   CallPointer0<>       mThreadInitCallPointer;
-   CallPointer0<>       mThreadExitCallPointer;
-   CallPointer1<char*>  mThreadExceptionCallPointer;
-   CallPointer1<int>    mThreadExecuteOnTimerCallPointer;
+   std::function<void(void)>   mThreadInitCallPointer;
+   std::function<void(void)>   mThreadExitCallPointer;
+   std::function<void(char*)>  mThreadExceptionCallPointer;
+   std::function<void(int)>    mThreadExecuteOnTimerCallPointer;
 
    //***************************************************************************
    //***************************************************************************

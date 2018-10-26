@@ -189,7 +189,7 @@ void TcpMsgClientThread::shutdownThread()
 void TcpMsgClientThread::processSessionChange(bool aEstablished)
 {
    // Guard.
-   if (!mSessionQCall.mExecuteCallPointer.isValid())
+   if (!mSessionQCall.isValid())
    {
       Prn::print(Prn::SocketErrorT1, "ERROR processSessionChange qcall invalid");
       return;
@@ -210,7 +210,7 @@ void TcpMsgClientThread::processSessionChange(bool aEstablished)
 void TcpMsgClientThread::processRxMsg(Ris::ByteContent* aMsg)
 {
    // Guard.
-   if (!mRxMsgQCall.mExecuteCallPointer.isValid()) return;
+   if (!mRxMsgQCall.isValid()) return;
 
    // Invoke the receive callback qcall.
    mRxMsgQCall(aMsg);

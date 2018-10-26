@@ -130,8 +130,6 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risPortableTypes.h"
-#include "risCallPointer.h"
 #include "risThreadsThreads.h"
 #include "risThreadsTimer.h"
 #include "risThreadsSynch.h"
@@ -182,7 +180,7 @@ public:
    //***************************************************************************
    // Members, call queue.
 
-   // This semahore is posted to when QCalls for this thread are invoked or
+   // This semahore is posted to when qcalls for this thread are invoked or
    // when a periodic timer event occurrs.
    CountingSemaphore mCentralSem;
 
@@ -257,8 +255,8 @@ public:
    //***************************************************************************
    // Methods, qcall target overloads:
 
-   // Post to the central semahore. It is called by QCall invokations after
-   // a QCall has been enqueued to the call queue.
+   // Post to the central semahore. It is called by qcall invokations after
+   // a qcall has been enqueued to the call queue.
    void notifyQCallAvailable() override;
 
    //***************************************************************************

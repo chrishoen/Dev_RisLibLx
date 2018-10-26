@@ -7,8 +7,7 @@ Thread timer.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "risPortableTypes.h"
-#include "risCallPointer.h"
+#include <functional>
 
 namespace Ris
 {
@@ -23,7 +22,7 @@ namespace Threads
 
 
 // Call pointer for function to be called periodically
-typedef CallPointer1<int> TimerCall;
+typedef std::function<void(int)> TimerCall;
 
 class ThreadTimer
 {

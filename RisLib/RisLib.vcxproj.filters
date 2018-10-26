@@ -17,7 +17,7 @@
     <ClCompile Include="risCmdLineParms.cpp" />
     <ClCompile Include="risCmdLineString.cpp" />
     <ClCompile Include="risCmdLineTables.cpp" />
-    <ClCompile Include="risLMPacketQueue.cpp" />
+    <ClCompile Include="risLCPointerQueue.cpp" />
     <ClCompile Include="risLogic.cpp" />
     <ClCompile Include="risNanoTime.cpp" />
     <ClCompile Include="risNetSessionStateList.cpp" />
@@ -29,7 +29,6 @@
     <ClCompile Include="risNetUdpMsgSocket.cpp" />
     <ClCompile Include="risNetUdpMsgThread.cpp" />
     <ClCompile Include="risNetUdpStringSocket.cpp" />
-    <ClCompile Include="risPointerStack.cpp" />
     <ClCompile Include="risPortableCalls_linux.cpp" />
     <ClCompile Include="risProgramTime.cpp" />
     <ClCompile Include="risSerialHeaderBuffer.cpp" />
@@ -48,6 +47,7 @@
     <ClCompile Include="risThreadsTwoThread.cpp" />
     <ClCompile Include="risTimeMarker.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="risLCCritcalSection_linux.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logFiles.h" />
@@ -62,7 +62,6 @@
     <ClInclude Include="risByteBuffer.h" />
     <ClInclude Include="risByteContent.h" />
     <ClInclude Include="risByteMsgMonkey.h" />
-    <ClInclude Include="risCallPointer.h" />
     <ClInclude Include="risCmdLineCmd.h" />
     <ClInclude Include="risCmdLineConsole.h" />
     <ClInclude Include="risCmdLineExec.h" />
@@ -72,8 +71,7 @@
     <ClInclude Include="risCmdLineTables.h" />
     <ClInclude Include="risContainers.h" />
     <ClInclude Include="risContainers2.h" />
-    <ClInclude Include="risLFIndex.h" />
-    <ClInclude Include="risLMPacketQueue.h" />
+    <ClInclude Include="risLCPointerQueue.h" />
     <ClInclude Include="risLogic.h" />
     <ClInclude Include="risMemoryPtr.h" />
     <ClInclude Include="risNanoTime.h" />
@@ -87,7 +85,6 @@
     <ClInclude Include="risNetUdpMsgSocket.h" />
     <ClInclude Include="risNetUdpMsgThread.h" />
     <ClInclude Include="risNetUdpStringSocket.h" />
-    <ClInclude Include="risPointerStack.h" />
     <ClInclude Include="risPortableCalls.h" />
     <ClInclude Include="risPortableTypes.h" />
     <ClInclude Include="risProgramTime.h" />
@@ -109,5 +106,6 @@
     <ClInclude Include="risThreadsTwoThread.h" />
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="risLCCriticalSection.h" />
   </ItemGroup>
 </Project>
