@@ -35,29 +35,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="procoMsg.cpp" />
-    <ClCompile Include="procoMsgBase.cpp" />
-    <ClCompile Include="procoMsgHelper.cpp" />
-    <ClCompile Include="procoSerialSettings.cpp" />
-    <ClCompile Include="procoTcpSettings.cpp" />
-    <ClCompile Include="procoUdpSettings.cpp" />
-    <ClCompile Include="someThreadParms.cpp" />
+    <ProjectReference Include="..\CommonLib\CommonLib.vcxproj">
+      <Project>{151dfa57-db3a-4bd3-9e40-d1896edb6e57}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\RisLib\RisLib.vcxproj">
+      <Project>{3fe48eb7-b04f-47f6-b02d-7427908f02bf}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CmdLineExec.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainInit.cpp" />
+    <ClCompile Include="someMasterThread.cpp" />
+    <ClCompile Include="someRandomTimerThread.cpp" />
+    <ClCompile Include="someSlaveThread.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="procoMsg.h" />
-    <ClInclude Include="procoMsgBase.h" />
-    <ClInclude Include="procoMsgHelper.h" />
-    <ClInclude Include="procoSerialSettings.h" />
-    <ClInclude Include="procoTcpSettings.h" />
-    <ClInclude Include="procoUdpSettings.h" />
-    <ClInclude Include="someThreadParms.h" />
+    <ClInclude Include="CmdLineExec.h" />
+    <ClInclude Include="MainInit.h" />
+    <ClInclude Include="someMasterThread.h" />
+    <ClInclude Include="someRandomTimerThread.h" />
+    <ClInclude Include="someSlaveThread.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{88b538a6-7f9a-47e3-97bf-c88ab3b828f4}</ProjectGuid>
+    <ProjectGuid>{7DD8EAE4-918A-470C-9889-FCDCEF3735B8}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>CommonLib</RootNamespace>
+    <RootNamespace>ProtoUdp</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -70,7 +75,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -102,9 +106,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
       <AdditionalOptions>-pthread</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\RisLib;..\CommonLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <AdditionalIncludeDirectories>..\RisLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <LibraryDependencies>pthread</LibraryDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

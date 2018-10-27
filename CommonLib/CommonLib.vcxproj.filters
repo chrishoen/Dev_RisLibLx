@@ -8,6 +8,7 @@
     <ClCompile Include="procoTcpSettings.cpp" />
     <ClCompile Include="procoUdpSettings.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="someThreadParms.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="procoMsg.h" />
@@ -17,5 +18,6 @@
     <ClInclude Include="procoTcpSettings.h" />
     <ClInclude Include="procoUdpSettings.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="someThreadParms.h" />
   </ItemGroup>
 </Project>
