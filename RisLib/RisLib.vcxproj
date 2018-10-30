@@ -120,7 +120,6 @@
     <ClInclude Include="risNetUdpMsgThread.h" />
     <ClInclude Include="risNetUdpStringSocket.h" />
     <ClInclude Include="risPortableCalls.h" />
-    <ClInclude Include="risPortableTypes.h" />
     <ClInclude Include="risProgramTime.h" />
     <ClInclude Include="risSerialHeaderBuffer.h" />
     <ClInclude Include="risSerialMsgPort.h" />
@@ -132,7 +131,6 @@
     <ClInclude Include="risThreadsProcess.h" />
     <ClInclude Include="risThreadsQCall.h" />
     <ClInclude Include="risThreadsQCallThread.h" />
-    <ClInclude Include="risThreadsQueue.h" />
     <ClInclude Include="risThreadsSynch.h" />
     <ClInclude Include="risThreadsThreads.h" />
     <ClInclude Include="risThreadsTimer.h" />

@@ -38,8 +38,6 @@ TcpClientSocket connects to a Hub and send/recv with a node.
 //******************************************************************************
 //******************************************************************************
 
-#include "risPortableTypes.h"
-
 namespace Ris
 {
 namespace Sockets

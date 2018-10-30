@@ -16,44 +16,33 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 
-//------------------------------------------------------------------------------
-// Ticks are in milliseconds.
-
+// Sleep. Ticks are in milliseconds.
 void portableSleep(int aTicks);
 
-//------------------------------------------------------------------------------
-// This returns a pointer to the current working directory.
-
+// Return a pointer to the current working directory.
 char* portableGetProgramDir();
 char* portableGetCurrentDir();
 
-//------------------------------------------------------------------------------
 // Wait for key pressed.
-
 void  portableWaitForKbhit();
 bool  portableKbhit(void);
 
-//------------------------------------------------------------------------------
-// Get system time, nanoseconds.
-
+// Get high resolution time, nanoseconds.
 long long int portableGetHiResCounter();
 long long int portableGetHiResFrequency();
 
-//------------------------------------------------------------------------------
-// strupr.
-
+// convert string to upper case.
 void portableStrupr(char* aString);
 
-//------------------------------------------------------------------------------
-// Console title.
-
+// Set console title.
 void portableSetConsoleTitle(char* aTitle);
 
-//------------------------------------------------------------------------------
-// Get file exists.
-
+// Return true if file exists.
 bool portableFilePathExists (char* aFilePath);
   
+// Set the program current working directory.
+void portableChdir(const char* aFilePath);
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
