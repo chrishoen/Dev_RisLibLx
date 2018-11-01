@@ -44,13 +44,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
-   aCmd->setArgDefault(2,11.1);
-
    int    tInt    = aCmd->argInt(1);
    double tDouble = aCmd->argDouble(2);
 
-   Prn::print(0,"Show2 %d %10.6f",tInt,tDouble);
+   char* p = 0;
+   long converted = strtol(aCmd->argString(1), &p, 10);
+   bool tFlag = *p == 0;
+
+   Prn::print(0,"IsInteger %s",my_string_from_bool(tFlag));
 }
 
 //******************************************************************************
@@ -58,6 +59,15 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, "IsInteger %s", my_string_from_bool(aCmd->isArgInteger(1)));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    char tString[200];
 
@@ -67,15 +77,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
       printf("CMD %d %s", (int)strlen(tString), tString);
       if (strcmp(tString, "e\n") == 0) break;
    }
-}
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
-{
-  
 }
 
 //******************************************************************************
