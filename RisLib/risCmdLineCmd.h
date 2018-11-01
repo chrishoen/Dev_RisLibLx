@@ -110,8 +110,8 @@ public:
    // Copy an argument into a string
    void copyArgString (int aArgIndex,char* aString,int aMaxSize);
 
-   // Return true if the argument is an integer.
-   bool isArgInteger(int aArgIndex);
+   // Return true if the argument is a number.
+   bool isArgNumber(int aArgIndex);
 
    // Set defaults for arguments from the command line.
    // These are used as defaults if no arguments are entered.

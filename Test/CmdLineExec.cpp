@@ -44,14 +44,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   int    tInt    = aCmd->argInt(1);
-   double tDouble = aCmd->argDouble(2);
-
-   char* p = 0;
-   long converted = strtol(aCmd->argString(1), &p, 10);
-   bool tFlag = *p == 0;
-
-   Prn::print(0,"IsInteger %s",my_string_from_bool(tFlag));
+   Prn::print(0, "IsNumber %s", my_string_from_bool(aCmd->isArgNumber(1)));
 }
 
 //******************************************************************************
@@ -60,7 +53,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "IsInteger %s", my_string_from_bool(aCmd->isArgInteger(1)));
 }
 
 //******************************************************************************

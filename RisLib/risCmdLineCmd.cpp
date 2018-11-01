@@ -354,18 +354,27 @@ void CmdLineCmd::copyArgString (int aArgIndex,char* aString,int aMaxSize)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return true if the argument is an integer.
+// Return true if the argument is a number.
 
-bool CmdLineCmd::isArgInteger(int aArgIndex)
+bool CmdLineCmd::isArgNumber(int aArgIndex)
 {
    // Guard.
    if (!mArgFlag[aArgIndex]) return false;
 
    // Determine if the argument is an integer.
    char* p = 0;
-   strtol(mArgPtr[aArgIndex], &p, 10);
+
+   p = 0;
+   strtol(mArgPtr[aArgIndex], &p, 0);
    if (p == 0) return false;
-   return *p == 0;
+   if (*p == 0) return true;
+
+   p = 0;
+   strtod(mArgPtr[aArgIndex], &p);
+   if (p == 0) return false;
+   if (*p == 0) return true;
+
+   return false;
 }
 
 //******************************************************************************
