@@ -130,7 +130,7 @@ void SerialPort::doOpen()
  
    mValidFlag=true;
 
-   Prn::print(Prn::SerialInitP2, "SerialMsgPort initialize PASS  $ %s : %16s",
+   Prn::print(Prn::SerialInitP2, "SerialPort initialize PASS  $ %s : %16s",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
 }
