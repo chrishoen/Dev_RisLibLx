@@ -87,8 +87,8 @@ public:
    // Send data, fixed number of bytes.
    int  doSendBytes(char *aData, int aNumBytes);
 
-   // Send data, null terminated string.
-   int  doSendZString(char *aData);
+   // Send a null terminated string, append an end of line LF (\n,10)
+   int  doSendLine(char *aData);
 
    // Send data, one byte.
    int  doSendOne(char aData);
@@ -99,13 +99,14 @@ public:
    // Methods.
 
    // Receive data, fixed number of bytes.
-   int  doReceiveBytes(char *aData, int aNumBytes);
+   int doReceiveBytes(char *aData, int aNumBytes);
 
-   // Receive data, terminated with end of line(\n,10).
-   int  doReceiveUntilEOL(char *aData, int aMaxNumBytes);
+   // Receive a string, terminated with end of line LF (\n,10). Trims the 
+   // terminator and returns a null terminated string.
+   int doReceiveLine(char *aData, int aMaxNumBytes);
 
    // Receive one byte.
-   int  doReceiveOne(char *aData);
+   int doReceiveOne(char *aData);
 
    // Return the number of bytes that are available to receive.
    int getAvailableReceiveBytes();
