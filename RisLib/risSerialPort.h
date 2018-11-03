@@ -88,7 +88,7 @@ public:
    int  doSendBytes(char *aData, int aNumBytes);
 
    // Send a null terminated string, append an end of line LF (\n,10)
-   int  doSendLine(char *aData);
+   int  doSendLine(const char *aData);
 
    // Send data, one byte.
    int  doSendOne(char aData);

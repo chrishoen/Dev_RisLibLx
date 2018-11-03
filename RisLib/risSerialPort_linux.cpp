@@ -221,7 +221,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
 //******************************************************************************
 // Send data, null terminated string, append an end of line LF (\n,10)
 
-int SerialPort::doSendLine(char *aData)
+int SerialPort::doSendLine(const char *aData)
 {
    // Copy the input string to a temp buffer and append a terminator.
    char tBuffer[200];
