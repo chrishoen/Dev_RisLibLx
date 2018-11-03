@@ -36,7 +36,7 @@ void PrintSettings::reset()
    char tBuffer[200];
    BaseClass::reset();
    BaseClass::setExplicitFileDir(Ris::getAlphaFilePath_Settings(tBuffer));
-   strcpy(BaseClass::mDefaultFileName, "Print_Settings.txt");
+   strcpy(BaseClass::mDefaultFileName, "PrnPrint_Settings.txt");
 
    strcpy(mPrintViewHostIPAddress,"127.0.0.1");
    mPrintViewHostIPPort = Ris::Net::PortDef::cPrintView;
