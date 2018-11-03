@@ -60,7 +60,9 @@ BaseThread::BaseThread()
    mBaseSpecific->mHandle    = 0;
    mThreadPriority = get_default_thread_priority();
    mThreadSingleProcessor  = -1;
+
    mThreadStackSize = 0;
+   mThreadInitSemFlag = true;
 }
 
 //******************************************************************************
@@ -189,6 +191,16 @@ void BaseThread::launchThread()
    // Thread attributes, finalize.
 
    pthread_attr_destroy(&tAttributes);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Wait for the thread init function to complete.
+
+   if (mThreadInitSemFlag)
+   {
+      mThreadInitSem.get();
+   }
 }
 
 //******************************************************************************
@@ -202,7 +214,7 @@ void BaseThread::threadFunction()
    // Thread execution
    try
    {
-      // Seed random numbers for this thread
+      // Seed thread random number.
       my_srand();
       // This is used by inheritors to initialize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
@@ -217,6 +229,11 @@ void BaseThread::threadFunction()
       // Note that the timer starts after the initialization section
       // has completed 
       threadTimerInitFunction();
+      // Post to the thread init semaphore.
+      if (mThreadInitSemFlag)
+      {
+         mThreadInitSem.put();
+      }
       // Run section, overload provided by inheritors 
       threadRunFunction();
       // Exit section, overload provided by inheritors
