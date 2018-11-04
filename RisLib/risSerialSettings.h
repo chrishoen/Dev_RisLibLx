@@ -8,6 +8,8 @@ Byte content message serial port class.
 //******************************************************************************
 //******************************************************************************
 
+#include <string>
+
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "risThreadsQCall.h"
@@ -46,11 +48,18 @@ public:
    // Receive timeout. Milliseconds, 0==no timeout
    int mRxTimeout;
 
+   // If true then inputs or outputs will be logged.
+   bool mTxLogFlag;
+   bool mRxLogFlag;
+
    // Message monkey creator.
    BaseMsgMonkeyCreator* mMonkeyCreator;
 
    // Receive byte content message callback qcall.
    Ris::Threads::QCall1<Ris::ByteContent*> mRxMsgQCall;
+
+   // Receive string callback qcall.
+   Ris::Threads::QCall1<std::string*> mRxStringQCall;
 
    //***************************************************************************
    //***************************************************************************
