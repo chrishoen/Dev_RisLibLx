@@ -107,7 +107,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    int tRet = 0;
    int tLength=tByteBuffer.getLength();
    tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(),tLength);
-   TS::print(3, "doSendMsg %d %d",tRet,tLength);
+   TS::print(4, "doSendMsg %d %d",tRet,tLength);
 
    mTxMsgCount++;
 
@@ -136,7 +136,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
 bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {
-   TS::print(2, "SerialMsgPort::doReceiveMsg***********************************");
+   TS::print(5, "SerialMsgPort::doReceiveMsg***********************************");
 
    //***************************************************************************
    //***************************************************************************
@@ -177,7 +177,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // If bad status then return false.
       if (tRet == mHeaderLength)
       {
-         TS::print(2, "receive header all %d", tRet);
+         TS::print(5, "receive header all %d", tRet);
       }
       else
       {
@@ -196,7 +196,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // the header buffer one byte at a time.
       if (mMonkey->mHeaderValidFlag)
       {
-         TS::print(2, "receive header all PASS");
+         TS::print(5, "receive header all PASS");
          mHeaderAllCount++;
       }
       else
@@ -259,7 +259,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
             // If the header is not valid then continue with the loop.
             if (mMonkey->mHeaderValidFlag)
             {
-               TS::print(2, "receive header one PASS");
+               TS::print(5, "receive header one PASS");
                mHeaderOneCount++;
                mHeaderReadState = cHeaderReadAll;
                tGoing = false;
@@ -282,7 +282,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // If bad status then return false.
    if (tRet == tPayloadLength)
    {
-      TS::print(2, "receive payload %d", tRet);
+      TS::print(5, "receive payload %d", tRet);
    }
    else
    {
@@ -318,7 +318,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    }
 
    // Done.
-   TS::print(2, "SerialMsgPort::doReceiveMsg PASS");
+   TS::print(4, "SerialMsgPort::doReceiveMsg PASS");
    mRxMsgCount++;
    return true;
 }

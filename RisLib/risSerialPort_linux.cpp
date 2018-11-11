@@ -110,9 +110,6 @@ void SerialPort::doOpen()
    struct termios tOptions;
    tcgetattr(mSpecific->mPortFd, &tOptions);
    cfmakeraw(&tOptions);
-// tOptions.c_iflag &= ~(INLCR | IGNCR | ICRNL | IXON | IXOFF);
-// tOptions.c_oflag &= ~(ONLCR | OCRNL);
-// tOptions.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
    tcsetattr(mSpecific->mPortFd, TCSANOW, &tOptions);
 
    //***************************************************************************
@@ -212,7 +209,7 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
    }
 
    // Write was successful. Return the number of bytes written.
-   TS::print(3, "SerialPort::doSendBytes PASS %d",aNumBytes);
+   TS::print(4, "SerialPort::doSendBytes PASS %d",aNumBytes);
    return tRet;
 }
 
@@ -318,7 +315,7 @@ int  SerialPort::doReceiveOne(char *aData)
 
 int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
 {
-   TS::print(2, "SerialPort::doReceiveBytes START %d", aNumBytes);
+   TS::print(5, "SerialPort::doReceiveBytes START %d", aNumBytes);
 
    // Locals.
    int tRet  = 0;
@@ -339,7 +336,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Poll the port for a read or a close.
 
    // Read.
-   TS::print(2, "serial_poll_start");
+   TS::print(5, "serial_poll_start");
 
    struct pollfd tPollFd[2];
    tPollFd[0].fd = mSpecific->mPortFd;
@@ -371,7 +368,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       return cRetCodeError;
    }
 
-   TS::print(2, "serial_poll_pass %d",tRet);
+   TS::print(5, "serial_poll_pass %d",tRet);
 
    //***************************************************************************
    //***************************************************************************
@@ -379,7 +376,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Read from port.
 
    // Read.
-   TS::print(2, "serial_read_start");
+   TS::print(5, "serial_read_start");
    tRet = (int)read(mSpecific->mPortFd, aData, (size_t)aNumBytes);
 
    // Test the return code.
@@ -395,7 +392,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
       return cRetCodeError;
    }
 
-   TS::print(2, "serial_read_pass");
+   TS::print(5, "serial_read_pass");
 
    //***************************************************************************
    //***************************************************************************
@@ -403,7 +400,7 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    // Done.
 
    // Read was successful. Return the number of bytes read.
-   TS::print(2, "SerialPort::doReceiveBytes PASS %d", aNumBytes);
+   TS::print(4, "SerialPort::doReceiveBytes PASS %d", aNumBytes);
    return tRet;
 }
 
