@@ -4,7 +4,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "procoNetworkThread.h"
+#include "someRandomTimerThread.h"
 
 #include "MainInit.h"
 
@@ -26,8 +26,17 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   ProtoComm::gNetworkThread = new ProtoComm::NetworkThread;
-   ProtoComm::gNetworkThread->launchThread();
+   if (true)
+   {
+      Some::gRandomTimerThread1 = new Some::RandomTimerThread(1);
+      Some::gRandomTimerThread1->launchThread();
+   }
+
+   if (true)
+   {
+      Some::gRandomTimerThread2 = new Some::RandomTimerThread(2);
+      Some::gRandomTimerThread2->launchThread();
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -35,7 +44,8 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   ProtoComm::gNetworkThread->showThreadInfo();
+   if (Some::gRandomTimerThread1) Some::gRandomTimerThread1->showThreadInfo();
+   if (Some::gRandomTimerThread2) Some::gRandomTimerThread2->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -51,8 +61,19 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   ProtoComm::gNetworkThread->shutdownThread();
-   delete ProtoComm::gNetworkThread;
+   if (Some::gRandomTimerThread1)
+   {
+      Some::gRandomTimerThread1->shutdownThread();
+      delete Some::gRandomTimerThread1;
+      Some::gRandomTimerThread1 = 0;
+   }
+
+   if (Some::gRandomTimerThread2)
+   {
+      Some::gRandomTimerThread2->shutdownThread();
+      delete Some::gRandomTimerThread2;
+      Some::gRandomTimerThread2 = 0;
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -60,7 +81,7 @@ int main(int argc,char** argv)
    // End program.
 
    main_finalize();
-// return 0;
+   return 0;
 
    printf("press enter\n");
    getchar();

@@ -40,8 +40,6 @@ public:
 
    int mStatusCode;              // User status code
 
-   void* getHandlePtr();
-
 protected:
    class Specific;
    Specific* mSpecific;
@@ -63,9 +61,6 @@ public:
    void put ();                     // Put to the semaphore
    bool get (int timeout= -1);      // Get from the semaphore, block until timeout,
                                     // return true if no timeout
-
-   void* getHandlePtr();
-
 protected:
    class Specific;
    Specific* mSpecific;
@@ -85,8 +80,6 @@ public:
 
    void lock   ();               // Lock the mutex
    void unlock ();               // Unlock the mutex
-
-   void* getHandlePtr();
 
 protected:
    class Specific;

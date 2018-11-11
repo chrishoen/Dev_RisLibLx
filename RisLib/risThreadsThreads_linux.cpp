@@ -15,6 +15,8 @@
 #include <errno.h>
 #include <assert.h>
 
+#include "tsThreadServices.h"
+
 #include "my_functions.h"
 #include "ris_priorities.h"
 #include "prnPrint.h"
@@ -53,16 +55,23 @@ public:
 
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
 
 BaseThread::BaseThread() 
 {
    mBaseSpecific = new BaseSpecific;
-   mBaseSpecific->mHandle    = 0;
+   mBaseSpecific->mHandle = 0;
+   mThreadRunState = 0;
    mThreadPriority = get_default_thread_priority();
-   mThreadSingleProcessor  = -1;
-
+   mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
-   mThreadInitSemFlag = true;
+   mThreadRunProcessor = -1;
+
+
+   // Create this now in the thread context of the thread creator.
+   // It will be copied to the thread local storage variable at the
+   // start of the thread run function.
+   mThreadLocal = new TS::ThreadLocal;
 }
 
 //******************************************************************************
@@ -72,26 +81,32 @@ BaseThread::BaseThread()
 BaseThread::~BaseThread() 
 {
    delete mBaseSpecific;
+   delete mThreadLocal;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Set the thread services thread name in the thread local storage.
 
-void* BaseThread::getHandlePtr()
+void BaseThread::setThreadName(const char* aThreadName)
 {
-   return (void*)&mBaseSpecific->mHandle;
+   mThreadLocal->setThreadName(aThreadName);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Set the thread services print level in the thread local storage.
 
-void BaseThread::configureThread()
+void BaseThread::setThreadPrintLevel(int aPrintLevel)
 {
-   mBaseSpecific->mHandle = 0;
-   mThreadStackSize = 0;
+   mThreadLocal->mPrintLevel = aPrintLevel;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void BaseThread::setThreadPriorityHigh()
 {
@@ -124,9 +139,13 @@ void BaseThread::launchThread()
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Configure thread parameters, but do not make any OS calls
+   // Do this first.
 
-   configureThread();
+   TS::print(1, "");
+   TS::print(1, "launchThread %s", mThreadLocal->mThreadName);
+
+   // Set the run state.
+   mThreadRunState = cThreadRunState_Launching;
 
    //***************************************************************************
    //***************************************************************************
@@ -197,10 +216,7 @@ void BaseThread::launchThread()
    //***************************************************************************
    // Wait for the thread init function to complete.
 
-   if (mThreadInitSemFlag)
-   {
-      mThreadInitSem.get();
-   }
+   mThreadInitSem.get();
 }
 
 //******************************************************************************
@@ -211,6 +227,18 @@ void BaseThread::launchThread()
 
 void BaseThread::threadFunction()
 {
+   // Set the thread local storage pointer to the address of the
+   // thread local storage object.
+   TS::setThreadLocal(mThreadLocal);
+   TS::print(1, "threadFunction BEGIN");
+
+   // Set the processor that was current at the start of the thread
+   // run function.
+   mThreadRunProcessor = getThreadProcessorNumber();
+
+   // Set the run state.
+   mThreadRunState = cThreadRunState_Running;
+
    // Thread execution
    try
    {
@@ -222,6 +250,7 @@ void BaseThread::threadFunction()
       // Initialization section, overload provided by inheritors
       // It is intended that this will be overloaded by 
       // inheriting thread base classes and by inheriting user classes
+      TS::print(1, "threadInitFunction");
       threadInitFunction();
       // It is intended that this will be overloaded by 
       // inheriting thread base classes that provide timers,
@@ -230,13 +259,12 @@ void BaseThread::threadFunction()
       // has completed 
       threadTimerInitFunction();
       // Post to the thread init semaphore.
-      if (mThreadInitSemFlag)
-      {
-         mThreadInitSem.put();
-      }
+      mThreadInitSem.put();
       // Run section, overload provided by inheritors 
+      TS::print(1, "threadRunFunction");
       threadRunFunction();
       // Exit section, overload provided by inheritors
+      TS::print(1, "threadExitFunction");
       threadExitFunction();
       // This is used by inheritors to finalize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
@@ -252,6 +280,13 @@ void BaseThread::threadFunction()
       // Exception section, overload provided by inheritors
       threadExceptionFunction("UNKNOWN");
    }
+
+   // Set the run state.
+   mThreadRunState = cThreadRunState_Terminated;
+
+   TS::print(1, "threadFunction END");
+   // Zero the thread local storage pointer.
+   TS::setThreadLocal(0);
 }
 
 //******************************************************************************
@@ -299,7 +334,10 @@ void BaseThread::forceTerminateThread()
 
 void BaseThread::waitForThreadTerminate()
 {
+   TS::print(1, "");
+   TS::print(1, "waitForThreadTerminate BEGIN %s", mThreadLocal->mThreadName);
    pthread_join(mBaseSpecific->mHandle,NULL);
+   TS::print(1, "waitForThreadTerminate END   %s", mThreadLocal->mThreadName);
 }
 
 //******************************************************************************
@@ -360,9 +398,9 @@ int BaseThread::getThreadProcessorNumber()
 // This is the function that is executed in the context of the created thread.
 // It calls a sequence of functions that are overloaded by inheritors.
 
-void BaseThread::threadShowInfo(char* aLabel)
+void BaseThread::showThreadFullInfo()
 {
-   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", aLabel);
+   printf("ThreadInfo>>>>>>>>>>>>>>>>>>>>>>>>>>BEGIN %s\n", mThreadLocal->mThreadName);
 
    int tMaxPriority = sched_get_priority_max(SCHED_FIFO);
    int tMinPriority = sched_get_priority_min(SCHED_FIFO);
@@ -399,9 +437,39 @@ void BaseThread::threadShowInfo(char* aLabel)
 //******************************************************************************
 //******************************************************************************
 
+void BaseThread::showThreadInfo()
+{
+   int tThreadPriority = getThreadPriority();
+
+   TS::print(0, "ThreadInfo %-20s %1d %3d %s",
+      mThreadLocal->mThreadName,
+      mThreadRunProcessor,
+      tThreadPriority,
+      asStringThreadRunState());
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 int countsPerOneSecond()
 {
    return 1000;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+char* BaseThread::asStringThreadRunState()
+{
+   switch (mThreadRunState)
+   {
+   case cThreadRunState_Launching: return "Launching";
+   case cThreadRunState_Running: return "running";
+   case cThreadRunState_Terminated: return "Terminated";
+   default: return "UNKNOWN";
+   }
 }
 
 //******************************************************************************

@@ -1,72 +1,56 @@
 #pragma once
 
 /*==============================================================================
-Byte content message network socket settings class.
+Thread Services.
+These provide printing, logging, and error handling services that are
+based on having the controlling parameters located in thread local storage.
+
+A global shared object that contains program settings.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risByteContent.h"
-#include "risByteMsgMonkey.h"
-#include "risThreadsQCall.h"
+#include <stdio.h>
+#include "tsThreadLocal.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-namespace Ris
-{
-namespace Net
+namespace TS
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates network socket settings. They are used to configure
-// the various socket classes.
+// Constants.
 
-class Settings
+   static const int cMaxStringSize = 400;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class provides global program settings storage for the thread
+// system printing and logging facility.
+
+class Share
 {
 public:
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // IP address.
-   char mLocalIpAddr[20];
+   // Thread local storage. This is created in the constructor. The pointer
+   // is copied to the thread local storage variable at the beginning of
+   // the thread run function.
+   TS::ThreadLocal* mMainThreadLocal;
 
-   // IP port.
-   int mLocalIpPort;
-
-   // IP address.
-   char mRemoteIpAddr[20];
-
-   // IP port.
-   int mRemoteIpPort;
-
-   // Max number of tcp server sessions.
-   int mMaxSessions;
-
-   // Socket flags.
-   int mFlags;
-
-   // Thread print level.
-   int mPrintLevel;
-
-   // Message monkey creator.
-   BaseMsgMonkeyCreator* mMonkeyCreator;
-
-   // Session callback qcall.
-   Ris::Threads::QCall1<bool>     mClientSessionQCall;
-   Ris::Threads::QCall2<int,bool> mServerSessionQCall;
-
-   // Receive byte content message callback qcall.
-   Ris::Threads::QCall1<Ris::ByteContent*> mRxMsgQCall;
-   Ris::Threads::QCall2<int,Ris::ByteContent*> mServerRxMsgQCall;
+   // Program log file.
+   char mProgramName[cMaxStringSize];
+   FILE* mLogFile;
 
    //***************************************************************************
    //***************************************************************************
@@ -74,16 +58,23 @@ public:
    // Methods.
 
    // Constructor.
-   Settings();
-
-   // Set member.
-   void setLocalIp (char* aIpAddr, int aIpPort);
-   void setRemoteIp(char* aIpAddr, int aIpPort);
+   Share();
+   ~Share();
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-}//namespace
+// Global singular instance.
+
+#ifdef _TSSHARE_CPP_
+          Share gShare;
+#else
+   extern Share gShare;
+#endif
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 

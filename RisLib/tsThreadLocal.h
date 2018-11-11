@@ -1,7 +1,11 @@
 #pragma once
 
 /*==============================================================================
-Byte content message network socket settings class.
+Thread Services.
+These provide printing, logging, and error handling services that are
+based on having the controlling parameters located in thread local storage.
+
+Thread local storage class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -16,57 +20,39 @@ Byte content message network socket settings class.
 //******************************************************************************
 //******************************************************************************
 
-namespace Ris
-{
-namespace Net
+namespace TS
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates network socket settings. They are used to configure
-// the various socket classes.
+// For each thread, an instance of this class is created and its pointer
+// is stored as a thread local variable.
 
-class Settings
+class ThreadLocal
 {
 public:
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constants.
+
+   static const int cMaxStringSize = 128;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
 
-   // IP address.
-   char mLocalIpAddr[20];
+   // A test code.
+   int mCode;
 
-   // IP port.
-   int mLocalIpPort;
+   // Thread name.
+   char mThreadName[cMaxStringSize];
 
-   // IP address.
-   char mRemoteIpAddr[20];
-
-   // IP port.
-   int mRemoteIpPort;
-
-   // Max number of tcp server sessions.
-   int mMaxSessions;
-
-   // Socket flags.
-   int mFlags;
-
-   // Thread print level.
+   // The print level for the thread. 
    int mPrintLevel;
-
-   // Message monkey creator.
-   BaseMsgMonkeyCreator* mMonkeyCreator;
-
-   // Session callback qcall.
-   Ris::Threads::QCall1<bool>     mClientSessionQCall;
-   Ris::Threads::QCall2<int,bool> mServerSessionQCall;
-
-   // Receive byte content message callback qcall.
-   Ris::Threads::QCall1<Ris::ByteContent*> mRxMsgQCall;
-   Ris::Threads::QCall2<int,Ris::ByteContent*> mServerRxMsgQCall;
 
    //***************************************************************************
    //***************************************************************************
@@ -74,16 +60,14 @@ public:
    // Methods.
 
    // Constructor.
-   Settings();
+   ThreadLocal();
 
    // Set member.
-   void setLocalIp (char* aIpAddr, int aIpPort);
-   void setRemoteIp(char* aIpAddr, int aIpPort);
+   void setThreadName (const char* aName);
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-}//namespace
 }//namespace
 

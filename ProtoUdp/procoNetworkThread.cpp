@@ -23,6 +23,10 @@ namespace ProtoComm
 
 NetworkThread::NetworkThread()
 {
+   // Set base class thread services.
+   BaseClass::setThreadName("Network");
+   BaseClass::setThreadPrintLevel(3);
+
    // Set base class thread priority.
    BaseClass::setThreadPriorityHigh();
 
@@ -53,8 +57,6 @@ NetworkThread::~NetworkThread()
 
 void NetworkThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "NetworkThread::threadInitFunction");
-
    // Instance of network socket settings.
    Ris::Net::Settings tSettings;
 
@@ -62,6 +64,7 @@ void NetworkThread::threadInitFunction()
    tSettings.setRemoteIp (gUdpSettings.mOtherUdpIPAddress, gUdpSettings.mOtherUdpPort);
    tSettings.mMonkeyCreator = &mMonkeyCreator;
    tSettings.mRxMsgQCall = mRxMsgQCall;
+   tSettings.mPrintLevel = gUdpSettings.mPrintLevel;
 
    // Create the child thread with the settings.
    mUdpMsgThread = new Ris::Net::UdpMsgThread(tSettings);
@@ -75,12 +78,21 @@ void NetworkThread::threadInitFunction()
 //******************************************************************************
 // Thread exit function, base class overload.
 
-void  NetworkThread::threadExitFunction()
+void NetworkThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "NetworkThread::threadExitFunction");
-
    // Shutdown the child thread.
    mUdpMsgThread->shutdownThread();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Show thread state info, base class overload.
+
+void NetworkThread::showThreadInfo()
+{
+   BaseClass::showThreadInfo();
+   if (mUdpMsgThread) mUdpMsgThread->showThreadInfo();
 }
 
 //******************************************************************************

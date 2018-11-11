@@ -51,13 +51,6 @@ BinarySemaphore::~BinarySemaphore()
 
 //******************************************************************************
 
-void* BinarySemaphore::getHandlePtr()
-{
-   return (void*)&mSpecific->mHandle;
-}
-
-//******************************************************************************
-
 void BinarySemaphore::reset()
 {
    sem_init(&mSpecific->mHandle,0,0);
@@ -164,13 +157,6 @@ CountingSemaphore::~CountingSemaphore()
 
 //******************************************************************************
 
-void* CountingSemaphore::getHandlePtr()
-{
-   return (void*)&mSpecific->mHandle;
-}
-
-//******************************************************************************
-
 void CountingSemaphore::put()
 {
    sem_post(&mSpecific->mHandle);
@@ -211,13 +197,6 @@ MutexSemaphore::~MutexSemaphore()
 
 //******************************************************************************
 
-void* MutexSemaphore::getHandlePtr()
-{
-   return (void*)&mSpecific->mMutex;
-}
-
-//******************************************************************************
-
 void MutexSemaphore::lock()
 {
    pthread_mutex_lock(&mSpecific->mMutex);
@@ -229,7 +208,6 @@ void MutexSemaphore::unlock()
 {
    pthread_mutex_unlock(&mSpecific->mMutex);
 }
-
 
 }//namespace
 }//namespace

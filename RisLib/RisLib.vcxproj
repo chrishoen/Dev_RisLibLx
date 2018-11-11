@@ -82,6 +82,11 @@
     <ClCompile Include="risTimeMarker.cpp" />
     <ClCompile Include="ris_priorities_linux.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="tsShare.cpp" />
+    <ClCompile Include="tsThreadLocal.cpp" />
+    <ClCompile Include="tsThreadServices_init.cpp" />
+    <ClCompile Include="tsThreadServices_print.cpp" />
+    <ClCompile Include="tsThreadServices_tls.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logFiles.h" />
@@ -139,6 +144,9 @@
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="ris_priorities.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="tsShare.h" />
+    <ClInclude Include="tsThreadLocal.h" />
+    <ClInclude Include="tsThreadServices.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{cd27243e-299e-4e44-aa52-4314cb2b9d98}</ProjectGuid>

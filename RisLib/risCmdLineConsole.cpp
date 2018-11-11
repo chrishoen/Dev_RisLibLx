@@ -11,6 +11,7 @@
 #include "risPortableCalls.h"
 #include "risThreadsThreads.h"
 #include "my_functions.h"
+#include "tsThreadServices.h"
 #include "prnPrint.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
@@ -30,6 +31,9 @@ namespace Ris
 
 void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 {            
+   TS::print(1, "");
+   TS::print(1, "Command Line Executive BEGIN");
+
    // Locals
    char tCommandLine[200];
    CmdLineCmd  tCmd;
@@ -42,7 +46,8 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
       // Read console input
 	   if (fgets(tCommandLine, 200, stdin) == 0)
 	   {
-		   return;
+         TS::print(1, "Command Line Executive END");
+         return;
 	   }
 
       // Remove cr/lf at end of line
@@ -60,6 +65,7 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
          // Exit
          if (strcmp(tCommandLine,"e")==0)
          {
+            TS::print(1, "Command Line Executive END");
             return;
          }
 
@@ -72,7 +78,8 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
             // Test for exit
             if(tCmd.isCmd("EXIT"))
             {
-               return;; 
+               TS::print(1, "Command Line Executive END");
+               return;;
             }
             // Not exit
             else
@@ -92,6 +99,7 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
          }
       }
    }
+   TS::print(1, "Command Line Executive END");
 }
 
 //******************************************************************************

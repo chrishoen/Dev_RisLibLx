@@ -82,6 +82,9 @@ public:
    // Message thread timer period.
    int mThreadTimerPeriod;
 
+   // Thread print level.
+   int mPrintLevel;
+
    // Echo message number of words.
    int mNumWords;
 

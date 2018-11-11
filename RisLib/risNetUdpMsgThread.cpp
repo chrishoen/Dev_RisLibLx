@@ -24,6 +24,10 @@ namespace Net
 
 UdpMsgThread::UdpMsgThread(Settings& aSettings)
 {
+   // Set base class thread services.
+   BaseClass::setThreadName("UdpMsg");
+   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
+
    // Base class variables.
    mThreadPriority = get_default_udp_rx_thread_priority();
 
@@ -40,8 +44,6 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
 
 void UdpMsgThread::threadInitFunction()
 {
-   Prn::print(Prn::SocketInitT1, "UdpMsgThread::threadInitFunction");
-
    // Initialize and configure the sockets.
    mRxSocket.initialize(mSettings);
    mRxSocket.configure();
@@ -57,8 +59,6 @@ void UdpMsgThread::threadInitFunction()
 
 void  UdpMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SocketInitT2, "UdpRxMsgThread::threadRunFunction");
-   
    bool tGoing=mRxSocket.mValidFlag;
 
    while(tGoing)
@@ -93,7 +93,6 @@ void  UdpMsgThread::threadRunFunction()
 
 void UdpMsgThread::threadExitFunction()
 {
-   Prn::print(Prn::SocketInitT1, "UdpMsgThread::threadExitFunction");
 }
 
 //******************************************************************************

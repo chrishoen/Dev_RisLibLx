@@ -1,97 +1,98 @@
-/*==============================================================================
-==============================================================================*/
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 #include "stdafx.h"
 
-#include <pthread.h>
-#include <sched.h>
-#include <unistd.h>
-#include <errno.h>
-#include <assert.h>
+#include <stdarg.h>
 
-#include <pthread.h>
-#include <sched.h>
-#include <semaphore.h>
-#include <unistd.h>
-#include <time.h>
-#include <errno.h>
-#include <assert.h>
+#include "my_functions.h"
+#include "risAlphaDir.h"
 
+#include "tsShare.h"
+#include "tsThreadServices.h"
 
-#include "risThreadsProcess.h"
-
-namespace Ris
-{
-namespace Threads
+namespace TS
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-static int mTimerPeriod = 10;
-
-void setProcessTimerResolution(int aTimerPeriod)
+void reset()
 {
-   mTimerPeriod = aTimerPeriod;
+   strcpy(gShare.mProgramName, "SomeProgram");
 }
 
-int  getProcessTimerResolution()
+void setProgramName(const char* aName)
 {
-   return mTimerPeriod;
+   strncpy(gShare.mProgramName, aName, cMaxStringSize);
+}
+
+void setProgramPrintLevel(int aPrintLevel)
+{
+   gShare.mMainThreadLocal->mPrintLevel = aPrintLevel;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void enterProcessHigh()
-{
-   return;
-   sched_param param;
-   param.sched_priority = sched_get_priority_max(SCHED_FIFO);
-   int ret = sched_setscheduler(getpid(), SCHED_FIFO, &param);
-   if (ret) printf("sched_setschedparam ERROR %d\n", errno);
-}
+bool openLogFile()
+{            
+   char tBuf[400];
+   char tFileName[400];
+   strcpy(tFileName, gShare.mProgramName);
+   strcat(tFileName,".txt");
 
-void exitProcess()
-{
-}
+   gShare.mLogFile = fopen(Ris::getAlphaFilePath_Log(tBuf,tFileName),"w");
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+   if (gShare.mLogFile==0)
+   {
+      return false;
+   }
 
-void setProcessAffinityMask(unsigned aMask)
-{
+   return true;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void showCurrentThreadInfo()
+void closeLogFile()
 {
-   int tCurrentProcessorNumber = sched_getcpu();;
-
-   sched_param param;
-   int policy;
-   pthread_getschedparam(pthread_self(), &policy, &param);
-   int tThreadPriority = param.sched_priority;
-
-   TS::print(1, "");
-   TS::print(1, "ThreadInfo %-20s %1d %3d",
-      "main",
-      tCurrentProcessorNumber,
-      tThreadPriority);
+   if (gShare.mLogFile != 0)
+   {
+      fclose(gShare.mLogFile);
+   }
+   gShare.mLogFile = 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-}//namespace
-}//namespace
+
+void initialize()
+{
+   openLogFile();
+
+   // This executes in the context of the main thread, so set the thread
+   // local storage pointer to the address of the main thread local storage
+   // object.
+   TS::setThreadLocal(gShare.mMainThreadLocal);
+   TS::print(1, "ThreadServices initialize");
+}
+
+void finalize()
+{
+   openLogFile();
+   // This executes in the context of the main thread, so set the thread
+   // local storage pointer to zero.
+   TS::setThreadLocal(0);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+} //namespace
 

@@ -9,6 +9,7 @@ Base thread classes
 
 #include "risThreadsSynch.h"
 #include "ris_priorities.h"
+#include "tsThreadLocal.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -34,28 +35,42 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constants.
+
+   // Thread run states.
+   static const int cThreadRunState_Launching  = 1;
+   static const int cThreadRunState_Running    = 2;
+   static const int cThreadRunState_Terminated = 3;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
 
-   //Configuration variables.
-   //Some of these are passed to the CreateThread in launch
-   //and some are used by threadFunction.
+   // Thread run state.
+   int mThreadRunState;
+
+   // Configuration variables.
+   // Some of these are passed to the CreateThread in launch
+   // and some are used by threadFunction.
    int    mThreadStackSize;
    int    mThreadPriority;
    int    mThreadSingleProcessor;
-   int    mThreadUseInitSem;
 
-   //Init semaphore.
-   //It is posted to after the end of threadInitFunction.
-   //launchThread waits for it.
-   bool             mThreadInitSemFlag;
+   // Init semaphore.
+   // It is posted to after the end of threadInitFunction.
+   // launchThread waits for it.
    BinarySemaphore  mThreadInitSem;
 
-   //Exit semaphore.
-   //It is posted to after the end of threadExitFunction.
-   //waitForThreadTerminate waits for it.
+   // Exit semaphore.
+   // It is posted to after the end of threadExitFunction.
+   // waitForThreadTerminate waits for it.
    BinarySemaphore  mThreadExitSem;
 
-protected:
+   // The processor that was current at the start of the thread
+   // run function.
+   int mThreadRunProcessor;
+
    // Pimpl pattern. Used to hide details of the operating system specific
    // variables, like the thread handle, from the .h file so that this
    // include file can be complied by different compliers. The class is
@@ -63,12 +78,27 @@ protected:
    // different compilers.
    class BaseSpecific;
    BaseSpecific* mBaseSpecific;
-public:
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Members.
+
+   // Thread local storage. This is created in the constructor. The pointer
+   // is copied to the thread local storage variable at the beginning of
+   // the thread run function.
+   TS::ThreadLocal* mThreadLocal;
+
+   // Set the thread services thread name in the thread local storage.
+   void setThreadName(const char* aThreadName);
+
+   // Set the thread services print level in the thread local storage.
+   void setThreadPrintLevel(int aPrintLevel);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    // Constructor.
    BaseThread(); 
@@ -78,13 +108,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Methods.
-
-   // Set the configuration variables to default values.
-   // This can be overloaded to set them to specific values.
-   // This is called by launch before the thread is created.
-   // Note that launch uses the configuration variables when it
-   // does the CreateThread.
-   virtual void configureThread(); 
 
    // Launch the thread.
    // It calls win32 CreateThread and passes in the configuration variables
@@ -182,14 +205,11 @@ public:
    void setThreadPriorityLow();
    void setThreadPriority(int aThreadPriority);
 
-   //Wait for the thread to terminate.
+   // Wait for the thread to terminate.
    void waitForThreadTerminate();
 
    // Terminate the thread forcefully.
    void forceTerminateThread();
-
-   // Get a pointer to the thread handle.
-   void* getHandlePtr();
 
    //***************************************************************************
    //***************************************************************************
@@ -203,8 +223,18 @@ public:
    int  getThreadProcessorNumber();
 
    // Show thread configuration info.
-   void threadShowInfo(char* aLabel);
+   void showThreadFullInfo();
 
+   // Show thread state info.
+   virtual void showThreadInfo();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Helpers.
+   char* asStringThreadRunState();
 };
 
 //******************************************************************************

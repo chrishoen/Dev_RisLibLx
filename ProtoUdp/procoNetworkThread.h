@@ -88,6 +88,9 @@ public:
    // sends an echo request message.
    void executeOnTimer(int aTimerCount) override;
   
+   // Show thread state info.
+   void showThreadInfo() override;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

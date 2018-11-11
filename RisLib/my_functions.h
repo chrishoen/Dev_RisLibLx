@@ -52,6 +52,12 @@ void my_trimCRLF(char* aString);
 // Return string "true" "false" for a bool
 char* my_string_from_bool(bool aValue);
 
+// Return string "true" "false" for a bool
+char* my_string_from_true(bool aValue);
+
+// Return string "pass" "fail" for a bool
+char* my_string_from_pass(bool aValue);
+
 char* my_stringLLU(char* aString,unsigned long long aValue);
 
 //------------------------------------------------------------------------------

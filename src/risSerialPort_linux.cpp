@@ -130,7 +130,7 @@ void SerialPort::doOpen()
  
    mValidFlag=true;
 
-   Prn::print(Prn::SerialInitP2, "SerialMsgPort initialize PASS  $ %s : %16s",
+   Prn::print(Prn::SerialInitP2, "SerialPort initialize PASS  $ %s : %16s",
       mSettings.mPortDevice,
       mSettings.mPortSetup);
 }
@@ -219,12 +219,19 @@ int SerialPort::doSendBytes(char* aData, int aNumBytes)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Send data, null terminated string.
+// Send data, null terminated string, append an end of line LF (\n,10)
 
-int SerialPort::doSendZString(char* aData)
+int SerialPort::doSendLine(const char *aData)
 {
-   int tNumBytes = (int)strlen(aData);
-   return doSendBytes(aData,tNumBytes);   
+   // Copy the input string to a temp buffer and append a terminator.
+   char tBuffer[200];
+   strncpy(tBuffer, aData, 196);
+   int tLength = (int)strlen(tBuffer);
+   tBuffer[tLength] = '\n';
+   tLength++;
+   tBuffer[tLength] = 0;
+
+   return doSendBytes(tBuffer,tLength);   
 }
 
 //******************************************************************************
@@ -240,9 +247,10 @@ int SerialPort::doSendOne(char aData)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Receive until eond of line.
+// Receive a string, terminated with end of line LF (\n,10). Trims the 
+// terminator and returns a null terminated string.
 
-int SerialPort::doReceiveUntilEOL(char *aData, int aMaxNumBytes)
+int SerialPort::doReceiveLine(char *aData, int aMaxNumBytes)
 {
    int  tStatus = 0;
    int  tIndex = 0;

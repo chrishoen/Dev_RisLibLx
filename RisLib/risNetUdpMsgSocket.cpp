@@ -4,8 +4,6 @@
 
 #include "stdafx.h"
 
-#include "prnPrint.h"
-
 #include "risNetUdpMsgSocket.h"
 
 namespace Ris
@@ -74,13 +72,13 @@ void UdpRxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInitS1, "UdpRxMsgSocket          %16s : %5d",
+      TS::print(1, "UdpRxMsgSocket     PASS %16s : %5d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketErrorS1, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
+      TS::print(1, "UdpRxMsgSocket     FAIL %16s : %5d $ %d %d",
          BaseClass::mLocal.mIpAddr.mString,
          BaseClass::mLocal.mPort,
          BaseClass::mStatus,
@@ -110,7 +108,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Prn::print(Prn::SocketErrorS1, "ERROR UdpRxMsgSocket INVALID SOCKET");
+      TS::print(0, "ERROR UdpRxMsgSocket INVALID SOCKET");
       return false;
    }
 
@@ -131,18 +129,18 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Returning false means socket was closed.
    if (mRxLength <= 0)
    {
-      Prn::print(Prn::SocketErrorS2, "ERROR UdpRxMsgSocket %d %d", mStatus, mError);
-      if (BaseClass::mStatus < 0)
-         switch (mError)
-         {
-         case 0: return false; break;
-         default: return false; break;
-         }
+      if (BaseClass::mError == 0)
+      {
+         TS::print(1, "UdpRxMsgSocket CLOSED");
+      }
       else
-         return false;
+      {
+         TS::print(0, "ERROR UdpRxMsgSocket %d %d", BaseClass::mStatus, BaseClass::mError);
+      }
+      return false;
    }
 
-   Prn::print(Prn::SocketRxRunS2, "UdpRxMsgSocket rx message %d", mRxLength);
+   TS::print(3, "UdpRxMsgSocket rx message %d", mRxLength);
 
    // Set the buffer length.
    tByteBuffer.setLength(mRxLength);
@@ -156,14 +154,14 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Extract the header.
    mMonkey->extractMessageHeaderParms(&tByteBuffer);
 
-   Prn::print(Prn::SocketRxRunS2, "UdpRxMsgSocket rx header %d %d",
+   TS::print(3, "UdpRxMsgSocket rx header %d %d",
       mMonkey->mHeaderValidFlag,
       mMonkey->mHeaderLength);
 
    // If the header is not valid then error.
    if (!mMonkey->mHeaderValidFlag)
    {
-      Prn::print(Prn::SocketErrorS1, "ERROR UdpRxMsgSocket INVALID HEADER", mStatus, mError);
+      TS::print(0, "ERROR UdpRxMsgSocket INVALID HEADER", mStatus, mError);
       return false;
    }
 
@@ -180,7 +178,7 @@ bool UdpRxMsgSocket::doReceiveMsg(ByteContent*& aMsg)
    // Test for errors.
    if (aMsg == 0)
    {
-      Prn::print(Prn::SocketErrorS1, "ERROR UdpRxMsgSocket INVALID MESSAGE", mStatus, mError);
+      TS::print(0, "ERROR UdpRxMsgSocket INVALID MESSAGE", mStatus, mError);
       mStatus = tByteBuffer.getError();
       return false;
    }
@@ -253,13 +251,13 @@ void UdpTxMsgSocket::configure()
    // Show.
    if (mValidFlag)
    {
-      Prn::print(Prn::SocketInitS1, "UdpTxMsgSocket          %16s : %5d",
+      TS::print(1, "UdpTxMsgSocket     PASS %16s : %5d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort);
    }
    else
    {
-      Prn::print(Prn::SocketErrorS1, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
+      TS::print(1, "UdpTxMsgSocket     FAIL %16s : %5d $ %d %d",
          BaseClass::mRemote.mIpAddr.mString,
          BaseClass::mRemote.mPort,
          BaseClass::mStatus,
@@ -279,7 +277,7 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!mValidFlag)
    {
-      Prn::print(Prn::SocketErrorS1, "ERROR UdpTxMsgSocket INVALID SOCKET");
+      TS::print(0, "ERROR UdpTxMsgSocket INVALID SOCKET");
       delete aMsg;
       return false;
    }
@@ -306,11 +304,11 @@ bool UdpTxMsgSocket::doSendMsg(ByteContent* aMsg)
 
    if (tRet)
    {
-      Prn::print(Prn::SocketTxRunS1, "UdpTxMsgSocket tx message %d", mTxLength);
+      TS::print(3, "UdpTxMsgSocket tx message %d", mTxLength);
    }
    else
    {
-      Prn::print(Prn::SocketErrorS1, "ERROR UdpTxMsgSocket INVALID SEND");
+      TS::print(0, "ERROR UdpTxMsgSocket INVALID SEND");
    }
 
    // Done.
