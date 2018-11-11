@@ -26,8 +26,8 @@ void SerialSettings::reset()
    mPortDevice[0] = 0;
    mPortSetup[0] = 0;
    mRxTimeout = 0;
-   mTxLogFlag = false;
-   mRxLogFlag = false;
+   mPrintLevel = 0;
+   mLogLevel = 0;
    mMonkeyCreator = 0;
 }
 

@@ -104,6 +104,11 @@ void BaseThread::setThreadPrintLevel(int aPrintLevel)
    mThreadLocal->mPrintLevel = aPrintLevel;
 }
 
+void BaseThread::setThreadLogLevel(int aLogLevel)
+{
+   mThreadLocal->mLogLevel = aLogLevel;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

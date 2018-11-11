@@ -24,6 +24,11 @@ namespace Ris
 
 SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
 {
+   // Set base class thread services.
+   BaseClass::setThreadName("SerialMsg");
+   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
+   BaseClass::setThreadLogLevel(aSettings.mLogLevel);
+
    BaseClass::mThreadPriority = get_default_udp_rx_thread_priority();
 
    mSettings = aSettings;
@@ -47,8 +52,6 @@ SerialMsgThread::~SerialMsgThread()
 
 void SerialMsgThread::threadInitFunction()
 {
-   Prn::print(Prn::SerialInitM1, "SerialMsgThread::threadInitFunction");
-
    // Initialize and open the serial port.
    mSerialMsgPort.initialize(mSettings);
    mSerialMsgPort.doOpen();
@@ -63,8 +66,6 @@ void SerialMsgThread::threadInitFunction()
 
 void  SerialMsgThread::threadRunFunction()
 {
-   Prn::print(Prn::SerialInitM1, "SerialRxMsgThread::threadRunFunction %d",mSerialMsgPort.mValidFlag);
-   
    bool tGoing=mSerialMsgPort.mValidFlag;
  
    while(tGoing)
@@ -105,7 +106,6 @@ void  SerialMsgThread::threadRunFunction()
 
 void SerialMsgThread::threadExitFunction()
 {
-   Prn::print(Prn::SerialInitM1, "SerialMsgThread::threadExitFunction");
 }
 
 //******************************************************************************

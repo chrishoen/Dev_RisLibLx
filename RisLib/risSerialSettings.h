@@ -48,9 +48,9 @@ public:
    // Receive timeout. Milliseconds, 0==no timeout
    int mRxTimeout;
 
-   // If true then inputs or outputs will be logged.
-   bool mTxLogFlag;
-   bool mRxLogFlag;
+   // Thread print and log levels.
+   int mPrintLevel;
+   int mLogLevel;
 
    // Message monkey creator.
    BaseMsgMonkeyCreator* mMonkeyCreator;

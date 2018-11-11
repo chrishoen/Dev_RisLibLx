@@ -86,7 +86,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      Prn::print(Prn::SerialErrorM1, "ERROR doSend when Invalid");
+      TS::print(0, "ERROR doSend when Invalid");
       mMonkey->destroyMsg(aMsg);
       return false;
    }
@@ -107,7 +107,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    int tRet = 0;
    int tLength=tByteBuffer.getLength();
    tRet = BaseClass::doSendBytes(tByteBuffer.getBaseAddress(),tLength);
-   Prn::print(Prn::SerialTxRunM1, "doSendMsg %d %d",tRet,tLength);
+   TS::print(3, "doSendMsg %d %d",tRet,tLength);
 
    mTxMsgCount++;
 
@@ -117,7 +117,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
    // Test for errors.
    if (tRet<0)
    {
-      Prn::print(Prn::SerialErrorM1, "ERROR SerialMsgPort::doSendMsg FAIL");
+      TS::print(0, "ERROR SerialMsgPort::doSendMsg FAIL");
       return false;
    }
 
@@ -136,7 +136,7 @@ bool SerialMsgPort::doSendMsg(ByteContent* aMsg)
 
 bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
 {
-   Prn::print(Prn::SerialRxRunM2, "SerialMsgPort::doReceiveMsg***********************************");
+   TS::print(2, "SerialMsgPort::doReceiveMsg***********************************");
 
    //***************************************************************************
    //***************************************************************************
@@ -150,7 +150,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Guard.
    if (!BaseClass::mValidFlag)
    {
-      Prn::print(Prn::SerialErrorM1, "ERROR SerialMsgPort::doReceiveMsg when Invalid");
+      TS::print(0, "ERROR SerialMsgPort::doReceiveMsg when Invalid");
       return false;
    }
 
@@ -177,11 +177,11 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // If bad status then return false.
       if (tRet == mHeaderLength)
       {
-         Prn::print(Prn::SerialRxRunM2, "receive header all %d", tRet);
+         TS::print(2, "receive header all %d", tRet);
       }
       else
       {
-         Prn::print(Prn::SerialRxRunM2, "receive header all ERROR %d", tRet);
+         TS::print(1, "receive header all ERROR %d", tRet);
          return false;
       }
 
@@ -196,12 +196,12 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
       // the header buffer one byte at a time.
       if (mMonkey->mHeaderValidFlag)
       {
-         Prn::print(Prn::SerialRxRunM2, "receive header all PASS");
+         TS::print(2, "receive header all PASS");
          mHeaderAllCount++;
       }
       else
       {
-         Prn::print(Prn::SerialRxRunM2, "receive header all FAIL");
+         TS::print(1, "receive header all FAIL");
          mHeaderReadState = cHeaderReadOne;
       }
    }
@@ -233,7 +233,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
          // If bad status then return false.
          if (tRet != 1)
          {
-            Prn::print(Prn::SerialRxRunM2, "receive header2 ERROR %d", tRet);
+            TS::print(0, "receive header2 ERROR %d", tRet);
             return false;
          }
 
@@ -259,7 +259,7 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
             // If the header is not valid then continue with the loop.
             if (mMonkey->mHeaderValidFlag)
             {
-               Prn::print(Prn::SerialRxRunM2, "receive header one PASS");
+               TS::print(2, "receive header one PASS");
                mHeaderOneCount++;
                mHeaderReadState = cHeaderReadAll;
                tGoing = false;
@@ -282,11 +282,11 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // If bad status then return false.
    if (tRet == tPayloadLength)
    {
-      Prn::print(Prn::SerialRxRunM2, "receive payload %d", tRet);
+      TS::print(2, "receive payload %d", tRet);
    }
    else
    {
-      Prn::print(Prn::SerialRxRunM2, "receive payload ERROR %d", tRet);
+      TS::print(0, "receive payload ERROR %d", tRet);
       return false;
    }
 
@@ -306,19 +306,19 @@ bool SerialMsgPort::doReceiveMsg (ByteContent*& aMsg)
    // Test for errors.
    if (aMsg==0)
    {
-      Prn::print(Prn::SerialErrorM1, "ERROR getMsgFromBuffer");
+      TS::print(0, "ERROR getMsgFromBuffer");
       return false;
    }
 
    // Test for message footer errors.
    if (!mMonkey->validateMessageFooter(&tByteBuffer,aMsg))
    {
-      Prn::print(Prn::SerialErrorM1, "ERROR validateMessageFooter");
+      TS::print(0, "ERROR validateMessageFooter");
       return false;
    }
 
    // Done.
-   Prn::print(Prn::SerialRxRunM1, "SerialMsgPort::doReceiveMsg PASS");
+   TS::print(2, "SerialMsgPort::doReceiveMsg PASS");
    mRxMsgCount++;
    return true;
 }

@@ -32,6 +32,12 @@ void setProgramName(const char* aName)
 void setProgramPrintLevel(int aPrintLevel)
 {
    gShare.mMainThreadLocal->mPrintLevel = aPrintLevel;
+   gShare.mMainThreadLocal->mLogLevel = 3;
+}
+
+void setProgramLogLevel(int aLogLevel)
+{
+   gShare.mMainThreadLocal->mLogLevel = aLogLevel;
 }
 
 //******************************************************************************

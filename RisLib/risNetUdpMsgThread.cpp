@@ -27,6 +27,7 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
    // Set base class thread services.
    BaseClass::setThreadName("UdpMsg");
    BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
+   BaseClass::setThreadLogLevel(aSettings.mLogLevel);
 
    // Base class variables.
    mThreadPriority = get_default_udp_rx_thread_priority();

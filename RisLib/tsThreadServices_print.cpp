@@ -33,6 +33,7 @@ void print(int aLevel, const char* aFormat, ...)
 
    // Guard.
    if (!isEnabled()) return;
+   if (aLevel > tls()->mPrintLevel && aLevel > tls()->mLogLevel) return;
 
    //*************************************************************************
    //*************************************************************************
@@ -79,7 +80,7 @@ void print(int aLevel, const char* aFormat, ...)
    }
 
    // Print to the log file.
-   if (gShare.mLogFile)
+   if (gShare.mLogFile && aLevel <= tls()->mLogLevel)
    {
       fputs(tPrintString, gShare.mLogFile);
    }
