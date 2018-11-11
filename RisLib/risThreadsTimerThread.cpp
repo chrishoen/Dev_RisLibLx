@@ -22,6 +22,10 @@ BaseTimerThread::BaseTimerThread()
    mTerminateFlag = false;
    mTimerPeriod = countsPerOneSecond();
    mTimerCount  = 0;
+
+   BaseClass::setThreadName("TimerThread");
+   BaseClass::setThreadPrintLevel(0);
+
 }
 
 //******************************************************************************
