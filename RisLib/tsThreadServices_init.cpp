@@ -49,7 +49,7 @@ bool openLogFile()
    char tBuf[400];
    char tFileName[400];
    strcpy(tFileName, gShare.mProgramName);
-   strcat(tFileName,".txt");
+   strcat(tFileName,"Log.txt");
 
    gShare.mLogFile = fopen(Ris::getAlphaFilePath_Log(tBuf,tFileName),"w");
 

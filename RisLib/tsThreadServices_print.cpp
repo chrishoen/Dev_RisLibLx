@@ -22,7 +22,7 @@ namespace TS
 // printf. If the input level is less than or equal to the print level
 // that is located in thread local storage then the print is performed
 // else it is ignored. If the print is performed it prints a string
-// to stdout and appends an end of line (\n).
+// to stdout and and to the log file.
 
 void print(int aLevel, const char* aFormat, ...)
 {
@@ -34,6 +34,31 @@ void print(int aLevel, const char* aFormat, ...)
    // Guard.
    if (!isEnabled()) return;
    if (aLevel > tls()->mPrintLevel && aLevel > tls()->mLogLevel) return;
+
+   //*************************************************************************
+   //*************************************************************************
+   //*************************************************************************
+   // Guard against having too many prints that are at or above level 4.
+
+   if (aLevel >= 4)
+   {
+      // Increment.
+      tls()->mPrintCount4++;
+
+      // If at the limit then print a message and exit.
+      if (tls()->mPrintCount4 == 40)
+      {
+         fputs("PRINT COUNT 4 LIMIT HAS BEEN REACHED\n", stdout);
+         if (gShare.mLogFile)
+         {
+            fputs("PRINT COUNT 4 LIMIT HAS BEEN REACHED\n", gShare.mLogFile);
+         }
+         return;
+      }
+
+      // If above the limit then exit.
+      if (tls()->mPrintCount4 > 40) return;
+   }
 
    //*************************************************************************
    //*************************************************************************

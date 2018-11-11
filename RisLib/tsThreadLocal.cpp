@@ -20,8 +20,9 @@ ThreadLocal::ThreadLocal()
 {
    strcpy(mThreadName, "NoThreadName");
    mCode = 0;
-   mPrintLevel = 3;
-   mLogLevel = 3;
+   mPrintLevel = 0;
+   mLogLevel = 0;
+   mPrintCount4 = 0;
 }
 
 void ThreadLocal::setThreadName(const char* aName)

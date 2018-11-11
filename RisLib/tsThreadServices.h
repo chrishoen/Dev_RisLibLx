@@ -52,7 +52,7 @@ namespace TS
    // printf. If the input level is less than or equal to the print level
    // that is located in thread local storage then the print is performed
    // else it is ignored. If the print is performed it prints a string
-   // to stdout and appends an end of line (\n).
+   // to stdout and and to the log file.
    void print(int aLevel, const char* aFormat, ...);
 
 
