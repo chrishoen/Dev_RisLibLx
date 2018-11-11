@@ -108,7 +108,6 @@ void ThreadTimer::startTimer (TimerCall aTimerCall,int aTimerPeriod)
    // Create, configure, launch timer thread  
    mSpecific->mTimerThread = new TimerTimerThread();
    mSpecific->mTimerThread->configure(mTimerPeriod,this);
-   mSpecific->mTimerThread->configureThread();
    mSpecific->mTimerThread->launchThread();
 }
 

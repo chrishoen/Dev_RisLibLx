@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "tsThreadServices.h"
 #include "risThreadsProcess.h"
 #include "someThreadParms.h"
 
@@ -10,10 +11,29 @@
 
 void main_initialize(int argc,char** argv)
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize thread services.
+
+   TS::reset();
+   TS::setProgramName("ThreadTest");
+   TS::setProgramPrintLevel(2);
+   TS::initialize();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Enter process.
+
    Ris::Threads::enterProcessHigh();
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize print facility.
+
+   // Initialize print.
    Prn::resetPrint();
    Prn::useConsole(1);
    Prn::useConsole(2);
@@ -30,12 +50,21 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::View21,          true,  2);
    Prn::setFilter(Prn::View22,          false, 2);
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read parameters files.
+
    // Read parameters files.
    Some::gThreadParms.reset();
    Some::gThreadParms.readSection("default");
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Done.
-   Prn::print(0, "ThreadQCall Program************************************BEGIN");
+
+   Prn::print(0, "ThreadTest Program************************************BEGIN");
 }
 
 //******************************************************************************
@@ -45,13 +74,16 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0, "ThreadQCall Program************************************END");
+   Prn::print(0, "ThreadTest Program************************************END");
 
    // Finalize print facility.
    Prn::finalizePrint();
 
    // Exit process.
    Ris::Threads::exitProcess();
+
+   // Finalize thread services.
+   TS::finalize();
 }
 
 //******************************************************************************

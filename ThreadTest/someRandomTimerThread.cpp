@@ -24,6 +24,18 @@ RandomTimerThread::RandomTimerThread(int aIdent)
      mRandomGen(mRandomDevice()),
      mRandomDis(gThreadParms.mDelayA1, gThreadParms.mDelayA2)
 {
+   // Set base class variables.
+   if (mIdent == 1)
+   {
+      BaseClass::setThreadName("RandomTimer1");
+      BaseClass::setThreadPrintLevel(3);
+   }
+   else
+   {
+      BaseClass::setThreadName("RandomTimer2");
+      BaseClass::setThreadPrintLevel(2);
+   }
+
    mTPFlag = false;
 }
 
@@ -35,7 +47,6 @@ RandomTimerThread::RandomTimerThread(int aIdent)
 
 void RandomTimerThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "RandomTimerThread::threadInitFunction");
 }
 
 //******************************************************************************
@@ -57,11 +68,11 @@ void RandomTimerThread::threadRunFunction()
 
       // Wait for a random delay.
       int tDelay = mRandomDis(mRandomGen);
-      Prn::print(Prn::ThreadRun4, "Delay %4d",tDelay);
+      Prn::print(Prn::ThreadRun4, "Delay %4d", tDelay);
       BaseClass::threadSleep(tDelay);
 
       // Send a qcall to the test thread.
-      if (mTPFlag) gMasterThread->mTest1QCall(mIdent,tCount);
+      if (mTPFlag) executeOnTimer(tCount);
       tCount++;
    }
 }
@@ -74,7 +85,17 @@ void RandomTimerThread::threadRunFunction()
 
 void RandomTimerThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "RandomTimerThread::threadExitFunction");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void RandomTimerThread::executeOnTimer(int aCount)
+{
+// TS::print(0, "print %d", aCount);
+
+   gMasterThread->mTest1QCall(mIdent, aCount);
 }
 
 //******************************************************************************

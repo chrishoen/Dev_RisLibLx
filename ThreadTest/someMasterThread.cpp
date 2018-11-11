@@ -27,6 +27,11 @@ MasterThread::MasterThread()
    using namespace std::placeholders;
 
    // Set base class thread variables.
+   BaseClass::mShortThread->setThreadName("MasterShort");
+   BaseClass::mShortThread->setThreadPrintLevel(3);
+   BaseClass::mLongThread->setThreadName("MasterLong");
+   BaseClass::mLongThread->setThreadPrintLevel(3);
+
    BaseClass::mShortThread->setThreadPriorityHigh();
    BaseClass::mShortThread->mTimerPeriod = 1000;
 
@@ -52,7 +57,6 @@ MasterThread::MasterThread()
 
 void MasterThread::threadInitFunction()
 {
-   Prn::print(0,"MasterThread::threadInitFunction");
 }
 
 //******************************************************************************
@@ -63,7 +67,6 @@ void MasterThread::threadInitFunction()
 
 void MasterThread::threadExitFunction()
 {
-   Prn::print(0,"MasterThread::threadExitFunction");
 }
 
 //******************************************************************************

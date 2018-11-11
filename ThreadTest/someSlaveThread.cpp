@@ -28,6 +28,8 @@ SlaveThread::SlaveThread()
      mRandomDis(gThreadParms.mDelayB1, gThreadParms.mDelayB2)
 {
    // Set base class thread variables.
+   BaseClass::setThreadName("SlaveThread");
+   BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadPriorityHigh();
    BaseClass::mTimerPeriod = 1000;
 
@@ -43,7 +45,6 @@ SlaveThread::SlaveThread()
 
 void SlaveThread::threadInitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SlaveThread::threadInitFunction");
 }
 
 //******************************************************************************
@@ -54,7 +55,6 @@ void SlaveThread::threadInitFunction()
 
 void SlaveThread::threadExitFunction()
 {
-   Prn::print(Prn::ThreadInit1, "SlaveThread::threadExitFunction");
 }
 
 //******************************************************************************

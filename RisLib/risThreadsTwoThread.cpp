@@ -234,7 +234,17 @@ void BaseTwoThread::shutdownThreads()
       mShortThread->shutdownThread();
       mLongThread->shutdownThread();
    }
+}
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Show thread state info.
+
+void BaseTwoThread::showThreadInfo()
+{
+   mLongThread->showThreadInfo();
+   mShortThread->showThreadInfo();
 }
 
 //******************************************************************************

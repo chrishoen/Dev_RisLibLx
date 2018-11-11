@@ -12,6 +12,15 @@
 #include <errno.h>
 #include <assert.h>
 
+#include <pthread.h>
+#include <sched.h>
+#include <semaphore.h>
+#include <unistd.h>
+#include <time.h>
+#include <errno.h>
+#include <assert.h>
+
+
 #include "risThreadsProcess.h"
 
 namespace Ris
@@ -58,6 +67,26 @@ void exitProcess()
 
 void setProcessAffinityMask(unsigned aMask)
 {
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void showCurrentThreadInfo()
+{
+   int tCurrentProcessorNumber = sched_getcpu();;
+
+   sched_param param;
+   int policy;
+   pthread_getschedparam(pthread_self(), &policy, &param);
+   int tThreadPriority = param.sched_priority;
+
+   TS::print(1, "");
+   TS::print(1, "ThreadInfo %-20s %1d %3d",
+      "main",
+      tCurrentProcessorNumber,
+      tThreadPriority);
 }
 
 //******************************************************************************
