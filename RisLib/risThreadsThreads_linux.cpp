@@ -446,11 +446,13 @@ void BaseThread::showThreadInfo()
 {
    int tThreadPriority = getThreadPriority();
 
-   TS::print(0, "ThreadInfo %-20s %1d %3d %s",
+   TS::print(0, "ThreadInfo %-20s %1d %3d %-8s %1d %1d",
       mThreadLocal->mThreadName,
       mThreadRunProcessor,
       tThreadPriority,
-      asStringThreadRunState());
+      asStringThreadRunState(),
+      mThreadLocal->mPrintLevel,
+      mThreadLocal->mLogLevel);
 }
 
 //******************************************************************************
@@ -470,9 +472,9 @@ char* BaseThread::asStringThreadRunState()
 {
    switch (mThreadRunState)
    {
-   case cThreadRunState_Launching: return "Launching";
-   case cThreadRunState_Running: return "running";
-   case cThreadRunState_Terminated: return "Terminated";
+   case cThreadRunState_Launching: return  "launching";
+   case cThreadRunState_Running: return    "running";
+   case cThreadRunState_Terminated: return "termed";
    default: return "UNKNOWN";
    }
 }
