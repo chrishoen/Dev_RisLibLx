@@ -45,7 +45,6 @@ namespace Ris
    char* getAlphaFilePath_Lib         (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Log         (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_RecData     (char* aBuffer, char* aFileName = 0);
-   char* getAlphaFilePath_RollUI      (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Settings    (char* aBuffer, char* aFileName = 0);
    char* getAlphaFilePath_Work        (char* aBuffer, char* aFileName = 0);
 
