@@ -23,7 +23,7 @@ BaseQCallThread::BaseQCallThread()
    mThreadPriority = get_default_qcall_thread_priority();
 
    mTerminateFlag = false;
-   mCallQueSize=100;
+   mCallQueSize=1000;
    mQCallAbortFlag = false;
 
    mTimerExecuteFlag = false;
