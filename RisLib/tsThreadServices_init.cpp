@@ -66,6 +66,9 @@ void initialize()
 
 void finalize()
 {
+   // Let things settle.
+   Ris::Threads::threadSleep(200);
+
    // shutdown the print thread.
    TS::gPrintThread->shutdownThread();
    delete TS::gPrintThread;
