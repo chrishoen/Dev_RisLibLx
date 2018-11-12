@@ -7,6 +7,7 @@
 #include <stdarg.h>
 
 #include "my_functions.h"
+#include "risThreadsThreads.h"
 #include "risAlphaDir.h"
 
 #include "tsShare.h"
@@ -55,6 +56,9 @@ void initialize()
    // Launch the print thread.
    TS::gPrintThread = new TS::PrintThread;
    TS::gPrintThread->launchThread();
+
+   // Let things settle.
+   Ris::Threads::threadSleep(200);
 
    // Do a print.
    TS::print(1, "ThreadServices initialize");

@@ -26,7 +26,7 @@ PrintThread::PrintThread()
    // Set base class thread parameters.
    BaseClass::setThreadName("TSPrint");
    BaseClass::setThreadPrintLevel(3);
-   BaseClass::setThreadLogLevel(3);
+   BaseClass::setThreadLogLevel(0);
    BaseClass::mTimerPeriod = 0;
    BaseClass::mThreadPriority = Ris::get_default_low_thread_priority();
 
