@@ -29,8 +29,10 @@ MasterThread::MasterThread()
    // Set base class thread variables.
    BaseClass::mShortThread->setThreadName("MasterShort");
    BaseClass::mShortThread->setThreadPrintLevel(3);
+   BaseClass::mShortThread->setThreadLogLevel(3);
    BaseClass::mLongThread->setThreadName("MasterLong");
    BaseClass::mLongThread->setThreadPrintLevel(3);
+   BaseClass::mLongThread->setThreadLogLevel(3);
 
    BaseClass::mShortThread->setThreadPriorityHigh();
    BaseClass::mShortThread->mTimerPeriod = 1000;
