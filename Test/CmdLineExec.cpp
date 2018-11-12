@@ -42,9 +42,16 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+#define POLLIN 0x001
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "IsNumber %s", my_string_from_bool(aCmd->isArgNumber(1)));
+   short revents = (short)aCmd->argInt(1);
+   printf("revents %d\n",revents);
+   if (revents & POLLIN)
+   {
+      printf("true\n");
+   }
 }
 
 //******************************************************************************

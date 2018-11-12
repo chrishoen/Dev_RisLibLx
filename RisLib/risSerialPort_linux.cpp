@@ -149,6 +149,9 @@ void SerialPort::doClose()
    //***************************************************************************
    // Close the port.
 
+   // Set invalid.
+   mValidFlag = false;
+
    // Write bytes to the event semaphore.
    unsigned long long tCount = 1;
    tRet = write(mSpecific->mEventFd, &tCount, 8);
@@ -164,7 +167,6 @@ void SerialPort::doClose()
 
    // Done.
    mSpecific->mPortFd = 0;
-   mValidFlag = false;
 }
 
 //******************************************************************************
@@ -249,7 +251,7 @@ int SerialPort::doSendOne(char aData)
 
 int SerialPort::doReceiveLine(char *aData, int aMaxNumBytes)
 {
-   int  tStatus = 0;
+   int  tStatus = -1;
    int  tIndex = 0;
    int  tRxStatus = 0;
    char tRxChar = 0;
@@ -341,11 +343,20 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    struct pollfd tPollFd[2];
    tPollFd[0].fd = mSpecific->mPortFd;
    tPollFd[0].events = POLLIN;
+   tPollFd[0].revents = 0;
    tPollFd[1].fd = mSpecific->mEventFd;
    tPollFd[1].events = POLLIN;
+   tPollFd[1].revents = 0;
 
    // Poll the port for read.
    tRet = poll(&tPollFd[0], 2, -1);
+
+   // Test the valid flag for closing.
+   if (!mValidFlag)
+   {
+      TS::print(1, "serial_poll_invalid close");
+      return cRetCodeError;
+   }
 
    // Test the return code for error.
    if (tRet < 0)
@@ -359,6 +370,16 @@ int SerialPort::doReceiveBytes(char *aData, int aNumBytes)
    {
       TS::print(1, "serial_poll_error_2 timeout");
       return cRetCodeTimeout;
+   }
+
+   if (tPollFd[0].revents & POLLIN)
+   {
+      TS::print(5, "serial_poll_event0 %d %04X",tRet, tPollFd[0].revents);
+   }
+
+   if (tPollFd[1].revents & POLLIN)
+   {
+      TS::print(5, "serial_poll_event1 %d %04X", tRet, tPollFd[1].revents);
    }
 
    // Test the return code for closed port.
