@@ -11,16 +11,33 @@
 
 void main_initialize(int argc,char** argv)
 {
+   printf("ThreadServices Program*****************************************BEGIN\n");
+   printf("ThreadServices Program*****************************************BEGIN\n");
+   printf("ThreadServices Program*****************************************BEGIN\n\n");
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize thread services.
+
    TS::reset();
    TS::setProgramName("ThreadServices");
    TS::setProgramPrintLevel(3);
    TS::initialize();
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Enter process.
+
    Ris::Threads::enterProcessHigh();
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize print facility.
+
+   // Initialize print.
    Prn::resetPrint();
    Prn::useConsole(1);
    Prn::initializePrint();
@@ -34,12 +51,14 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::View11,          true,  1);
    Prn::setFilter(Prn::View12,          false, 1);
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read parameters files.
+
    // Read parameters files.
    Some::gThreadParms.reset();
    Some::gThreadParms.readSection("default");
-
-   // Done.
-   Prn::print(0, "ThreadServices Program************************************BEGIN");
 }
 
 //******************************************************************************
@@ -49,8 +68,6 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0, "ThreadServices Program************************************END");
-
    // Finalize print facility.
    Prn::finalizePrint();
 
@@ -59,6 +76,10 @@ void main_finalize()
 
    // Finalize thread services.
    TS::finalize();
+
+   // Done.
+   printf("\n");
+   printf("ThreadServices Program*****************************************END\n\n");
 }
 
 //******************************************************************************

@@ -10,6 +10,7 @@
 #include "risAlphaDir.h"
 
 #include "tsShare.h"
+#include "tsPrintThread.h"
 #include "tsThreadServices.h"
 
 namespace TS
@@ -44,54 +45,27 @@ void setProgramLogLevel(int aLogLevel)
 //******************************************************************************
 //******************************************************************************
 
-bool openLogFile()
-{            
-   char tBuf[400];
-   char tFileName[400];
-   strcpy(tFileName, gShare.mProgramName);
-   strcat(tFileName,"Log.txt");
-
-   gShare.mLogFile = fopen(Ris::getAlphaFilePath_Log(tBuf,tFileName),"w");
-
-   if (gShare.mLogFile==0)
-   {
-      return false;
-   }
-
-   return true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void closeLogFile()
-{
-   if (gShare.mLogFile != 0)
-   {
-      fclose(gShare.mLogFile);
-   }
-   gShare.mLogFile = 0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void initialize()
 {
-   openLogFile();
-
    // This executes in the context of the main thread, so set the thread
    // local storage pointer to the address of the main thread local storage
    // object.
    TS::setThreadLocal(gShare.mMainThreadLocal);
+
+   // Launch the print thread.
+   TS::gPrintThread = new TS::PrintThread;
+   TS::gPrintThread->launchThread();
+
+   // Do a print.
    TS::print(1, "ThreadServices initialize");
 }
 
 void finalize()
 {
-   openLogFile();
+   // shutdown the print thread.
+   TS::gPrintThread->shutdownThread();
+   delete TS::gPrintThread;
+
    // This executes in the context of the main thread, so set the thread
    // local storage pointer to zero.
    TS::setThreadLocal(0);

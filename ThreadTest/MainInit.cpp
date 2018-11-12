@@ -11,6 +11,10 @@
 
 void main_initialize(int argc,char** argv)
 {
+   printf("ThreadTest Program*********************************************BEGIN\n");
+   printf("ThreadTest Program*********************************************BEGIN\n");
+   printf("ThreadTest Program*********************************************BEGIN\n\n");
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -18,7 +22,7 @@ void main_initialize(int argc,char** argv)
 
    TS::reset();
    TS::setProgramName("ThreadTest");
-   TS::setProgramPrintLevel(2);
+   TS::setProgramPrintLevel(3);
    TS::initialize();
 
    //***************************************************************************
@@ -36,7 +40,6 @@ void main_initialize(int argc,char** argv)
    // Initialize print.
    Prn::resetPrint();
    Prn::useConsole(1);
-   Prn::useConsole(2);
    Prn::initializePrint();
 
    // Initialize print filters.
@@ -47,8 +50,6 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ThreadRun4,      false);
    Prn::setFilter(Prn::View11,          true,  1);
    Prn::setFilter(Prn::View12,          false, 1);
-   Prn::setFilter(Prn::View21,          true,  2);
-   Prn::setFilter(Prn::View22,          false, 2);
 
    //***************************************************************************
    //***************************************************************************
@@ -58,13 +59,6 @@ void main_initialize(int argc,char** argv)
    // Read parameters files.
    Some::gThreadParms.reset();
    Some::gThreadParms.readSection("default");
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Done.
-
-   Prn::print(0, "ThreadTest Program************************************BEGIN");
 }
 
 //******************************************************************************
@@ -74,8 +68,6 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0, "ThreadTest Program************************************END");
-
    // Finalize print facility.
    Prn::finalizePrint();
 
@@ -84,6 +76,10 @@ void main_finalize()
 
    // Finalize thread services.
    TS::finalize();
+
+   // Done.
+   printf("\n");
+   printf("ThreadTest Program*********************************************END\n\n");
 }
 
 //******************************************************************************

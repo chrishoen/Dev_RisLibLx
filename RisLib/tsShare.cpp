@@ -24,7 +24,6 @@ namespace TS
 Share::Share()
 {
    strcpy(mProgramName, "SomeProgram");
-   mLogFile = 0;
 
    // Create this now in the thread context of the thread creator.
    // It will be copied to the thread local storage variable at the

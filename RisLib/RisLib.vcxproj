@@ -82,6 +82,8 @@
     <ClCompile Include="risTimeMarker.cpp" />
     <ClCompile Include="ris_priorities_linux.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="tsPrintString.cpp" />
+    <ClCompile Include="tsPrintThread.cpp" />
     <ClCompile Include="tsShare.cpp" />
     <ClCompile Include="tsThreadLocal.cpp" />
     <ClCompile Include="tsThreadServices_init.cpp" />
@@ -144,6 +146,8 @@
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="ris_priorities.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="tsPrintString.h" />
+    <ClInclude Include="tsPrintThread.h" />
     <ClInclude Include="tsShare.h" />
     <ClInclude Include="tsThreadLocal.h" />
     <ClInclude Include="tsThreadServices.h" />

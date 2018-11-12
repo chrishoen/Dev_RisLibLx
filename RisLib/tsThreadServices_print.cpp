@@ -10,6 +10,7 @@
 #include "risAlphaDir.h"
 
 #include "tsShare.h"
+#include "tsPrintThread.h"
 #include "tsThreadServices.h"
 
 namespace TS
@@ -32,6 +33,8 @@ void print(int aLevel, const char* aFormat, ...)
    // Do this first.
 
    // Guard.
+   if (gPrintThread == 0) return;
+   if (!gPrintThread->mEnableFlag) return;
    if (!isEnabled()) return;
    if (aLevel > tls()->mPrintLevel && aLevel > tls()->mLogLevel) return;
 
@@ -40,6 +43,7 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    // Guard against having too many prints that are at or above level 4.
 
+#if 0
    if (aLevel >= 4)
    {
       // Increment.
@@ -59,6 +63,7 @@ void print(int aLevel, const char* aFormat, ...)
       // If above the limit then exit.
       if (tls()->mPrintCount4 > 40) return;
    }
+#endif
 
    //*************************************************************************
    //*************************************************************************
@@ -70,8 +75,8 @@ void print(int aLevel, const char* aFormat, ...)
    int   tInputSize;
 
    // Print string buffer.
-   char  tPrintString[cMaxStringSize];
-   int   tPrintSize;
+   char  tOutputString[cMaxStringSize];
+   int   tOutputSize;
 
    //*************************************************************************
    //*************************************************************************
@@ -89,7 +94,7 @@ void print(int aLevel, const char* aFormat, ...)
    // Do an sprintf with the thread name and the input string into the
    // print string. Append a newline \n.
 
-   tPrintSize = sprintf(tPrintString,"%-20s $$ %s\n",
+   tOutputSize = sprintf(tOutputString,"%-20s $$ %s\n",
       tls()->mThreadName,
       tInputString);
 
@@ -98,17 +103,8 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    // Print the string.
 
-   // Print to stdout.
-   if (aLevel <= tls()->mPrintLevel)
-   {
-      fputs(tPrintString, stdout);
-   }
-
-   // Print to the log file.
-   if (gShare.mLogFile && aLevel <= tls()->mLogLevel)
-   {
-      fputs(tPrintString, gShare.mLogFile);
-   }
+   PrintString* tPrintString = new PrintString(tOutputString);
+   gPrintThread->mWriteQCall(tPrintString);
 }
 
 //******************************************************************************
