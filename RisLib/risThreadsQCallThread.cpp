@@ -148,7 +148,7 @@ void BaseQCallThread::threadResourceExitFunction()
    Prn::print(Prn::QCallInit1, "BaseQCallThread::threadResourceExitFunction");
 
    // Finalize the call queue.
-   BaseQCallTarget::initializeCallQueue(mCallQueSize);
+   BaseQCallTarget::finalizeCallQueue();
 }
 
 //******************************************************************************

@@ -36,6 +36,7 @@ LCPointerQueue::LCPointerQueue()
 
 void LCPointerQueue::resetVariables()
 {
+   mValidFlag = false;
    mNumElements = 0;
    mPutIndex = 0;
    mGetIndex = 0;
@@ -69,6 +70,9 @@ void LCPointerQueue::initialize(int aSize)
 
    // Allocate memory for the array.
    mElement = new void*[mNumElements];
+
+   // The queue is now valid.
+   mValidFlag = true;
 }
 
 //******************************************************************************
@@ -78,6 +82,7 @@ void LCPointerQueue::initialize(int aSize)
 
 void LCPointerQueue::finalize()
 {
+   mValidFlag = false;
    if (mElement == 0) return;
    delete mElement;
    mElement = 0;
@@ -132,6 +137,9 @@ void LCPointerQueue::show(char* aLabel)
 
 bool LCPointerQueue::tryWrite (void* aElement)
 {
+   // Guard.
+   if (!mValidFlag) return false;
+
    // Lock.
    enterCriticalSection(mCriticalSection);
 
@@ -178,6 +186,9 @@ bool LCPointerQueue::tryWrite (void* aElement)
   
 void* LCPointerQueue::tryRead()
 {
+   // Guard.
+   if (!mValidFlag) return 0;
+
    // Exit if the queue is empty.
    int tSize = mPutIndex - mGetIndex;
    if (tSize < 0) tSize = mNumElements + tSize;

@@ -37,6 +37,9 @@ public:
    //***************************************************************************
    // Members.
 
+   // If true then the queue has been initialized.
+   bool mValidFlag;
+
    // Array of queue values, storage for the values. The values are void*s.
    // NumElements is Size + 1.
    // Index range is 0..Size.
