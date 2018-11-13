@@ -6,11 +6,13 @@
     <ClCompile Include="MainInit.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="someTestThread.cpp" />
+    <ClCompile Include="risThreadsWaitableTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLineExec.h" />
     <ClInclude Include="MainInit.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="someTestThread.h" />
+    <ClInclude Include="risThreadsWaitableTimer.h" />
   </ItemGroup>
 </Project>
