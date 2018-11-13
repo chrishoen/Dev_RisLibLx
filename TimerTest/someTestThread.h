@@ -9,7 +9,7 @@ Some timer thread class.
 //******************************************************************************
 
 #include "risThreadsThreads.h"
-#include "risThreadsWaitableTimer.h"
+#include "risThreadsWaitable.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -36,7 +36,7 @@ public:
    // Members.
 
    // Waitable timer.
-   Ris::Threads::WaitableTimer mTimer;
+   Ris::Threads::Waitable mTimer;
 
    // If true then execute periodic function.
    bool mTPFlag;

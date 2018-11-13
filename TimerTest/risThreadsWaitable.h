@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Thread waitable timer.
+Thread waitable timer and events.
 ==============================================================================*/
 
 //******************************************************************************
@@ -16,11 +16,11 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// The Timer class provides a timer that can be used to call a function
-// periodically. It is passed a function pointer and a timer period.
+// The class provides a mechanism that allows a thread to wait on a timer
+// and on a set of events.
 
 
-class WaitableTimer
+class Waitable
 {
 public:
    //***************************************************************************
@@ -52,8 +52,8 @@ public:
    // Intrastructure.
 
    // Constructor.
-   WaitableTimer();
-  ~WaitableTimer();
+   Waitable();
+  ~Waitable();
 
    //***************************************************************************
    //***************************************************************************

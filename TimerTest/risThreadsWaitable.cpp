@@ -17,7 +17,7 @@
 #include "risThreadsThreads.h"
 #include "prnPrint.h"
 
-#include "risThreadsWaitableTimer.h"
+#include "risThreadsWaitable.h"
 
 namespace Ris
 {
@@ -29,7 +29,7 @@ namespace Threads
 //******************************************************************************
 // class definition for implementation specific
 
-class WaitableTimer::Specific
+class Waitable::Specific
 {
 public:
    int mTimerFd;
@@ -44,7 +44,7 @@ public:
 //******************************************************************************
 // Constructor.
 
-WaitableTimer::WaitableTimer()
+Waitable::Waitable()
 {
    // Initialize members
    mTimerPeriod=1000;
@@ -54,7 +54,7 @@ WaitableTimer::WaitableTimer()
 }
 
 
-WaitableTimer::~WaitableTimer()
+Waitable::~Waitable()
 {
    stopTimer();
    delete mSpecific;
@@ -65,7 +65,7 @@ WaitableTimer::~WaitableTimer()
 //******************************************************************************
 // Start a timer call periodically, in milliseconds
 
-void WaitableTimer::startTimer (int aTimerPeriod)
+void Waitable::startTimer (int aTimerPeriod)
 {
    // Guard.
    if (aTimerPeriod == 0) return;
@@ -102,7 +102,7 @@ void WaitableTimer::startTimer (int aTimerPeriod)
 //******************************************************************************
 //******************************************************************************
 
-void WaitableTimer::stopTimer()
+void Waitable::stopTimer()
 {
    if (mSpecific->mTimerFd == 0) return;
    
@@ -120,7 +120,7 @@ void WaitableTimer::stopTimer()
 //******************************************************************************
 // Wait for the timer.
 
-void WaitableTimer::waitForTimer()
+void Waitable::waitForTimer()
 {
    unsigned long long tExpired = 0;
    int tRet = (int)read(mSpecific->mTimerFd, &tExpired, sizeof(tExpired));
