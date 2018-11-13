@@ -25,7 +25,7 @@ TestThread::TestThread()
    BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadLogLevel(3);
 
-   mTPFlag = false;
+   mTPFlag = true;
 }
 
 //******************************************************************************
@@ -36,6 +36,7 @@ TestThread::TestThread()
 
 void TestThread::threadInitFunction()
 {
+   mTimer.startTimer(1000);
 }
 
 //******************************************************************************
@@ -55,14 +56,15 @@ void TestThread::threadRunFunction()
       // Test for thread termination.
       if (BaseClass::mTerminateFlag) break;
 
-      // Wait for a random delay.
-      BaseClass::threadSleep(1000);
+      // Wait for the timer.
+      mTimer.waitForTimer();
 
       // Send a qcall to the test thread.
       if (mTPFlag) executeOnTimer(tCount);
       tCount++;
    }
 }
+//BaseClass::threadSleep(1000);
 
 //******************************************************************************
 //******************************************************************************
@@ -72,6 +74,7 @@ void TestThread::threadRunFunction()
 
 void TestThread::threadExitFunction()
 {
+   mTimer.stopTimer();
 }
 
 //******************************************************************************
