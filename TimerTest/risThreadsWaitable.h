@@ -49,25 +49,28 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
    Waitable();
   ~Waitable();
+
+   // Start a timer periodically, in milliseconds
+   void initialize(int aTimerPeriod);
+
+   // Stop the timer.
+   void finalize();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Start a timer periodically, in milliseconds
-   void startTimer (int aTimerPeriod);
+   // Wait for the timer or event.
+   void waitForTimerOrEvent();
 
-   // Stop the timer.
-   void stopTimer();
-
-   // Wait for the timer.
-   void waitForTimer();
+   // Post to the event. This will unblock any pending waits.
+   void postEvent();
 };
 
 //******************************************************************************

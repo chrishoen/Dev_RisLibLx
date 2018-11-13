@@ -48,6 +48,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 101);
+
+   Some::gTestThread->mWaitable.postEvent();
 }
 
 //******************************************************************************

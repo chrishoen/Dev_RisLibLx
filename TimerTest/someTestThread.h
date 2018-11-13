@@ -36,7 +36,10 @@ public:
    // Members.
 
    // Waitable timer.
-   Ris::Threads::Waitable mTimer;
+   Ris::Threads::Waitable mWaitable;
+
+   // Timer period.
+   int mTimerPeriod;
 
    // If true then execute periodic function.
    bool mTPFlag;
