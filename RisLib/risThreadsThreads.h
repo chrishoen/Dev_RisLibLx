@@ -39,8 +39,14 @@ public:
 
    // Thread run states.
    static const int cThreadRunState_Launching  = 1;
-   static const int cThreadRunState_Running    = 2;
-   static const int cThreadRunState_Terminated = 3;
+   static const int cThreadRunState_InitR      = 2;
+   static const int cThreadRunState_InitF      = 3;
+   static const int cThreadRunState_InitT      = 4;
+   static const int cThreadRunState_Running    = 5;
+   static const int cThreadRunState_ExitT      = 6;
+   static const int cThreadRunState_ExitF      = 7;
+   static const int cThreadRunState_ExitR      = 8;
+   static const int cThreadRunState_Terminated = 9;
 
    //***************************************************************************
    //***************************************************************************

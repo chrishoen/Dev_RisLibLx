@@ -241,9 +241,6 @@ void BaseThread::threadFunction()
    // run function.
    mThreadRunProcessor = getThreadProcessorNumber();
 
-   // Set the run state.
-   mThreadRunState = cThreadRunState_Running;
-
    // Thread execution
    try
    {
@@ -251,31 +248,38 @@ void BaseThread::threadFunction()
       my_srand();
       // This is used by inheritors to initialize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
+      mThreadRunState = cThreadRunState_InitR;
       threadResourceInitFunction();
       // Initialization section, overload provided by inheritors
       // It is intended that this will be overloaded by 
       // inheriting thread base classes and by inheriting user classes
       TS::print(1, "threadInitFunction");
+      mThreadRunState = cThreadRunState_InitF;
       threadInitFunction();
       // It is intended that this will be overloaded by 
       // inheriting thread base classes that provide timers,
       // and not by inheriting user classes.
       // Note that the timer starts after the initialization section
       // has completed 
+      mThreadRunState = cThreadRunState_InitT;
       threadTimerInitFunction();
       // Post to the thread init semaphore.
       mThreadInitSem.put();
       // Run section, overload provided by inheritors 
       TS::print(1, "threadRunFunction");
+      mThreadRunState = cThreadRunState_Running;
       threadRunFunction();
       // This is used by inheritors to finalize timers. This should be
       // overloaded by thread base classes and not by thread user classes.
+      mThreadRunState = cThreadRunState_ExitT;
       threadTimerExitFunction();
       // Exit section, overload provided by inheritors
       TS::print(1, "threadExitFunction");
+      mThreadRunState = cThreadRunState_ExitF;
       threadExitFunction();
       // This is used by inheritors to finalize resources. This should be
       // overloaded by thread base classes and not by thread user classes.
+      mThreadRunState = cThreadRunState_ExitR;
       threadResourceExitFunction();
    }
    catch (char* aStr)
@@ -475,8 +479,14 @@ char* BaseThread::asStringThreadRunState()
 {
    switch (mThreadRunState)
    {
-   case cThreadRunState_Launching: return  "launching";
-   case cThreadRunState_Running: return    "running";
+   case cThreadRunState_Launching:  return  "launching";
+   case cThreadRunState_InitR:      return  "initR";
+   case cThreadRunState_InitF:      return  "initF";
+   case cThreadRunState_InitT:      return  "initT";
+   case cThreadRunState_Running:    return  "running";
+   case cThreadRunState_ExitT:      return  "exitT";
+   case cThreadRunState_ExitF:      return  "exitF";
+   case cThreadRunState_ExitR:      return  "exitR";
    case cThreadRunState_Terminated: return "termed";
    default: return "UNKNOWN";
    }
