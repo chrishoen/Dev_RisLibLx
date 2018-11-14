@@ -178,6 +178,10 @@ public:
    // This should be used by inheritors to do the actual work of the thread
    virtual void threadRunFunction(){}
 
+   // This is used by inheritors to finalize thread timers. This should be
+   // overloaded by thread base classes and not by thread user classes.
+   virtual void threadTimerExitFunction() {}
+
    // This should be used by inheritors when the thread exits.It is used
    // for any thread cleanup
    virtual void threadExitFunction(){}

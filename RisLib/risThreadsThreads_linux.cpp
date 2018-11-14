@@ -268,6 +268,9 @@ void BaseThread::threadFunction()
       // Run section, overload provided by inheritors 
       TS::print(1, "threadRunFunction");
       threadRunFunction();
+      // This is used by inheritors to finalize timers. This should be
+      // overloaded by thread base classes and not by thread user classes.
+      threadTimerExitFunction();
       // Exit section, overload provided by inheritors
       TS::print(1, "threadExitFunction");
       threadExitFunction();

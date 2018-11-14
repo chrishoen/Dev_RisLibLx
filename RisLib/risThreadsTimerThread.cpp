@@ -16,47 +16,70 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 
-BaseTimerThread::BaseTimerThread() 
+BaseTimerThread::BaseTimerThread()
 {
-   // Members
+   mTimerPeriod = 1000;
+   mTimerCount = 0;
    mTerminateFlag = false;
-   mTimerPeriod = countsPerOneSecond();
-   mTimerCount  = 0;
-
-   BaseClass::setThreadName("TimerThread");
-   BaseClass::setThreadPrintLevel(0);
-
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Thread timer init function. This is called by the base class
+// after the thread starts running. It initializes the timer.
+
+void BaseTimerThread::threadTimerInitFunction()
+{
+   mWaitable.initialize(mTimerPeriod);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread run function. This is called by the base class immediately 
+// after the thread init function. It runs a loop that waits for the
+// timer or the termination event.
 
 void BaseTimerThread::threadRunFunction()
 {
-   while(1)
+   // Loop to wait for posted events and process them.
+   while (true)
    {
-      // Wait for semaphore to timeout
-      mSemaphore.get(mTimerPeriod);
-      // Test for termination
+      // Wait for a timer or an event.
+      mWaitable.waitForTimerOrEvent();
+
+      // Test for thread termination.
       if (mTerminateFlag) break;
-      // Execute inheritor timer function
-      executeOnTimer(mTimerCount++);
+
+      // Call the inheritors handler for the timer.
+      if (mWaitable.wasTimer()) executeOnTimer(mTimerCount++);
    }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Thread exit function. This is called by the base class
+// before the thread is terminated. It finalizes the timer.
+
+void BaseTimerThread::threadTimerExitFunction()
+{
+   mWaitable.finalize();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread shutdown function. Set the termination flag, post to the 
+// waitable event and wait for the thread to terminate.
 
 void BaseTimerThread::shutdownThread()
 {
-   // Set terminate
    mTerminateFlag = true;
-   mSemaphore.put();
-   // Wait for terminate
-   waitForThreadTerminate();
-}   
+   mWaitable.postEvent();
+   BaseClass::waitForThreadTerminate();
+}
 
 //******************************************************************************
 //******************************************************************************
