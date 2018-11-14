@@ -44,7 +44,7 @@ void TimerThread::threadInitFunction()
 {
    if (mTestCode !=3) return;
 
-   BaseClass::threadShowInfo("TimerThread");
+   BaseClass::showThreadFullInfo();
 }
 
 //******************************************************************************
