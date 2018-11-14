@@ -29,6 +29,11 @@
     <ClInclude Include="MainInit.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RisLib\RisLib.vcxproj">
+      <Project>{cd27243e-299e-4e44-aa52-4314cb2b9d98}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{22E6F72C-6E05-4078-B7E7-9F863E7A192B}</ProjectGuid>
     <Keyword>Linux</Keyword>
@@ -65,11 +70,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
       <AdditionalOptions>-pthread</AdditionalOptions>
-      <AdditionalIncludeDirectories>/home/linaro/Alpha/Lib/RisLib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../RisLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>~/Alpha/Lib/RisLib/lib/libRisLib.a;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <LibraryDependencies>pthread</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>

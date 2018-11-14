@@ -131,8 +131,7 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 //******************************************************************************
 #include "risThreadsThreads.h"
-#include "risThreadsTimer.h"
-#include "risThreadsSynch.h"
+#include "risThreadsWaitable.h"
 #include "risThreadsQCall.h"
 
 //******************************************************************************
@@ -147,19 +146,19 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// BaseQCallThreadEx is a thread that waits on a queue of QCalls, which are
+// BaseQCallThread is a thread that waits on a queue of QCalls, which are
 // objects that contain a pointer to a function and values for arguments that
 // are to be passed to that function. This is similar to a thread that waits
 // on a message queue, and wakes up and processes messages when they are sent
 // to it's queue. Here the messages take the form of QCalls. 
 //
-// BaseQCallThreadEx contains an mCallQue and a threadRunFunction that services
+// BaseQCallThread contains an mCallQue and a threadRunFunction that services
 // it. The mCallQue is a queue of QCall pointers and it contains a semaphore that 
 // the thread waits at. When a QCall pointer is written to the queue, the thread
 // wakes up, gets the QCall from the queue and and calls the QCall "execute" 
 // CallPointer, passing in the QCall arguments.
 // 
-// BaseQCallThreadEx supplies a shutdownThread that invokes a mTerminateQCall that
+// BaseQCallThread supplies a shutdownThread that invokes a mTerminateQCall that
 // sets an mTerminateFlag. The threadRunFunction polls the mTerminateFlag
 // and exits the thread if it is true.
 
@@ -171,49 +170,40 @@ public:
    //***************************************************************************
    // Members.
 
-   // If true the the thread will terminate at the next post to the central
-   // semaphore.
+   // Waitable timer or event. The thread run function contains a loop that
+   // waits on this for a timer or an event. The timer provides for
+   // periodic exectution and the event can signify that the call queue is
+   // ready or it can signify for thread termination.
+   Ris::Threads::Waitable mWaitable;
+
+   // If true the the thread will terminate at the next post to the waitable
+   // event.
    bool mTerminateFlag;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members, call queue.
+   // Members.
 
-   // This semahore is posted to when qcalls for this thread are invoked or
-   // when a periodic timer event occurrs.
-   CountingSemaphore mCentralSem;
-
-   // Inherited target call queue size.
-   int  mCallQueSize;
+   // Target call queue size. Inheritors can set this in their constructors.
+   int mCallQueSize;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members, thread timer.
+   // Members.
 
-   // Thread timer. It periodically executes threadExecuteOnTimer,
-   // not in the execution context of this thread.
-   ThreadTimer    mThreadTimer;
-   TimerCall      mThreadTimerCall;
-   
-   // Set by threadExecuteOnTimer to indicate that a timer
-   // update has occurred.
-   bool  mTimerExecuteFlag;
+   // Timer period in milliseconds. If this is zero then no timer is created.
+   // Inheritors can set this in their constructors.
+   int mTimerPeriod;
 
-   // Timer period in milliseconds.
-   // If this is zero then no timer is created.
-   int   mTimerPeriod;
-
-   // These give the number of timer events that have
-   // occurred since thread launch
-   int   mCurrentTimeCount;
-   int   mTimerCurrentTimeCount;
+   // The number of timer events that have occurred since thread launch.
+   int mCurrentTimeCount;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members, status.
+   // Members.
 
    // If true then abort the qcall.
    bool mQCallAbortFlag;
@@ -221,7 +211,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Intrastructure.
+   // Methods.
 
    // Constructor.
    BaseQCallThread();
@@ -232,52 +222,49 @@ public:
    //***************************************************************************
    // Methods, thread base class overloads:
 
-   // Initialize the thread call queue.
+   // Thread resource init function. This is called by the base class
+   // after the thread starts running. It initializes the call queue.
    void threadResourceInitFunction() override;
 
-   // Initialize the thread timer.
-   void threadTimerInitFunction() override; 
+   // Thread timer init function. This is called by the base class
+   // after the thread starts running. It initializes the timer.
+   void threadTimerInitFunction() override;
 
-   // Execute a loop that calls threadRunRecursive to process the call queue.
-   // The loop terminates on the mTerminateFlag. It waits for the call queue
-   // semaphore, extracts a call from the call queue, and executes the call. 
-   void threadRunFunction() override; 
+   // Thread run function. This is called by the base class immediately 
+   // after the thread init function. It runs a loop that waits for the
+   // waitable timer or event.
+   void threadRunFunction() override;
 
-   // Finalize the thread call queue.
+   // Thread timer exit function. This is called by the base class
+   // before the thread is terminated. It finalizes the timer.
+   void threadTimerExitFunction() override;
+
+   // Thread resource exit function. This is called by the base class
+   // before the thread is terminated. It finalizes the call queue.
    void threadResourceExitFunction() override;
 
-   // Set the mTerminateFlag and post to the call semaphore. Then wait for
-   // the thread to terminate.
-   void shutdownThread()override; 
+   // Thread shutdown function. Set the termination flag, post to the 
+   // waitable event and wait for the thread to terminate.
+   virtual void shutdownThread() override;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods, qcall target overloads:
 
-   // Post to the central semahore. It is called by qcall invokations after
-   // a qcall has been enqueued to the call queue.
+   // Post to the waitable event. It is called by qcall invocations after
+   // a qcall has been enqueued to the call queue. It wakes up the thread run
+   // function to process the call queue.
    void notifyQCallAvailable() override;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods, inheritor overloads:
+   // Methods. Inheritor overloads.
 
-   // This is executed by the timer. It updates timer variables
-   // and signals the central semaphore to wake up the thread.
-   // aCurrentTimeCount gives the number of timer events that
-   // have occurred since thread launch.
-   virtual void threadExecuteOnTimer(int aCurrentTimeCount);
-
-   // Inheritors provide an overload for this.
-   // It is executed in the context of this thread, after the
-   // central semaphore wakes up.
-   // aCurrentTimeCount gives the number of timer events that
-   // have occurred since thread launch.
-   // It is called by threadRunFunction and is caused by
-   // threadExecuteOnTimer.
-   virtual void executeOnTimer(int aCurrentTimeCount){}
+   // An overload of this can be supplied by the inheritor.
+   // It is called periodically by the threadRunFunction.
+   virtual void executeOnTimer(int aTimerCount) {}
 };
 
 //******************************************************************************

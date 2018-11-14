@@ -39,7 +39,7 @@ public:
    // Members.
 
    // Waitable timer or event. The thread run function contains a loop that
-   // waits on this timer.
+   // waits on this for a timer or a shutdown event.
    Ris::Threads::Waitable mWaitable;
 
    // Timer period, milliseconds. Inheritors should set this in their
@@ -74,7 +74,7 @@ public:
    // timer or the termination event.
    void threadRunFunction() override;
 
-   // Thread exit function. This is called by the base class
+   // Thread timer exit function. This is called by the base class
    // before the thread is terminated. It finalizes the timer.
    void threadTimerExitFunction() override;
 
@@ -85,10 +85,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. Inheritor overloads.
 
    // An overload of this is supplied by the inheritor.
-   // It is called periodically by the threadRunFunction
+   // It is called periodically by the threadRunFunction.
    virtual void executeOnTimer(int aTimerCount)=0;
 };
 
