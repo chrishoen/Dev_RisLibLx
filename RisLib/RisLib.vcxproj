@@ -63,6 +63,7 @@
     <ClCompile Include="risThreadsTimerThread.cpp" />
     <ClCompile Include="risThreadsTimer_linux.cpp" />
     <ClCompile Include="risThreadsTwoThread.cpp" />
+    <ClCompile Include="risThreadsWaitable_linux.cpp" />
     <ClCompile Include="risTimeMarker.cpp" />
     <ClCompile Include="ris_priorities_linux.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="risThreadsTimer.h" />
     <ClInclude Include="risThreadsTimerThread.h" />
     <ClInclude Include="risThreadsTwoThread.h" />
+    <ClInclude Include="risThreadsWaitable.h" />
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="ris_priorities.h" />
     <ClInclude Include="stdafx.h" />

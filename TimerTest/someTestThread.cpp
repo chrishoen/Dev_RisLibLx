@@ -25,7 +25,7 @@ TestThread::TestThread()
    BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadLogLevel(3);
 
-   mTimerPeriod = 4000;
+   mTimerPeriod = 1000;
    mTPFlag = false;
 }
 
