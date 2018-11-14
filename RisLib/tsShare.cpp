@@ -31,6 +31,8 @@ Share::Share()
    mMainThreadLocal = new TS::ThreadLocal;
    mMainThreadLocal->setThreadName("main");
    mMainThreadLocal->mPrintLevel = 0;
+
+   mPrintEnableFlag = false;
 }
 
 Share::~Share()

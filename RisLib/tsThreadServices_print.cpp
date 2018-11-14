@@ -33,8 +33,8 @@ void print(int aLevel, const char* aFormat, ...)
    // Do this first.
 
    // Guard.
+   if (!gShare.mPrintEnableFlag) return;
    if (gPrintThread == 0) return;
-   if (!gPrintThread->mEnableFlag) return;
    if (!isEnabled()) return;
    if (aLevel > tls()->mPrintLevel && aLevel > tls()->mLogLevel) return;
 

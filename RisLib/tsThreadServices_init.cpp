@@ -53,6 +53,9 @@ void initialize()
    // object.
    TS::setThreadLocal(gShare.mMainThreadLocal);
 
+   // Disable prints.
+   gShare.mPrintEnableFlag = false;
+
    // Launch the print thread.
    TS::gPrintThread = new TS::PrintThread;
    TS::gPrintThread->launchThread();
@@ -60,14 +63,24 @@ void initialize()
    // Let things settle.
    Ris::Threads::threadSleep(200);
 
+   // Enable prints.
+   gShare.mPrintEnableFlag = true;
+
    // Do a print.
    TS::print(1, "ThreadServices initialize");
 }
 
 void finalize()
 {
+   // Do a print.
+   TS::print(1, "");
+   TS::print(1, "ThreadServices finalize");
+
    // Let things settle.
    Ris::Threads::threadSleep(200);
+
+   // Disable prints.
+   gShare.mPrintEnableFlag = false;
 
    // shutdown the print thread.
    TS::gPrintThread->shutdownThread();

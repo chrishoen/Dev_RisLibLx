@@ -28,15 +28,16 @@ int get_default_high_thread_priority();
 int get_default_low_thread_priority();
 
 int get_default_qcall_thread_priority();
-int get_default_qcall_timer_thread_priority();
 
 int get_default_short_thread_priority();
-int get_default_short_timer_thread_priority();
 int get_default_long_thread_priority();
 
 int get_default_udp_rx_thread_priority();
 int get_default_tcp_server_thread_priority();
 int get_default_tcp_client_thread_priority();
+
+int get_default_log_thread_priority();
+int get_default_print_thread_priority();
 
 //******************************************************************************
 //******************************************************************************

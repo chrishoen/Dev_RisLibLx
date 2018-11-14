@@ -28,14 +28,13 @@ PrintThread::PrintThread()
    BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadLogLevel(0);
    BaseClass::mTimerPeriod = 0;
-   BaseClass::mThreadPriority = Ris::get_default_low_thread_priority();
+   BaseClass::mThreadPriority = Ris::get_default_print_thread_priority();
 
    // Initialize qcalls.
    mWriteQCall.bind(this, &PrintThread::executeWrite);
 
    // Initialize variables.
    mFile = 0;
-   mEnableFlag = false;
    mWriteCount = 0;
 }
 
@@ -90,9 +89,6 @@ void PrintThread::threadInitFunction()
 {
    // Open the log file.
    doFileOpenNew();
-
-   // Prints are enabled.
-   mEnableFlag = true;
 }
 
 //******************************************************************************
@@ -102,9 +98,6 @@ void PrintThread::threadInitFunction()
 
 void  PrintThread::threadExitFunction()
 {
-   // Prints are disabled.
-   mEnableFlag = false;
-
    // Close the file.
    doFileClose();
 }
@@ -118,7 +111,7 @@ void  PrintThread::threadExitFunction()
 void PrintThread::executeWrite(PrintString* aString)
 {
    // Guard.
-   if (!mEnableFlag)
+   if (!gShare.mPrintEnableFlag)
    {
       delete aString;
       return;
