@@ -54,15 +54,15 @@ void TestThread::threadRunFunction()
    int tCount = 0;
    while (true)
    {
-      // Test for thread termination.
-      if (BaseClass::mTerminateFlag) break;
-
       // Wait for a timer or an event.
       mWaitable.waitForTimerOrEvent();
 
-      // Send a qcall to the test thread.
-      if (mTPFlag) executeOnTimer(tCount);
-      tCount++;
+      // Test for thread termination.
+      if (BaseClass::mTerminateFlag) break;
+
+      // Call a handler for the timer or the event.
+      if (mWaitable.wasTimer()) executeOnTimer(tCount++);
+      if (mWaitable.wasEvent()) executeOnEvent();
    }
 }
 
@@ -80,10 +80,33 @@ void TestThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Thread shutdown function. Set the termination flag, post to the 
+// waitable event and wait for the thread to terminate.
+
+void TestThread::shutdownThread()
+{
+   BaseClass::mTerminateFlag = true;
+   mWaitable.postEvent();
+   BaseClass::waitForThreadTerminate();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void TestThread::executeOnTimer(int aCount)
 {
+   if (!mTPFlag) return;
    Prn::print(0, "executeOnTimer %d", aCount);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TestThread::executeOnEvent()
+{
+   Prn::print(0, "executeOnEvent");
 }
 
 //******************************************************************************

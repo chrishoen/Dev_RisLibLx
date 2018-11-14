@@ -71,12 +71,18 @@ public:
    // before the thread is terminated.
    void threadExitFunction() override;
 
+   // Thread shutdown function. Set the termination flag, post to the 
+   // waitable event and wait for the thread to terminate.
+   void shutdownThread() override;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods. 
 
+   // Test methods.
    void executeOnTimer(int aCount);
+   void executeOnEvent();
 };
 
 //******************************************************************************

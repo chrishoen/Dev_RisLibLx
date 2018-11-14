@@ -28,13 +28,15 @@ public:
    //***************************************************************************
    // Members.
 
-   // Period, in milliseconds
-   int  mTimerPeriod;
-
    // Current time count, incremented on every timer event.
    // Counts the number of timer events that have occurred
    // since the timer was created.
-   int  mCurrentTimeCount;
+   int  mTimerCount;
+
+   // Return true if the previous wait unblocking was a result of the timer 
+   // or the event.
+   bool mWasTimerFlag;
+   bool mWasEventFlag;
 
 protected:
    // Pimpl pattern. Used to hide details of the operating system specific
@@ -55,7 +57,7 @@ public:
    Waitable();
   ~Waitable();
 
-   // Start a timer periodically, in milliseconds
+   // Start a timer periodically, in milliseconds.
    void initialize(int aTimerPeriod);
 
    // Stop the timer.
@@ -66,11 +68,16 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Post to the event.
+   void postEvent();
+
    // Wait for the timer or event.
    void waitForTimerOrEvent();
 
-   // Post to the event. This will unblock any pending waits.
-   void postEvent();
+   // Return true if the previous wait unblocking was a result of the timer 
+   // or the event.
+   bool wasTimer();
+   bool wasEvent();
 };
 
 //******************************************************************************
