@@ -28,20 +28,24 @@ namespace TS
 
 PrintString::PrintString()
 {
+   mPrintFlag = false;
    mString[0] = 0;
 }
 
 PrintString::PrintString(const char* aString)
 {
+   mPrintFlag = false;
    my_strncpy(mString,aString,cMaxStringSize);
 }
 
 PrintString::PrintString(const PrintString& aRhs)
 {
+   mPrintFlag = aRhs.mPrintFlag;
    my_strncpy(mString, aRhs.mString, cMaxStringSize);
 }
 PrintString& PrintString::operator= (const PrintString& aRhs)
 {
+   mPrintFlag = aRhs.mPrintFlag;
    my_strncpy(mString, aRhs.mString, cMaxStringSize);
 }
 

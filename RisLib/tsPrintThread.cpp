@@ -118,7 +118,10 @@ void PrintThread::executeWrite(PrintString* aString)
    }
 
    // Print to stdout.
-   fputs(aString->mString, stdout);
+   if (aString->mPrintFlag)
+   {
+      fputs(aString->mString, stdout);
+   }
 
    // Print to the log file.
    fputs(aString->mString, mFile);

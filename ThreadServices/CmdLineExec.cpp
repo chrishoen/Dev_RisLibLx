@@ -49,16 +49,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-// aCmd->setArgDefault(1, "0123");
-   char tSource[100];
-   char tDestin[100];
-   int tSize = 4;
-   aCmd->copyArgString(1, tSource, 100);
-
-   my_strncpy(tDestin, tSource, tSize);
-
-   Prn::print(0, "source %3d %s", strlen(tSource), tSource);
-   Prn::print(0, "destin %3d %s", strlen(tDestin), tDestin);
+   TS::print(0, "print level 0");
+   TS::print(1, "print level 1");
+   TS::print(2, "print level 2");
+   TS::print(3, "print level 3");
+   TS::print(4, "print level 4");
+   TS::print(5, "print level 5");
 
 }
 

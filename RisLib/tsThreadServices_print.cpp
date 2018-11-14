@@ -43,7 +43,6 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    // Guard against having too many prints that are at or above level 4.
 
-#if 0
    if (aLevel >= 4)
    {
       // Increment.
@@ -52,18 +51,15 @@ void print(int aLevel, const char* aFormat, ...)
       // If at the limit then print a message and exit.
       if (tls()->mPrintCount4 == 40)
       {
-         fputs("PRINT COUNT 4 LIMIT HAS BEEN REACHED\n", stdout);
-         if (gShare.mLogFile)
-         {
-            fputs("PRINT COUNT 4 LIMIT HAS BEEN REACHED\n", gShare.mLogFile);
-         }
+         PrintString* tPrintString = new PrintString("PRINT COUNT 4 LIMIT HAS BEEN REACHED");
+         tPrintString->mPrintFlag = true;
+         gPrintThread->mWriteQCall(tPrintString);
          return;
       }
 
       // If above the limit then exit.
       if (tls()->mPrintCount4 > 40) return;
    }
-#endif
 
    //*************************************************************************
    //*************************************************************************
@@ -102,8 +98,9 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    //*************************************************************************
    // Print the string.
-
+   
    PrintString* tPrintString = new PrintString(tOutputString);
+   tPrintString->mPrintFlag = aLevel <= tls()->mPrintLevel;
    gPrintThread->mWriteQCall(tPrintString);
 }
 
