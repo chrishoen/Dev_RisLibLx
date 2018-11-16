@@ -44,11 +44,18 @@ PrintThread::~PrintThread()
 void PrintThread::doFileOpenNew()
 {
    char tBuf[400];
-   char tFileName[400];
+   char tFileName[40];
    strcpy(tFileName, gShare.mProgramName);
    strcat(tFileName, "Log.txt");
 
-   mFile = fopen(Ris::getAlphaFilePath_Log(tBuf, tFileName), "w");
+   if (gShare.mProgramLogFilepath[0] == 0)
+   {
+      mFile = fopen(Ris::getAlphaFilePath_Log(tBuf, tFileName), "w");
+   }
+   else
+   {
+      mFile = fopen(gShare.mProgramLogFilepath, "w");
+   }
 }
 
 void PrintThread::doFileOpenAppend()
@@ -58,7 +65,14 @@ void PrintThread::doFileOpenAppend()
    strcpy(tFileName, gShare.mProgramName);
    strcat(tFileName, "Log.txt");
 
-   mFile = fopen(Ris::getAlphaFilePath_Log(tBuf, tFileName), "w+");
+   if (gShare.mProgramLogFilepath[0] == 0)
+   {
+      mFile = fopen(Ris::getAlphaFilePath_Log(tBuf, tFileName), "a");
+   }
+   else
+   {
+      mFile = fopen(gShare.mProgramLogFilepath, "w");
+   }
 }
 
 void PrintThread::doFileClose()

@@ -48,8 +48,11 @@ public:
    // the thread run function.
    TS::ThreadLocal* mMainThreadLocal;
 
-   // Program log file.
+   // Program name.
    char mProgramName[cMaxStringSize];
+
+   // Program log file pathname.
+   char mProgramLogFilepath[cMaxStringSize];
 
    // If true then prints are enabled.
    bool mPrintEnableFlag;

@@ -31,6 +31,11 @@ void setProgramName(const char* aName)
    strncpy(gShare.mProgramName, aName, cMaxStringSize);
 }
 
+void setProgramLogFilepath(const char* aPath)
+{
+   strncpy(gShare.mProgramLogFilepath, aPath, cMaxStringSize);
+}
+
 void setProgramPrintLevel(int aPrintLevel)
 {
    gShare.mMainThreadLocal->mPrintLevel = aPrintLevel;
