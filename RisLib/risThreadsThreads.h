@@ -41,12 +41,10 @@ public:
    static const int cThreadRunState_Launching  = 1;
    static const int cThreadRunState_InitR      = 2;
    static const int cThreadRunState_InitF      = 3;
-   static const int cThreadRunState_InitT      = 4;
-   static const int cThreadRunState_Running    = 5;
-   static const int cThreadRunState_ExitT      = 6;
-   static const int cThreadRunState_ExitF      = 7;
-   static const int cThreadRunState_ExitR      = 8;
-   static const int cThreadRunState_Terminated = 9;
+   static const int cThreadRunState_Running    = 4;
+   static const int cThreadRunState_ExitR      = 5;
+   static const int cThreadRunState_ExitF      = 6;
+   static const int cThreadRunState_Terminated = 7;
 
    //***************************************************************************
    //***************************************************************************
@@ -176,17 +174,8 @@ public:
    // inheriting thread base classes and by inheriting user classes
    virtual void threadInitFunction(){}
 
-   // This is used by inheritors to initialize thread timers. This should be
-   // overloaded by thread base classes and not by thread user classes.
-   // The launching thread also waits for this to complete.
-   virtual void threadTimerInitFunction(){}
-
    // This should be used by inheritors to do the actual work of the thread
    virtual void threadRunFunction(){}
-
-   // This is used by inheritors to finalize thread timers. This should be
-   // overloaded by thread base classes and not by thread user classes.
-   virtual void threadTimerExitFunction() {}
 
    // This should be used by inheritors when the thread exits.It is used
    // for any thread cleanup

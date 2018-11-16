@@ -65,18 +65,18 @@ public:
    //***************************************************************************
    // Methods. Base class overloads.
 
-   // Thread timer init function. This is called by the base class
-   // after the thread starts running. It initializes the timer.
-   void threadTimerInitFunction() override;
+   // Thread resource init function. This is called by the base class
+   // after the thread starts running. It initializes the waitable timer.
+   void threadResourceInitFunction() override;
 
    // Thread run function. This is called by the base class immediately 
    // after the thread init function. It runs a loop that waits for the
    // timer or the termination event.
    void threadRunFunction() override;
 
-   // Thread timer exit function. This is called by the base class
-   // before the thread is terminated. It finalizes the timer.
-   void threadTimerExitFunction() override;
+   // Thread resource exit function. This is called by the base class
+   // before the thread is terminated. It finalizes the waitable timer.
+   void threadResourceExitFunction() override;
 
    // Thread shutdown function. Set the termination flag, post to the 
    // waitable event and wait for the thread to terminate.

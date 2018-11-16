@@ -53,6 +53,7 @@ Waitable::Waitable()
    mTimerCount = 0;
    mWasTimerFlag = false;
    mWasEventFlag = false;
+   mValidFlag = false;
 
    // Create new specific implementation.
    mSpecific = new Specific;
@@ -103,6 +104,9 @@ void Waitable::initialize (int aTimerPeriod)
 
    // Create the event.
    mSpecific->mEventFd = eventfd(0, EFD_SEMAPHORE);
+
+   // Set valid.
+   mValidFlag = true;
 }
 
 //******************************************************************************
@@ -111,13 +115,18 @@ void Waitable::initialize (int aTimerPeriod)
 
 void Waitable::finalize()
 {
-   if (mSpecific->mTimerFd == 0) return;
-   
+   // Guard.
+   if (!mValidFlag) return;
+
+   // Close the timer and event.
    close(mSpecific->mTimerFd);
    close(mSpecific->mEventFd);
 
    mSpecific->mTimerFd = 0;
    mSpecific->mEventFd = 0;
+
+   // Set invalid.
+   mValidFlag = true;
 }
 
 //******************************************************************************
@@ -127,11 +136,14 @@ void Waitable::finalize()
 
 void Waitable::waitForTimerOrEvent()
 {
-   TS::print(5, "Waitable waitForTimerOrEvent*******************************BEGIN");
-
    // Reset variables.
    mWasTimerFlag = false;
    mWasEventFlag = false;
+
+   // Guard.
+   if (!mValidFlag) return;
+
+   TS::print(5, "Waitable waitForTimerOrEvent*******************************BEGIN");
 
    // Add the timer and event fds to a read set.
    int tRet;
@@ -184,10 +196,11 @@ bool Waitable::wasEvent() { return mWasEventFlag; }
 
 void Waitable::postEvent()
 {
-   int tRet;
-   unsigned long long tValue = 1;
+   // Guard.
+   if (!mValidFlag) return;
 
    // Write to the event semaphore, increment by one.
+   unsigned long long tValue = 1;
    write(mSpecific->mEventFd, &tValue, sizeof(tValue));
 }
 

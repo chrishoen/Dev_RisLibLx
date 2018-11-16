@@ -133,6 +133,7 @@ executed by the thread run function and then deleted.
 #include "risThreadsThreads.h"
 #include "risThreadsWaitable.h"
 #include "risThreadsQCall.h"
+#include "risLCPointerQueue.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -185,7 +186,12 @@ public:
    //***************************************************************************
    // Members.
 
-   // Target call queue size. Inheritors can set this in their constructors.
+   // Pointer queue that contains pointers to qcalls.
+   // QCall invocations enqueue qcalls to this queue.
+   // This thread dequeues qcalls from it.
+   LCPointerQueue mCallQueue;
+
+   // Call queue size. Inheritors can set this in their constructors.
    int mCallQueSize;
 
    //***************************************************************************
@@ -223,24 +229,18 @@ public:
    // Methods, thread base class overloads:
 
    // Thread resource init function. This is called by the base class
-   // after the thread starts running. It initializes the call queue.
+   // after the thread starts running. It initializes the call queue and
+   // the waitable timer.
    void threadResourceInitFunction() override;
-
-   // Thread timer init function. This is called by the base class
-   // after the thread starts running. It initializes the timer.
-   void threadTimerInitFunction() override;
 
    // Thread run function. This is called by the base class immediately 
    // after the thread init function. It runs a loop that waits for the
    // waitable timer or event.
    void threadRunFunction() override;
 
-   // Thread timer exit function. This is called by the base class
-   // before the thread is terminated. It finalizes the timer.
-   void threadTimerExitFunction() override;
-
    // Thread resource exit function. This is called by the base class
-   // before the thread is terminated. It finalizes the call queue.
+   // before the thread is terminated. It finalizes the call queue and
+   // the waitable timer.
    void threadResourceExitFunction() override;
 
    // Thread shutdown function. Set the termination flag, post to the 
@@ -252,10 +252,11 @@ public:
    //***************************************************************************
    // Methods, qcall target overloads:
 
-   // Post to the waitable event. It is called by qcall invocations after
-   // a qcall has been enqueued to the call queue. It wakes up the thread run
-   // function to process the call queue.
-   void notifyQCallAvailable() override;
+   // Try to write a qcall to the to the target queue. Return true if
+   // successful. This is called by qcall invocations to enqueue a qcall.
+   // It writes to the call queue and posts to the waitable event, which
+   // then wakes up the thread run function to process the call queue.
+   bool tryWriteQCall(BaseQCall* aQCall) override;
 
    //***************************************************************************
    //***************************************************************************

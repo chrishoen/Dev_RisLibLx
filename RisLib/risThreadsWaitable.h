@@ -38,6 +38,9 @@ public:
    bool mWasTimerFlag;
    bool mWasEventFlag;
 
+   // Return true if the object is valid.
+   bool mValidFlag;
+
 protected:
    // Pimpl pattern. Used to hide details of the operating system specific
    // variables, like the timer handle, from the .h file so that this

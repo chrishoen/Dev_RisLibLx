@@ -39,22 +39,15 @@ BaseQCallThread::~BaseQCallThread()
 //******************************************************************************
 //******************************************************************************
 // Thread resource init function. This is called by the base class
-// after the thread starts running. It initializes the call queue.
+// after the thread starts running. It initializes the call queue and
+// the waitable timer.
 
 void BaseQCallThread::threadResourceInitFunction()
 {
    // Initialize the call queue.
-   BaseQCallTarget::initializeCallQueue(mCallQueSize);
-}
+   mCallQueue.initialize(mCallQueSize);
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Thread timer init function. This is called by the base class
-// after the thread starts running. It initializes the timer.
-
-void BaseQCallThread::threadTimerInitFunction()
-{
+   // Initialize the waitable timer.
    mWaitable.initialize(mTimerPeriod);
 }
 
@@ -117,23 +110,18 @@ void BaseQCallThread::threadRunFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread timer exit function. This is called by the base class
-// before the thread is terminated. It finalizes the timer.
-
-void BaseQCallThread::threadTimerExitFunction()
-{
-   mWaitable.finalize();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Thread resource exit function. This is called by the base class
-// before the thread is terminated. It finalizes the call queue.
+// before the thread is terminated. It finalizes the call queue and
+// the waitable timer.
 
 void BaseQCallThread::threadResourceExitFunction()
 {
-   BaseQCallTarget::finalizeCallQueue();
+   // Finalize the call queue.
+   mCallQueue.finalize();
+
+   // Finalize the waitable timer;
+   mWaitable.finalize();
+
 }
 
 //******************************************************************************
@@ -148,20 +136,35 @@ void BaseQCallThread::shutdownThread()
    // Post to the waitable event. This will wake up the threadRunFunction
    // and it will return because the termination flag was set.
    mWaitable.postEvent();
-   // Wait for the thread run function to return..
+   // Wait for the thread run function to return.
    waitForThreadTerminate();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Post to the waitable event. It is called by qcall invocations after
-// a qcall has been enqueued to the call queue. It wakes up the thread run
-// function to process the call queue.
+// Try to write a qcall to the to the target queue. Return true if
+// successful. This is called by qcall invocations to enqueue a qcall.
+// It writes to the call queue and posts to the waitable event, which
+// then wakes up the thread run function to process the call queue.
 
-void BaseQCallThread::notifyQCallAvailable()
+bool BaseQCallThread::tryWriteQCall(BaseQCall* aQCall) 
 {
+   // Guard.
+   if (mTerminateFlag) return false;
+
+   // Try to write to the call queue.
+   if (!mCallQueue.tryWrite(aQCall))
+   {
+      // The write was not successful.
+      return false;
+   }
+
+   // Post to the waitable event.
    mWaitable.postEvent();
+
+   // Successful.
+   return true;
 }
 
 //******************************************************************************

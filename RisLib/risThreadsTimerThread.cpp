@@ -26,10 +26,10 @@ BaseTimerThread::BaseTimerThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread timer init function. This is called by the base class
-// after the thread starts running. It initializes the timer.
+// Thread resource init function. This is called by the base class
+// after the thread starts running. It initializes the waitable timer.
 
-void BaseTimerThread::threadTimerInitFunction()
+void BaseTimerThread::threadResourceInitFunction()
 {
    mWaitable.initialize(mTimerPeriod);
 }
@@ -60,10 +60,10 @@ void BaseTimerThread::threadRunFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread exit function. This is called by the base class
-// before the thread is terminated. It finalizes the timer.
+// Thread resource exit function. This is called by the base class
+// before the thread is terminated. It finalizes the waitable timer.
 
-void BaseTimerThread::threadTimerExitFunction()
+void BaseTimerThread::threadResourceExitFunction()
 {
    mWaitable.finalize();
 }

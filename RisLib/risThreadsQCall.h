@@ -132,7 +132,6 @@ executed by the thread run function and then deleted.
 //******************************************************************************
 
 #include <functional>
-#include "risLCPointerQueue.h"
 
 namespace Ris
 {
@@ -142,13 +141,15 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// QCall target base class. Inheriting classes process received QCalls.
 
 class BaseQCall;
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// QCall target base class. Inheriting classes process received QCalls.
+// This provides an interface to the qcall classes that hides the details
+// of the qcall processing thread.
 
 class BaseQCallTarget
 {
@@ -157,35 +158,11 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members.
-
-   // Pointer queue that contains pointers to qcalls.
-   // QCall invocations enqueue qcalls to this queue.
-   // QCall targets dequeue from it.
-   LCPointerQueue mCallQueue;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Methods.
 
-   // Initialize the call queue.
-   void initializeCallQueue(int aCallQueueSize)
-   {
-      mCallQueue.initialize(aCallQueueSize);
-   }
-
-   // Finalize the call queue.
-   void finalizeCallQueue()
-   {
-      mCallQueue.finalize();
-   }
-
-   // Notify that a qcall is available.
-   // Target inheritors provide an override for this method.
-   // It is called after a QCall has been enqueued to the target queue.
-   // It notifies the target that a QCall is available.
-   virtual void notifyQCallAvailable() = 0;
+   // Try to write a qcall to the to the target queue. Return true if
+   // successful.
+   virtual bool tryWriteQCall(BaseQCall* aQCall) = 0;
 };
 
 //******************************************************************************
@@ -257,16 +234,10 @@ public:
    {
       // Create a new copy of the qcall.
       QCall0* tQCall = new QCall0(*this);
-
       // Try to write the copy to the target queue.
-      if (mTarget->mCallQueue.tryWrite(tQCall))
+      if (!mTarget->tryWriteQCall(tQCall))
       {
-         // Notify the target thread that a qcall is available.
-         mTarget->notifyQCallAvailable();
-      }
-      else
-      {
-         // The target queue is full.
+         // The write was not successful.
          delete tQCall;
       }
    }
@@ -339,14 +310,9 @@ public:
       // Create a new copy of the qcall.
       QCall1* tQCall = new QCall1(*this);
       // Try to write the copy to the target queue.
-      if (mTarget->mCallQueue.tryWrite(tQCall))
+      if (!mTarget->tryWriteQCall(tQCall))
       {
-         // Notify the target thread that a qcall is available.
-         mTarget->notifyQCallAvailable();
-      }
-      else
-      {
-         // The target queue is full.
+         // The write was not successful.
          delete tQCall;
       }
    }
@@ -421,14 +387,9 @@ public:
       // Create a new copy of the qcall.
       QCall2* tQCall = new QCall2(*this);
       // Try to write the copy to the target queue.
-      if (mTarget->mCallQueue.tryWrite(tQCall))
+      if (!mTarget->tryWriteQCall(tQCall))
       {
-         // Notify the target thread that a qcall is available.
-         mTarget->notifyQCallAvailable();
-      }
-      else
-      {
-         // The target queue is full.
+         // The write was not successful.
          delete tQCall;
       }
    }
@@ -505,14 +466,9 @@ public:
       // Create a new copy of the qcall.
       QCall3* tQCall = new QCall3(*this);
       // Try to write the copy to the target queue.
-      if (mTarget->mCallQueue.tryWrite(tQCall))
+      if (!mTarget->tryWriteQCall(tQCall))
       {
-         // Notify the target thread that a qcall is available.
-         mTarget->notifyQCallAvailable();
-      }
-      else
-      {
-         // The target queue is full.
+         // The write was not successful.
          delete tQCall;
       }
    }
@@ -591,14 +547,9 @@ public:
       // Create a new copy of the qcall.
       QCall4* tQCall = new QCall4(*this);
       // Try to write the copy to the target queue.
-      if (mTarget->mCallQueue.tryWrite(tQCall))
+      if (!mTarget->tryWriteQCall(tQCall))
       {
-         // Notify the target thread that a qcall is available.
-         mTarget->notifyQCallAvailable();
-      }
-      else
-      {
-         // The target queue is full.
+         // The write was not successful.
          delete tQCall;
       }
    }
@@ -679,14 +630,9 @@ public:
       // Create a new copy of the qcall.
       QCall5* tQCall = new QCall5(*this);
       // Try to write the copy to the target queue.
-      if (mTarget->mCallQueue.tryWrite(tQCall))
+      if (!mTarget->tryWriteQCall(tQCall))
       {
-         // Notify the target thread that a qcall is available.
-         mTarget->notifyQCallAvailable();
-      }
-      else
-      {
-         // The target queue is full.
+         // The write was not successful.
          delete tQCall;
       }
    }
