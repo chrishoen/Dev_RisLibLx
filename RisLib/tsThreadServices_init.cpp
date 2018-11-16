@@ -61,7 +61,7 @@ void initialize()
    TS::gPrintThread->launchThread();
 
    // Let things settle.
-   Ris::Threads::threadSleep(200);
+// Ris::Threads::threadSleep(200);
 
    // Enable prints.
    gShare.mPrintEnableFlag = true;
@@ -80,7 +80,7 @@ void finalize()
    gShare.mPrintEnableFlag = false;
 
    // Let things settle.
-   Ris::Threads::threadSleep(500);
+// Ris::Threads::threadSleep(500);
 
    // shutdown the print thread.
    TS::gPrintThread->shutdownThread();

@@ -5,6 +5,7 @@
 #include "CmdLineExec.h"
 #include "MainInit.h"
 
+#include "tsPrintThread.h"
 #include "someMasterThread.h"
 #include "someSlaveThread.h"
 #include "someRandomTimerThread.h"
@@ -47,6 +48,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
+   TS::gPrintThread->showThreadInfo();
    Some::gSlaveThread->showThreadInfo();
    Some::gMasterThread->showThreadInfo();
    Some::gRandomTimerThread1->showThreadInfo();
