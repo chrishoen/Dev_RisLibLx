@@ -61,6 +61,12 @@ public:
 
    // Copy an input string to the member string.
    void puts(const char* aString);
+
+   // Send this instance to the print thread. The print thread will
+   // eventually delete this instance. Do not use this instance after
+   // sending it. If this is not successful then it deletes itself.
+   void sendToPrintThread();
+
 };
 
 //******************************************************************************

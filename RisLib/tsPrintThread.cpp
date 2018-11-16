@@ -27,11 +27,7 @@ PrintThread::PrintThread()
    BaseClass::setThreadName("TSPrint");
    BaseClass::setThreadPrintLevel(3);
    BaseClass::setThreadLogLevel(0);
-   BaseClass::mTimerPeriod = 0;
    BaseClass::mThreadPriority = Ris::get_default_print_thread_priority();
-
-   // Initialize qcalls.
-   mWriteQCall.bind(this, &PrintThread::executeWrite);
 
    // Initialize variables.
    mFile = 0;
@@ -87,6 +83,9 @@ void PrintThread::doFileFlush()
 
 void PrintThread::threadInitFunction()
 {
+   // Initialize the string queue.
+   mStringQueue.initialize(cQueueSize);
+
    // Open the log file.
    doFileOpenNew();
 }
@@ -98,17 +97,66 @@ void PrintThread::threadInitFunction()
 
 void  PrintThread::threadExitFunction()
 {
-   // Close the file.
+   // Finalize the string queue.
+   mStringQueue.finalize();
+
+   // Close the log file.
    doFileClose();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Write function. This is bound to the qcall. It writes a string to the
-// log file and then deletes it
+// Thread run function. This is called by the base class immediately 
+// after the thread init function. It runs a loop that waits on the
+// semaphore. When it wakes up, it reads a string from the string
+// queue and prints it.
 
-void PrintThread::executeWrite(PrintString* aString)
+void PrintThread::threadRunFunction()
+{
+   // Loop to wait for posted events and process them.
+   int tCount = 0;
+   while (true)
+   {
+      // Wait on the counting semaphore.
+      mSemaphore.get();
+
+      // Test for thread termination.
+      if (mTerminateFlag) break;
+
+      // Try to read a string from the queue.
+      if (PrintString* tString = (PrintString*)mStringQueue.tryRead())
+      {
+         // print the string and then delete it.
+         printString(tString);
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread shutdown function. Set the termination flag, post to the 
+// semaphore and wait for the thread to terminate.
+
+void PrintThread::shutdownThread()
+{
+   // Set the termination flag.
+   mTerminateFlag = true;
+   // Post to the semaphore.
+   mSemaphore.put();
+   // Wait for the thread run function to return.
+   BaseClass::waitForThreadTerminate();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Print a string to stdout and the program log file and delete it.
+// log file and then deletes it. This is called by the thread run function
+// when it dequeues a string from the queue.
+
+void PrintThread::printString(PrintString* aString)
 {
    // Guard.
    if (!gShare.mPrintEnableFlag)
@@ -133,6 +181,34 @@ void PrintThread::executeWrite(PrintString* aString)
 
    // Done.
    delete aString;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Try to write a string to the to the queue. Return true if
+// successful. This is called by print invocations to enqueue a string.
+// It writes to the string queue and posts to the semaphore, which
+// then wakes up the thread run function to process the string queue.
+
+bool PrintThread::tryWriteString(PrintString* aString)
+{
+   // Guard.
+   if (mTerminateFlag) return false;
+   if (!gShare.mPrintEnableFlag) return false;
+
+   // Try to write to the call queue.
+   if (!mStringQueue.tryWrite(aString))
+   {
+      // The write was not successful.
+      return false;
+   }
+
+   // Post to the semaphore.
+   mSemaphore.put();
+
+   // Successful.
+   return true;
 }
 
 //******************************************************************************

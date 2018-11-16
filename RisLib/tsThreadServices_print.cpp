@@ -53,7 +53,7 @@ void print(int aLevel, const char* aFormat, ...)
       {
          PrintString* tPrintString = new PrintString("PRINT COUNT 4 LIMIT HAS BEEN REACHED");
          tPrintString->mPrintFlag = true;
-         gPrintThread->mWriteQCall(tPrintString);
+         tPrintString->sendToPrintThread();
          return;
       }
 
@@ -98,10 +98,11 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    //*************************************************************************
    // Print the string.
-   
+
+   // Create a new string instance and send it to the print thread.
    PrintString* tPrintString = new PrintString(tOutputString);
    tPrintString->mPrintFlag = aLevel <= tls()->mPrintLevel;
-   gPrintThread->mWriteQCall(tPrintString);
+   tPrintString->sendToPrintThread();
 }
 
 //******************************************************************************
