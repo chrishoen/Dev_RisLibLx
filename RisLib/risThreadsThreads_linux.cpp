@@ -335,7 +335,6 @@ void BaseThread::forceTerminateThread()
 
 void BaseThread::waitForThreadTerminate()
 {
-   TS::print(1, "");
    TS::print(1, "waitForThreadTerminate BEGIN %s", mThreadLocal->mThreadName);
    pthread_join(mBaseSpecific->mHandle,NULL);
    TS::print(1, "waitForThreadTerminate END   %s", mThreadLocal->mThreadName);
