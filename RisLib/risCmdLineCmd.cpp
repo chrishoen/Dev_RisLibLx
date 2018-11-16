@@ -64,6 +64,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    //---------------------------------------------------------------------------
    // Initialize members
 
+   my_strncpy(mCommandLine,aCommandLine,1000);
    mGoodCmd=false;
 
    for (i=0;i<=MaxNumOfArgs;i++)
@@ -73,16 +74,17 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
 
    mArgNum      = 0;
    mValidFlag   = 0;
+   mArgWhole[0] = 0;
 
    //---------------------------------------------------------------------------
    // Guard
 
-   if(strlen(aCommandLine)==0) return;
+   if(strlen(mCommandLine)==0) return;
 
    //---------------------------------------------------------------------------
    // Parse command line into command and argument members
 
-   tToken = r_myStrtok(aCommandLine,mDelimiters,&tTokenIndex);
+   tToken = r_myStrtok(mCommandLine,mDelimiters,&tTokenIndex);
 
    // Guard against line with one space
    if(tToken==0) return;
@@ -98,7 +100,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    // Loop through command line to extract argument pointers
    // First argument is at arg[1]
    tArgIndex = 1;
-   while((tToken = r_myStrtok(aCommandLine,mDelimiters,&tTokenIndex)))
+   while((tToken = r_myStrtok(mCommandLine,mDelimiters,&tTokenIndex)))
    {
       // Store argument pointer
       strcpy(mArgPtr[tArgIndex],tToken);
@@ -113,6 +115,13 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
       mArgNum++;
       tArgIndex++;
    }
+
+   // Copy all of the chars after the command into the whole argument.
+   if (mArgNum == 0) return;
+
+   int tCmdLength = strlen(mArgPtr[0]);
+   char* tArgWholePtr = &aCommandLine[0] + tCmdLength + 1;
+   my_strncpy(mArgWhole, tArgWholePtr, 200);
 }
 
 //******************************************************************************
@@ -304,6 +313,27 @@ char* CmdLineCmd::argString(int aArgIndex)
 
    // Return char* argument.
    return tValue;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to the whole argumant string.
+
+char* CmdLineCmd::argWhole()
+{
+   return &mArgWhole[0];
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy the whole argument into a string
+
+void CmdLineCmd::copyArgWhole(char* aString, int aMaxSize)
+{
+   // Copy argument to string.
+   my_strncpy(aString, mArgWhole, aMaxSize);
 }
 
 //******************************************************************************

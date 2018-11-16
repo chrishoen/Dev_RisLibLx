@@ -33,15 +33,20 @@ public:
    enum {MaxNumOfArgs =  20};
    enum {MaxArgSize   = 100};
 
-   // Argument delimiters
+   // Copy of the input command line.
+   char mCommandLine[1000];
+
+   // Argument delimiters.
    char mDelimiters[10];
 
-   // Command line string argument pointer
+   // Command line string argument pointer.
    // mArgPtr[0] is the command, mArgPtr[1] is the first argument ...
    char*  mArgPtr   [MaxNumOfArgs+1];
-   // Command line string argument storage
-   // mArgPtr[n] points to mArgStore[n]
-   char   mArgStore [MaxNumOfArgs+1][MaxArgSize];
+   // Command line string argument storage.
+   // mArgPtr[n] points to mArgStore[n].
+   char   mArgStore[MaxNumOfArgs + 1][MaxArgSize];
+   // The whole set of arguments, all chars afer the command.
+   char   mArgWhole[MaxArgSize*10];
    // True if corresponding argument exists
    bool   mArgFlag  [MaxNumOfArgs+1];
    // Number of arguments
@@ -112,6 +117,12 @@ public:
 
    // Return true if the argument is a number.
    bool isArgNumber(int aArgIndex);
+
+   // Return a pointer to the whole argumant string.
+   char*    argWhole();
+
+   // Copy the whole argument into a string
+   void copyArgWhole(char* aString, int aMaxSize);
 
    // Set defaults for arguments from the command line.
    // These are used as defaults if no arguments are entered.

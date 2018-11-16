@@ -46,12 +46,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   short revents = (short)aCmd->argInt(1);
-   printf("revents %d\n",revents);
-   if (revents & POLLIN)
-   {
-      printf("true\n");
-   }
+   aCmd->setArgDefault(1, 101);
+   aCmd->setArgDefault(2, 202.2);
+   aCmd->setArgDefault(3, "abcd");
+
+   char tWhole[100];
+   aCmd->copyArgWhole(tWhole, 100);
+
+   Prn::print(0, "arg1     %-10d",   aCmd->argInt(1));
+   Prn::print(0, "arg2     %-10.2f", aCmd->argDouble(2));
+   Prn::print(0, "arg3     %-10s",   aCmd->argString(3));
+   Prn::print(0, "argw1    %-20s",   aCmd->argWhole());
+   Prn::print(0, "argw2    %-20s",   tWhole);
 }
 
 //******************************************************************************
@@ -60,6 +66,14 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   char tWhole[100];
+   aCmd->copyArgWhole(tWhole, 100);
+
+   Prn::print(0, "arg1     %-10d", aCmd->argInt(1));
+   Prn::print(0, "arg2     %-10.2f", aCmd->argDouble(2));
+   Prn::print(0, "arg3     %-10s", aCmd->argString(3));
+   Prn::print(0, "argw1    %-20s", aCmd->argWhole());
+   Prn::print(0, "argw2    %-20s", tWhole);
 }
 
 //******************************************************************************
