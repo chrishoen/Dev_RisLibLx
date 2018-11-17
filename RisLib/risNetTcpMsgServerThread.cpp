@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "ris_priorities.h"
+#include "risPriorities.h"
 #include "risNetTcpMsgServerThread.h"
 
 namespace Ris
@@ -25,7 +25,7 @@ namespace Net
 TcpMsgServerThread::TcpMsgServerThread(Settings& aSettings)
 {
    // Base class variables.
-   mThreadPriority = get_default_tcp_server_thread_priority();
+   mThreadPriority = gPriorities.mTcpServerThreadPriority;
 
    // Store settings.
    mSettings = aSettings;

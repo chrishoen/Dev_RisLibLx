@@ -18,7 +18,7 @@
 #include "tsThreadServices.h"
 
 #include "my_functions.h"
-#include "ris_priorities.h"
+#include "risPriorities.h"
 #include "prnPrint.h"
 #include "risThreadsThreads.h"
 
@@ -62,7 +62,7 @@ BaseThread::BaseThread()
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
    mThreadRunState = 0;
-   mThreadPriority = get_default_thread_priority();
+   mThreadPriority = gPriorities.mNormalThreadPriority;
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
@@ -115,12 +115,12 @@ void BaseThread::setThreadLogLevel(int aLogLevel)
 
 void BaseThread::setThreadPriorityHigh()
 {
-   mThreadPriority = get_default_high_thread_priority();
+   mThreadPriority = gPriorities.mNormalThreadPriority;
 }
 
 void BaseThread::setThreadPriorityLow()
 {
-   mThreadPriority = get_default_low_thread_priority();
+   mThreadPriority = gPriorities.mNormalThreadPriority;
 }
 
 void BaseThread::setThreadPriority(int aThreadPriority)

@@ -6,7 +6,6 @@
     <ClCompile Include="prnPrint_linux.cpp" />
     <ClCompile Include="prnPrintFilterTable.cpp" />
     <ClCompile Include="prnPrintSettings.cpp" />
-    <ClCompile Include="ris_priorities_linux.cpp" />
     <ClCompile Include="risAlphaDir_linux.cpp" />
     <ClCompile Include="risByteBuffer.cpp" />
     <ClCompile Include="risByteMsgMonkey.cpp" />
@@ -55,6 +54,7 @@
     <ClCompile Include="tsPrintString.cpp" />
     <ClCompile Include="tsPrintThread.cpp" />
     <ClCompile Include="risThreadsWaitable_linux.cpp" />
+    <ClCompile Include="risPriorities_linux.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logFiles.h" />
@@ -64,7 +64,6 @@
     <ClInclude Include="prnPrintFilters.h" />
     <ClInclude Include="prnPrintFilterTable.h" />
     <ClInclude Include="prnPrintSettings.h" />
-    <ClInclude Include="ris_priorities.h" />
     <ClInclude Include="risAlphaDir.h" />
     <ClInclude Include="risByteBuffer.h" />
     <ClInclude Include="risByteContent.h" />
@@ -117,5 +116,6 @@
     <ClInclude Include="tsPrintString.h" />
     <ClInclude Include="tsPrintThread.h" />
     <ClInclude Include="risThreadsWaitable.h" />
+    <ClInclude Include="risPriorities.h" />
   </ItemGroup>
 </Project>

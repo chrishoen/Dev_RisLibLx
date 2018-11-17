@@ -181,8 +181,8 @@ BaseTwoThread::BaseTwoThread()
    mShortThread = new TwoThreadShortThread;
    mLongThread  = new TwoThreadLongThread;
 
-   mShortThread->mThreadPriority = get_default_short_thread_priority();
-   mLongThread->mThreadPriority = get_default_long_thread_priority();
+   mShortThread->mThreadPriority = gPriorities.mShortThreadPriority;
+   mLongThread->mThreadPriority = gPriorities.mLongThreadPriority;
    mLongThread->mTimerPeriod = 0;
 
    // Default exception codes.

@@ -8,7 +8,7 @@ Base thread classes
 //******************************************************************************
 
 #include "risThreadsSynch.h"
-#include "ris_priorities.h"
+#include "risPriorities.h"
 #include "tsThreadLocal.h"
 
 //******************************************************************************

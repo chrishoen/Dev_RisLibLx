@@ -8,39 +8,36 @@ Description:
 
 #include "stdafx.h"
 
-#include "ris_priorities.h"
+#define  _RISPRIORITIES_CPP_
+#include "risPriorities.h"
 
-
-//******************************************************************************
 namespace Ris
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// RisLib default thread priorities
+// Constructor.
 
-int get_default_thread_priority()                      { return 50; }
-int get_default_high_thread_priority()                 { return 80; }
-int get_default_low_thread_priority()                  { return 20; }
+Priorities::Priorities()
+{
+   mLowThreadPriority        = 20;
+   mNormalThreadPriority     = 50;
+   mHighThreadPriority       = 80;
 
-int get_default_qcall_thread_priority()                { return 50; }
+   mQCallThreadPriority      = 50;
+   mShortThreadPriority      = 80;
+   mLongThreadPriority       = 50;
 
-int get_default_long_thread_priority()                 { return 80; }
-int get_default_short_thread_priority()                { return 80; }
+   mUdpThreadPriority        = 80;
+   mTcpServerThreadPriority  = 50;
+   mTcpClientThreadPriority  = 50;
+   mSerialThreadPriority     = 80;
 
-int get_default_udp_rx_thread_priority()               { return 80; }
-int get_default_tcp_server_thread_priority()           { return 50; }
-int get_default_tcp_client_thread_priority()           { return 50; }
-
-int get_default_log_thread_priority()                  { return 25; }
-int get_default_print_thread_priority()                { return 20; }
+   mTsPrintThreadPriority    = 20;
+}
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace
-
-
-
-

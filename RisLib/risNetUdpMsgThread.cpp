@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "ris_priorities.h"
+#include "risPriorities.h"
 #include "risNetUdpMsgThread.h"
 
 namespace Ris
@@ -30,7 +30,7 @@ UdpMsgThread::UdpMsgThread(Settings& aSettings)
    BaseClass::setThreadLogLevel(aSettings.mLogLevel);
 
    // Base class variables.
-   mThreadPriority = get_default_udp_rx_thread_priority();
+   mThreadPriority = gPriorities.mUdpThreadPriority;
 
    // Store settings.
    mSettings = aSettings;
