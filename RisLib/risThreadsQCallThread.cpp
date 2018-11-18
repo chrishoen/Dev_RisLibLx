@@ -6,7 +6,7 @@
 
 #include "prnPrint.h"
 
-#include "risPriorities.h"
+#include "risThreadsPriorities.h"
 #include "risThreadsQCallThread.h"
 
 namespace Ris
@@ -21,7 +21,8 @@ namespace Threads
 
 BaseQCallThread::BaseQCallThread()
 {
-   mThreadPriority = gPriorities.mQCallThreadPriority;
+   setThreadPrintLevel(TS::PrintLevel(0, 3));
+   setThreadPriority(Ris::Threads::gPriorities.mQCall);
 
    mTerminateFlag = false;
    mCallQueSize=1000;

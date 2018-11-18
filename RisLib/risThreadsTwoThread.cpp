@@ -34,7 +34,7 @@ namespace Threads
 
 TwoThreadShortThread::TwoThreadShortThread()
 {
-   mTimerPeriod = 1000;
+   mTimerPeriod = 0;
    mTimerCompletionDownCounter = 0;
    mTimerCompletionCode = 0;
 }
@@ -181,8 +181,12 @@ BaseTwoThread::BaseTwoThread()
    mShortThread = new TwoThreadShortThread;
    mLongThread  = new TwoThreadLongThread;
 
-   mShortThread->mThreadPriority = gPriorities.mShortThreadPriority;
-   mLongThread->mThreadPriority = gPriorities.mLongThreadPriority;
+   mShortThread->setThreadPrintLevel(TS::PrintLevel(0, 3));
+   mShortThread->setThreadPriority(Ris::Threads::gPriorities.mShort);
+   mLongThread->mTimerPeriod = 0;
+   
+   mLongThread->setThreadPrintLevel(TS::PrintLevel(0, 3));
+   mLongThread->setThreadPriority(Ris::Threads::gPriorities.mLong);
    mLongThread->mTimerPeriod = 0;
 
    // Default exception codes.

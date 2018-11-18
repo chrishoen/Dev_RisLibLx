@@ -18,7 +18,7 @@
 #include "tsThreadServices.h"
 
 #include "my_functions.h"
-#include "risPriorities.h"
+#include "risThreadsPriorities.h"
 #include "prnPrint.h"
 #include "risThreadsThreads.h"
 
@@ -62,7 +62,7 @@ BaseThread::BaseThread()
    mBaseSpecific = new BaseSpecific;
    mBaseSpecific->mHandle = 0;
    mThreadRunState = 0;
-   mThreadPriority = gPriorities.mNormalThreadPriority;
+   mThreadPriority = gPriorities.mNormal.mPriority;
    mThreadSingleProcessor = -1;
    mThreadStackSize = 0;
    mThreadRunProcessor = -1;
@@ -107,20 +107,30 @@ void BaseThread::setThreadPrintLevel(TS::PrintLevel aPrintLevel)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Set the thread processor number and priority.
 
-void BaseThread::setThreadPriorityHigh()
+void BaseThread::setThreadPriority(Priority aPriority)
 {
-   mThreadPriority = gPriorities.mNormalThreadPriority;
+   mThreadSingleProcessor = aPriority.mProcessor;
+   mThreadPriority        = aPriority.mPriority;
 }
 
 void BaseThread::setThreadPriorityLow()
 {
-   mThreadPriority = gPriorities.mNormalThreadPriority;
+   mThreadSingleProcessor = gPriorities.mLow.mProcessor;
+   mThreadPriority        = gPriorities.mLow.mPriority;
 }
 
-void BaseThread::setThreadPriority(int aThreadPriority)
+void BaseThread::setThreadPriorityNormal()
 {
-   mThreadPriority = aThreadPriority;
+   mThreadSingleProcessor = gPriorities.mNormal.mProcessor;
+   mThreadPriority        = gPriorities.mNormal.mPriority;
+}
+
+void BaseThread::setThreadPriorityHigh()
+{
+   mThreadSingleProcessor = gPriorities.mHigh.mProcessor;
+   mThreadPriority        = gPriorities.mHigh.mPriority;
 }
 
 //******************************************************************************

@@ -6,7 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include "risPriorities.h"
+#include "risThreadsPriorities.h"
 #include "risAlphaDir.h"
 #include "tsShare.h"
 
@@ -25,8 +25,8 @@ PrintThread::PrintThread()
 {
    // Set base class thread parameters.
    BaseClass::setThreadName("TSPrint");
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(3,0));
-   BaseClass::mThreadPriority = Ris::gPriorities.mTsPrintThreadPriority;
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(0, 3));
+   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTsPrint);
 
    // Initialize variables.
    mFile = 0;

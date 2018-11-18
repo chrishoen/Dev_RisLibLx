@@ -8,11 +8,30 @@ Description:
 
 #include "stdafx.h"
 
-#define  _RISPRIORITIES_CPP_
-#include "risPriorities.h"
+#define  _RISTHREADSPRIORITIES_CPP_
+#include "risThreadsPriorities.h"
 
 namespace Ris
 {
+namespace Threads
+{
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
+Priority::Priority()
+{
+   mProcessor = -1;
+   mPriority = 50;
+}
+
+Priority::Priority(short aProcessor, short aPriority)
+{
+   mProcessor = aProcessor;
+   mPriority = aPriority;
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -21,23 +40,24 @@ namespace Ris
 
 Priorities::Priorities()
 {
-   mLowThreadPriority        = 20;
-   mNormalThreadPriority     = 50;
-   mHighThreadPriority       = 80;
+   mLow       = Priority(-1, 20);
+   mNormal    = Priority(-1, 50);
+   mHigh      = Priority(-1, 80);
 
-   mQCallThreadPriority      = 50;
-   mShortThreadPriority      = 80;
-   mLongThreadPriority       = 50;
+   mQCall     = Priority(-1, 50);
+   mShort     = Priority(-1, 80);
+   mLong      = Priority(-1, 50);
 
-   mUdpThreadPriority        = 80;
-   mTcpServerThreadPriority  = 50;
-   mTcpClientThreadPriority  = 50;
-   mSerialThreadPriority     = 80;
+   mUdp       = Priority(-1, 80);
+   mTcpServer = Priority(-1, 50);
+   mTcpClient = Priority(-1, 50);
+   mSerial    = Priority(-1, 80);
 
-   mTsPrintThreadPriority    = 20;
+   mTsPrint   = Priority(-1, 20);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+}//namespace
 }//namespace

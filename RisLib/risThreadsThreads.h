@@ -8,7 +8,7 @@ Base thread classes
 //******************************************************************************
 
 #include "risThreadsSynch.h"
-#include "risPriorities.h"
+#include "risThreadsPriorities.h"
 #include "tsThreadLocal.h"
 
 //******************************************************************************
@@ -199,10 +199,11 @@ public:
    // Sleep for some milliseconds.
    void threadSleep(int aTicks); 
 
-   // Set thread priority.
-   void setThreadPriorityHigh();
+   // Set the thread processor number and priority.
+   void setThreadPriority(Priority aPriority);
    void setThreadPriorityLow();
-   void setThreadPriority(int aThreadPriority);
+   void setThreadPriorityNormal();
+   void setThreadPriorityHigh();
 
    // Wait for the thread to terminate.
    void waitForThreadTerminate();

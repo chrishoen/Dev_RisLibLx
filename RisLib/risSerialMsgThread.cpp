@@ -11,7 +11,7 @@
 #include "risPortableCalls.h"
 #include "prnPrint.h"
 
-#include "risPriorities.h"
+#include "risThreadsPriorities.h"
 #include "risSerialMsgThread.h"
 
 namespace Ris
@@ -26,8 +26,8 @@ SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
 {
    // Set base class thread services.
    BaseClass::setThreadName("SerialMsg");
+   BaseClass::setThreadPriority(aSettings.mThreadPriority);
    BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
-   BaseClass::mThreadPriority = gPriorities.mSerialThreadPriority;
 
    mSettings = aSettings;
    mRxMsgQCall = aSettings.mRxMsgQCall;

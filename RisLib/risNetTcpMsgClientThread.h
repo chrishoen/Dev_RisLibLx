@@ -62,6 +62,7 @@ namespace Net
 class TcpMsgClientThread : public Ris::Threads::BaseThreadWithTermFlag
 {
 public:
+   typedef Ris::Threads::BaseThreadWithTermFlag BaseClass;
 
    //***************************************************************************
    //***************************************************************************

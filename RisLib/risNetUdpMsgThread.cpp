@@ -9,7 +9,7 @@
 
 #include "prnPrint.h"
 
-#include "risPriorities.h"
+#include "risThreadsPriorities.h"
 #include "risNetUdpMsgThread.h"
 
 namespace Ris
@@ -24,12 +24,10 @@ namespace Net
 
 UdpMsgThread::UdpMsgThread(Settings& aSettings)
 {
-   // Set base class thread services.
-   BaseClass::setThreadName("UdpMsg");
-   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
-
    // Base class variables.
-   mThreadPriority = gPriorities.mUdpThreadPriority;
+   BaseClass::setThreadName("UdpMsg");
+   BaseClass::setThreadPriority(aSettings.mThreadPriority);
+   BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
 
    // Store settings.
    mSettings = aSettings;

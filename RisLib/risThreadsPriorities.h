@@ -11,6 +11,37 @@ thread priorities for base class threads that are defined in RisLib.
 
 namespace Ris
 {
+namespace Threads
+{
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a struct that encapsulates thread single processor and priority.
+
+class Priority
+{
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Thread single processor number and priority.
+   short mProcessor;
+   short mPriority;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   Priority();
+   Priority(short aProcessor, short aPriority);
+
+};
 
 //******************************************************************************
 //******************************************************************************
@@ -27,20 +58,20 @@ public:
    //***************************************************************************
    // Members.
 
-   int mLowThreadPriority;
-   int mNormalThreadPriority;
-   int mHighThreadPriority;
+   Priority mLow;
+   Priority mNormal;
+   Priority mHigh;
 
-   int mQCallThreadPriority;
-   int mShortThreadPriority;
-   int mLongThreadPriority;
+   Priority mQCall;
+   Priority mShort;
+   Priority mLong;
 
-   int mUdpThreadPriority;
-   int mTcpServerThreadPriority;
-   int mTcpClientThreadPriority;
-   int mSerialThreadPriority;
+   Priority mUdp;
+   Priority mTcpServer;
+   Priority mTcpClient;
+   Priority mSerial;
 
-   int mTsPrintThreadPriority;
+   Priority mTsPrint;
 
    //***************************************************************************
    //***************************************************************************
@@ -56,7 +87,7 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _RISPRIORITIES_CPP_
+#ifdef _RISTHREADSPRIORITIES_CPP_
           Priorities gPriorities;
 #else
    extern Priorities gPriorities;
@@ -65,5 +96,6 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+}//namespace
 }//namespace
 

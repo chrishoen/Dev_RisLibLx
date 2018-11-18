@@ -12,6 +12,7 @@ Byte content message network socket settings class.
 #include "risByteMsgMonkey.h"
 #include "risThreadsQCall.h"
 #include "tsDefs.h"
+#include "risThreadsPriorities.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -54,6 +55,9 @@ public:
 
    // Socket flags.
    int mFlags;
+
+   // Thread processor number and priority.
+   Ris::Threads::Priority mThreadPriority;
 
    // Thread print and log levels.
    TS::PrintLevel mPrintLevel;

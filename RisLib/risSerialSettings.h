@@ -14,6 +14,7 @@ Byte content message serial port class.
 #include "risByteMsgMonkey.h"
 #include "risThreadsQCall.h"
 #include "tsDefs.h"
+#include "risThreadsPriorities.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -48,6 +49,9 @@ public:
 
    // Receive timeout. Milliseconds, 0==no timeout
    int mRxTimeout;
+
+   // Thread processor number and priority.
+   Ris::Threads::Priority mThreadPriority;
 
    // Thread print and log levels.
    TS::PrintLevel mPrintLevel;

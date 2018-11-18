@@ -27,6 +27,7 @@ void SerialSettings::reset()
    mPortSetup[0] = 0;
    mRxTimeout = 0;
    mMonkeyCreator = 0;
+   mThreadPriority = Ris::Threads::gPriorities.mSerial;
 }
 
 void SerialSettings::setPortDevice(char* aPortDevice)
