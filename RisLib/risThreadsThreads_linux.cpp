@@ -349,6 +349,16 @@ void BaseThread::waitForThreadTerminate()
 //******************************************************************************
 //******************************************************************************
 
+void BaseThread::shutdownThreadPrologue()
+{
+   TS::print(1, "");
+   TS::print(1, "shutdownThread");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 BaseThreadWithTermFlag::BaseThreadWithTermFlag() 
 {
    mTerminateFlag = false;
@@ -360,6 +370,7 @@ BaseThreadWithTermFlag::BaseThreadWithTermFlag()
 
 void BaseThreadWithTermFlag::shutdownThread()
 {
+   shutdownThreadPrologue();
    mTerminateFlag = true;
    waitForThreadTerminate();
 }
@@ -370,6 +381,7 @@ void BaseThreadWithTermFlag::shutdownThread()
 
 void BaseThreadWithTermSem::shutdownThread()
 {
+   shutdownThreadPrologue();
    mTerminateSem.put();
    waitForThreadTerminate();
 }

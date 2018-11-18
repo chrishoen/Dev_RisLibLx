@@ -132,6 +132,7 @@ void BaseQCallThread::threadResourceExitFunction()
 
 void BaseQCallThread::shutdownThread()
 {
+   shutdownThreadPrologue();
    // Set the termination flag.
    mTerminateFlag = true;
    // Post to the waitable event. This will wake up the threadRunFunction

@@ -106,6 +106,7 @@ void UdpMsgThread::threadExitFunction()
 
 void UdpMsgThread::shutdownThread()
 {
+   shutdownThreadPrologue();
    BaseThreadWithTermFlag::mTerminateFlag = true;
 
    mRxSocket.doClose();

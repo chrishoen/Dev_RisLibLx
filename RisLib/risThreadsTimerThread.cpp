@@ -76,6 +76,7 @@ void BaseTimerThread::threadResourceExitFunction()
 
 void BaseTimerThread::shutdownThread()
 {
+   shutdownThreadPrologue();
    mTerminateFlag = true;
    mWaitable.postEvent();
    BaseClass::waitForThreadTerminate();

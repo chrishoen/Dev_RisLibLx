@@ -84,6 +84,9 @@ void TestThread::threadExitFunction()
 
 void TestThread::shutdownThread()
 {
+   TS::print(1, "");
+   TS::print(1, "shutdownThread");
+
    BaseClass::mTerminateFlag = true;
    mWaitable.postEvent();
    BaseClass::waitForThreadTerminate();

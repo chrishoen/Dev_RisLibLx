@@ -224,6 +224,9 @@ void BaseTwoThread::launchThreads()
 
 void BaseTwoThread::shutdownThreads() 
 {
+   TS::print(1, "");
+   TS::print(1, "shutdownThreads");
+
    // Abort any pending waits.
    mLongThread->mQCallAbortFlag = true;
    mShortThread->threadAbortTimerCompletion();
