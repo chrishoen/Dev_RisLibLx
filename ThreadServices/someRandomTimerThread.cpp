@@ -27,12 +27,12 @@ RandomTimerThread::RandomTimerThread(int aIdent)
    if (mIdent == 1)
    {
       BaseClass::setThreadName("RandomTimer1");
-      BaseClass::setThreadPrintLevel(3);
+      BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
    }
    else
    {
       BaseClass::setThreadName("RandomTimer2");
-      BaseClass::setThreadPrintLevel(2);
+      BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
    }
 
    mTPFlag = false;

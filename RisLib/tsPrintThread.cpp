@@ -25,8 +25,7 @@ PrintThread::PrintThread()
 {
    // Set base class thread parameters.
    BaseClass::setThreadName("TSPrint");
-   BaseClass::setThreadPrintLevel(3);
-   BaseClass::setThreadLogLevel(0);
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(3,0));
    BaseClass::mThreadPriority = Ris::gPriorities.mTsPrintThreadPriority;
 
    // Initialize variables.
@@ -180,7 +179,7 @@ void PrintThread::printString(PrintString* aString)
    }
 
    // Print to stdout.
-   if (aString->mPrintFlag)
+   if (aString->mOutFlag)
    {
       fputs(aString->mString, stdout);
    }

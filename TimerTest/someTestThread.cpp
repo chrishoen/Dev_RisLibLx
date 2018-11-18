@@ -22,8 +22,7 @@ TestThread::TestThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Test");
-   BaseClass::setThreadPrintLevel(3);
-   BaseClass::setThreadLogLevel(3);
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
 
    mTimerPeriod = 1000;
    mTPFlag = false;

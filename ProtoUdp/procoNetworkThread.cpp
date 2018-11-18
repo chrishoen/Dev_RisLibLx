@@ -25,7 +25,7 @@ NetworkThread::NetworkThread()
 {
    // Set base class thread services.
    BaseClass::setThreadName("Network");
-   BaseClass::setThreadPrintLevel(3);
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
 
    // Set base class thread priority.
    BaseClass::setThreadPriorityHigh();

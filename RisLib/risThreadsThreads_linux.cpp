@@ -99,14 +99,9 @@ void BaseThread::setThreadName(const char* aThreadName)
 //******************************************************************************
 // Set the thread services print level in the thread local storage.
 
-void BaseThread::setThreadPrintLevel(int aPrintLevel)
+void BaseThread::setThreadPrintLevel(TS::PrintLevel aPrintLevel)
 {
    mThreadLocal->mPrintLevel = aPrintLevel;
-}
-
-void BaseThread::setThreadLogLevel(int aLogLevel)
-{
-   mThreadLocal->mLogLevel = aLogLevel;
 }
 
 //******************************************************************************
@@ -446,8 +441,8 @@ void BaseThread::showThreadInfo()
       mThreadRunProcessor,
       tThreadPriority,
       asStringThreadRunState(),
-      mThreadLocal->mPrintLevel,
-      mThreadLocal->mLogLevel);
+      mThreadLocal->mPrintLevel.mOutLevel,
+      mThreadLocal->mPrintLevel.mLogLevel);
 }
 
 //******************************************************************************

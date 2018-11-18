@@ -36,15 +36,9 @@ void setProgramLogFilepath(const char* aPath)
    strncpy(gShare.mProgramLogFilepath, aPath, cMaxStringSize);
 }
 
-void setProgramPrintLevel(int aPrintLevel)
+void setProgramPrintLevel(PrintLevel aPrintLevel)
 {
    gShare.mMainThreadLocal->mPrintLevel = aPrintLevel;
-   gShare.mMainThreadLocal->mLogLevel = 3;
-}
-
-void setProgramLogLevel(int aLogLevel)
-{
-   gShare.mMainThreadLocal->mLogLevel = aLogLevel;
 }
 
 //******************************************************************************

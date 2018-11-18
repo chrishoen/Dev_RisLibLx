@@ -21,8 +21,7 @@ void main_initialize(int argc,char** argv)
 
    TS::reset();
    TS::setProgramName("Timer");
-   TS::setProgramPrintLevel(3);
-   TS::setProgramLogLevel(3);
+   TS::setProgramPrintLevel(TS::PrintLevel(3, 3));
    TS::initialize();
 
    //***************************************************************************

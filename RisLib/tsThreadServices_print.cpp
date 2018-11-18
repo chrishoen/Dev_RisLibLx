@@ -36,7 +36,8 @@ void print(int aLevel, const char* aFormat, ...)
    if (!gShare.mPrintEnableFlag) return;
    if (gPrintThread == 0) return;
    if (!isEnabled()) return;
-   if (aLevel > tls()->mPrintLevel && aLevel > tls()->mLogLevel) return;
+   if (aLevel > tls()->mPrintLevel.mOutLevel && 
+       aLevel > tls()->mPrintLevel.mLogLevel) return;
 
    //*************************************************************************
    //*************************************************************************
@@ -52,7 +53,7 @@ void print(int aLevel, const char* aFormat, ...)
       if (tls()->mPrintCount4 == 40)
       {
          PrintString* tPrintString = new PrintString("PRINT COUNT 4 LIMIT HAS BEEN REACHED");
-         tPrintString->mPrintFlag = true;
+         tPrintString->mOutFlag = true;
          tPrintString->sendToPrintThread();
          return;
       }
@@ -101,7 +102,7 @@ void print(int aLevel, const char* aFormat, ...)
 
    // Create a new string instance and send it to the print thread.
    PrintString* tPrintString = new PrintString(tOutputString);
-   tPrintString->mPrintFlag = aLevel <= tls()->mPrintLevel;
+   tPrintString->mOutFlag = aLevel <= tls()->mPrintLevel.mOutLevel;
    tPrintString->sendToPrintThread();
 }
 

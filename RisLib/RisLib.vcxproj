@@ -66,6 +66,7 @@
     <ClCompile Include="risThreadsWaitable_linux.cpp" />
     <ClCompile Include="risTimeMarker.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="tsDefs.cpp" />
     <ClCompile Include="tsPrintString.cpp" />
     <ClCompile Include="tsPrintThread.cpp" />
     <ClCompile Include="tsShare.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="risThreadsWaitable.h" />
     <ClInclude Include="risTimeMarker.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="tsDefs.h" />
     <ClInclude Include="tsPrintString.h" />
     <ClInclude Include="tsPrintThread.h" />
     <ClInclude Include="tsShare.h" />

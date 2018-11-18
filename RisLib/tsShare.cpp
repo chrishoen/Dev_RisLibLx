@@ -31,7 +31,6 @@ Share::Share()
    // start of the thread run function.
    mMainThreadLocal = new TS::ThreadLocal;
    mMainThreadLocal->setThreadName("main");
-   mMainThreadLocal->mPrintLevel = 0;
 
    mPrintEnableFlag = false;
 }

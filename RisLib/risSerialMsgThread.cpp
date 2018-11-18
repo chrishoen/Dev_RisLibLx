@@ -27,7 +27,6 @@ SerialMsgThread::SerialMsgThread(SerialSettings& aSettings)
    // Set base class thread services.
    BaseClass::setThreadName("SerialMsg");
    BaseClass::setThreadPrintLevel(aSettings.mPrintLevel);
-   BaseClass::setThreadLogLevel(aSettings.mLogLevel);
    BaseClass::mThreadPriority = gPriorities.mSerialThreadPriority;
 
    mSettings = aSettings;

@@ -20,8 +20,6 @@ ThreadLocal::ThreadLocal()
 {
    strcpy(mThreadName, "NoThreadName");
    mCode = 0;
-   mPrintLevel = 0;
-   mLogLevel = 0;
    mPrintCount4 = 0;
 }
 

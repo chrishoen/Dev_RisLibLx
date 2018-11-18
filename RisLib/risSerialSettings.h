@@ -13,6 +13,7 @@ Byte content message serial port class.
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
 #include "risThreadsQCall.h"
+#include "tsDefs.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -49,8 +50,7 @@ public:
    int mRxTimeout;
 
    // Thread print and log levels.
-   int mPrintLevel;
-   int mLogLevel;
+   TS::PrintLevel mPrintLevel;
 
    // Message monkey creator.
    BaseMsgMonkeyCreator* mMonkeyCreator;

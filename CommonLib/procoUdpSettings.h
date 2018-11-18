@@ -10,6 +10,7 @@ Parameters class whose values are read from a command file.
 //******************************************************************************
 
 #include "risCmdLineParms.h"
+#include "tsDefs.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -83,7 +84,7 @@ public:
    int mThreadTimerPeriod;
 
    // Thread print level.
-   int mPrintLevel;
+   TS::PrintLevel mPrintLevel;
 
    // Echo message number of words.
    int mNumWords;

@@ -35,8 +35,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // If true then print the string.
-   bool mPrintFlag;
+   // If true then print the string to stdout.
+   bool mOutFlag;
 
    // Null terminated string.
    char mString[cMaxStringSize];

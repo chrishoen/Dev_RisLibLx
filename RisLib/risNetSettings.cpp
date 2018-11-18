@@ -26,8 +26,6 @@ Settings::Settings()
    mRemoteIpPort = 0;
    mMaxSessions = 0;
    mFlags = 0;
-   mPrintLevel = 0;
-   mLogLevel = 0;
    mMonkeyCreator = 0;
 }
 
