@@ -352,7 +352,7 @@ void BaseThread::waitForThreadTerminate()
 void BaseThread::shutdownThreadPrologue()
 {
    TS::print(1, "");
-   TS::print(1, "shutdownThread");
+   TS::print(1, "shutdownThread %s", mThreadLocal->mThreadName);
 }
 
 //******************************************************************************
