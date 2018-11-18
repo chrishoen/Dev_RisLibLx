@@ -46,18 +46,19 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 101);
-   aCmd->setArgDefault(2, 202.2);
-   aCmd->setArgDefault(3, "abcd");
+   while (true)
+   {
+      char tLine[200];
+      fgets(tLine, 200, stdin);
+      int tLength = (int)strlen(tLine);
+      printf("%3d %s\n",tLength,tLine);
 
-   char tWhole[100];
-   aCmd->copyArgWhole(tWhole, 100);
-
-   Prn::print(0, "arg1     %-10d",   aCmd->argInt(1));
-   Prn::print(0, "arg2     %-10.2f", aCmd->argDouble(2));
-   Prn::print(0, "arg3     %-10s",   aCmd->argString(3));
-   Prn::print(0, "argw1    %-20s",   aCmd->argWhole());
-   Prn::print(0, "argw2    %-20s",   tWhole);
+      if (strcmp(tLine, "e\n") == 0)
+      {
+         printf("exit\n");
+         break;
+      }
+   }
 }
 
 //******************************************************************************
@@ -66,14 +67,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   char tWhole[100];
-   aCmd->copyArgWhole(tWhole, 100);
-
-   Prn::print(0, "arg1     %-10d", aCmd->argInt(1));
-   Prn::print(0, "arg2     %-10.2f", aCmd->argDouble(2));
-   Prn::print(0, "arg3     %-10s", aCmd->argString(3));
-   Prn::print(0, "argw1    %-20s", aCmd->argWhole());
-   Prn::print(0, "argw2    %-20s", tWhole);
 }
 
 //******************************************************************************
