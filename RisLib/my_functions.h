@@ -48,6 +48,7 @@ bool my_randflag(double aP);
 
 // Trim CRLF from the end of a string
 void my_trimCRLF(char* aString);
+void my_trim_new_line(char* aString);
 
 // Return string "true" "false" for a bool
 char* my_string_from_bool(bool aValue);

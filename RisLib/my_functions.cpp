@@ -138,6 +138,26 @@ void my_trimCRLF(char* aString)
    }
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Strings
+
+// Trim CR from the end of a string
+void my_trim_new_line(char* aString)
+{
+   // Remove cr/lf at end of line
+   unsigned tStringLen = (unsigned)strlen(aString);
+
+   if (tStringLen >= 1)
+   {
+      if (aString[tStringLen - 1] == 0xa)
+      {
+         aString[tStringLen - 1] = 0;
+      }
+   }
+}
+
 // Return string "true" "false" for a bool
 char* my_string_from_bool(bool aValue)
 {

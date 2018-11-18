@@ -35,6 +35,21 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
+   while (true)
+   {
+      char tLine[200];
+      fgets(tLine, 200, stdin);
+      my_trim_new_line(tLine);
+
+      int tLength = (int)strlen(tLine);
+      printf("%3d %s\n", tLength, tLine);
+
+      if (strcmp(tLine, "e") == 0)
+      {
+         printf("exit\n");
+         break;
+      }
+   }
 }
 
 //******************************************************************************

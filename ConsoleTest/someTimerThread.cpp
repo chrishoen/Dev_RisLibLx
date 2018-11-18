@@ -23,7 +23,7 @@ TimerThread::TimerThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Timer");
-   BaseClass::setThreadPrintLevel(TS::PrintLevel(3, 3));
+   BaseClass::setThreadPrintLevel(TS::PrintLevel(0, 3));
    BaseClass::mTimerPeriod = 1000;
 
    // Members
