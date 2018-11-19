@@ -4,7 +4,6 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 #include "MainInit.h"
-#include <curses.h>
 
 #include "someTimerThread.h"
 
@@ -19,7 +18,6 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Initialize program.
 
-   initscr();
    main_initialize(argc,argv);
 
    //***************************************************************************

@@ -62,16 +62,13 @@ void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
    int tChar;
    while (true)
    {
-      while (true)
+      tChar = getc(stdin);
+      ungetc(tChar, stdin);
+      Prn::print(Prn::View11, "char %d",tChar);
+      if (tChar == '\n')
       {
-         tChar = getc(stdin);
-         ungetc(tChar, stdin);
-         Prn::print(Prn::View11, "char %d",tChar);
-         if (tChar == '\n')
-         {
-            Prn::print(Prn::View11, "newline");
-            break;
-         }
+         Prn::print(Prn::View11, "newline");
+         break;
       }
 
       fgets(tLine, 200, stdin);
