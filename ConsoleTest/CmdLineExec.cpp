@@ -35,18 +35,16 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(Prn::View11, "GO1****************************");
    while (true)
    {
-      char tLine[200];
-      fgets(tLine, 200, stdin);
-      my_trim_new_line(tLine);
-
-      int tLength = (int)strlen(tLine);
-      printf("%3d %s\n", tLength, tLine);
-
-      if (strcmp(tLine, "e") == 0)
+      int tChar = 0;
+//    tChar = getc(stdin);
+      tChar = getchar();
+      Prn::print(Prn::View11, "char %d", tChar);
+      if (tChar == 27)
       {
-         printf("exit\n");
+         Prn::print(Prn::View11, "escape");
          break;
       }
    }
@@ -58,6 +56,36 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(Prn::View11, "GO2****************************");
+
+   char tLine[200];
+   int tChar;
+   while (true)
+   {
+      while (true)
+      {
+         tChar = getc(stdin);
+         ungetc(tChar, stdin);
+         Prn::print(Prn::View11, "char %d",tChar);
+         if (tChar == '\n')
+         {
+            Prn::print(Prn::View11, "newline");
+            break;
+         }
+      }
+
+      fgets(tLine, 200, stdin);
+      my_trim_new_line(tLine);
+
+      int tLength = (int)strlen(tLine);
+      Prn::print(Prn::View11, "line %3d %s", tLength, tLine);
+
+      if (strcmp(tLine, "e") == 0)
+      {
+         Prn::print(Prn::View11, "exit");
+         break;
+      }
+   }
 }
 
 //******************************************************************************

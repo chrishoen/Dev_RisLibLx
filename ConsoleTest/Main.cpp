@@ -4,6 +4,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 #include "MainInit.h"
+#include <curses.h>
 
 #include "someTimerThread.h"
 
@@ -18,6 +19,7 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Initialize program.
 
+   initscr();
    main_initialize(argc,argv);
 
    //***************************************************************************
@@ -33,8 +35,8 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Show program threads.
 
-   Ris::Threads::showCurrentThreadInfo();
-   Some::gTimerThread->showThreadInfo();
+   //Ris::Threads::showCurrentThreadInfo();
+   //Some::gTimerThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
