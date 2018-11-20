@@ -39,8 +39,8 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
    while (true)
    {
       int tChar = 0;
-//    tChar = getc(stdin);
-      tChar = getchar();
+      tChar = getc(stdin);
+//    tChar = getchar();
       Prn::print(Prn::View11, "char %d", tChar);
       if (tChar == 27)
       {
