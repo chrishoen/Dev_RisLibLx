@@ -57,7 +57,7 @@ void BaseQCallThread::threadResourceInitFunction()
 //******************************************************************************
 // Thread run function. This is called by the base class immediately 
 // after the thread init function. It runs a loop that waits for the
-// waitable timer or event.
+// waitable timer or semaphore.
 // 
 // This provides the execution context for processing queued qcalls
 // It waits for the call queue waitable event, extracts a call from
@@ -75,27 +75,24 @@ void BaseQCallThread::threadRunFunction()
    // Exit the loop on a thread terminate.
    while (true)
    {
-      // Wait for a timer or an event.
-      mWaitable.waitForTimerOrEvent();
+      // Wait for the timer or the counting semaphore.
+      mWaitable.waitForTimerOrSemaphore();
 
       // Test for thread termination.
       if (mTerminateFlag) break;
 
-      // If the periodic timer occurred.
+      // If the periodic timer was signaled.
       if (mWaitable.wasTimer())
       {
-         // Call the inheritors handler for the timer.
+         // Call the inheritors timer handler.
          executeOnTimer(mCurrentTimeCount++);
       }
 
-      // If an event was posted.
-      if (mWaitable.wasEvent())
+      // If the counting semaphore was signaled.
+      if (mWaitable.wasSemaphore())
       {
          // Try to read a qcall from the queue.
-         BaseQCall* tQCall = (BaseQCall*)mCallQueue.tryRead();
-
-         // Test the read.
-         if (tQCall)
+         if (BaseQCall* tQCall = (BaseQCall*)mCallQueue.tryRead())
          {
             // Set the abort flag false for each qcall.
             mQCallAbortFlag = false;
@@ -135,9 +132,9 @@ void BaseQCallThread::shutdownThread()
    shutdownThreadPrologue();
    // Set the termination flag.
    mTerminateFlag = true;
-   // Post to the waitable event. This will wake up the threadRunFunction
+   // Post to the waitable semaphore. This will wake up the threadRunFunction
    // and it will return because the termination flag was set.
-   mWaitable.postEvent();
+   mWaitable.postSemaphore();
    // Wait for the thread run function to return.
    waitForThreadTerminate();
 }
@@ -147,7 +144,7 @@ void BaseQCallThread::shutdownThread()
 //******************************************************************************
 // Try to write a qcall to the to the target queue. Return true if
 // successful. This is called by qcall invocations to enqueue a qcall.
-// It writes to the call queue and posts to the waitable event, which
+// It writes to the call queue and posts to the waitable semaphore, which
 // then wakes up the thread run function to process the call queue.
 
 bool BaseQCallThread::tryWriteQCall(BaseQCall* aQCall) 
@@ -162,8 +159,8 @@ bool BaseQCallThread::tryWriteQCall(BaseQCall* aQCall)
       return false;
    }
 
-   // Post to the waitable event.
-   mWaitable.postEvent();
+   // Post to the waitable semaphore.
+   mWaitable.postSemaphore();
 
    // Successful.
    return true;

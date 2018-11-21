@@ -65,10 +65,10 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 101);
 
-   Some::gMasterThread->mTest1QCall(7, aCmd->argInt(1));
+   Some::gMasterThread->mTest0QCall();
    return;
 
-   Some::gMasterThread->mTest0QCall();
+   Some::gMasterThread->mTest1QCall(7, aCmd->argInt(1));
    return;
 
 }

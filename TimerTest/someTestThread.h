@@ -82,7 +82,7 @@ public:
 
    // Test methods.
    void executeOnTimer(int aCount);
-   void executeOnEvent();
+   void executeOnSemaphore();
 };
 
 //******************************************************************************

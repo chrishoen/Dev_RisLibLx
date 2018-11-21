@@ -119,7 +119,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    // Copy all of the chars after the command into the whole argument.
    if (mArgNum == 0) return;
 
-   int tCmdLength = strlen(mArgPtr[0]);
+   int tCmdLength = (int)strlen(mArgPtr[0]);
    char* tArgWholePtr = &aCommandLine[0] + tCmdLength + 1;
    my_strncpy(mArgWhole, tArgWholePtr, 200);
 }

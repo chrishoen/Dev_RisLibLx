@@ -1,12 +1,13 @@
 #pragma once
 
 /*==============================================================================
-Thread waitable timer and events.
+Thread timer.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <functional>
 
 namespace Ris
 {
@@ -16,11 +17,14 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// The class provides a mechanism that allows a thread to wait on a timer
-// and on a counting semaphore.
+// The Timer class provides a timer that can be used to call a function
+// periodically. It is passed a function pointer and a timer period.
 
 
-class Waitable
+// Call pointer for function to be called periodically
+typedef std::function<void(int)> TimerCall;
+
+class ThreadTimer
 {
 public:
    //***************************************************************************
@@ -28,18 +32,16 @@ public:
    //***************************************************************************
    // Members.
 
+   // Pointer to function to execute periodically
+   TimerCall  mTimerCall;
+
+   // Period, in milliseconds
+   int  mTimerPeriod;
+
    // Current time count, incremented on every timer event.
    // Counts the number of timer events that have occurred
    // since the timer was created.
-   int  mTimerCount;
-
-   // Return true if the previous wait unblocking was a result of the timer 
-   // or the counting semaphore.
-   bool mWasTimerFlag;
-   bool mWasSemaphoreFlag;
-
-   // Return true if the object is valid.
-   bool mValidFlag;
+   int  mCurrentTimeCount;
 
 protected:
    // Pimpl pattern. Used to hide details of the operating system specific
@@ -54,34 +56,22 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Intrastructure.
 
    // Constructor.
-   Waitable();
-  ~Waitable();
-
-   // Initialize the timer and the counting semaphore. Start the timer
-   // periodically, in milliseconds.
-   void initialize(int aTimerPeriod);
-
-   // Cancel the timer.
-   void finalize();
+   ThreadTimer();
+  ~ThreadTimer();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Post to the counting semaphore.
-   void postSemaphore();
+   // Execute a timer call periodically, in milliseconds
+   void startTimer (TimerCall aTimerCall,int aTimerPeriod);
 
-   // Wait for the timer or counting semaphore.
-   void waitForTimerOrSemaphore();
-
-   // Return true if the previous wait unblocking was a result of the timer 
-   // or the counting semaphore.
-   bool wasTimer();
-   bool wasSemaphore();
+   // Cancel the timer call.
+   void cancel();
 };
 
 //******************************************************************************

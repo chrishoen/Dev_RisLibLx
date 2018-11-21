@@ -5,6 +5,7 @@
 #include "CmdLineExec.h"
 #include "MainInit.h"
 
+#include "tsPrintThread.h"
 #include "someTestThread.h"
 
 //******************************************************************************
@@ -34,6 +35,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
+   TS::gPrintThread->showThreadInfo();
    Some::gTestThread->showThreadInfo();
 
    //***************************************************************************

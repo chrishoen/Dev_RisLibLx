@@ -29,6 +29,7 @@ PrintThread::PrintThread()
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTsPrint);
 
    // Initialize variables.
+   mTerminateFlag = false;
    mFile = 0;
    mWriteCount = 0;
 }

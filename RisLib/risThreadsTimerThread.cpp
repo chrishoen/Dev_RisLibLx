@@ -47,7 +47,7 @@ void BaseTimerThread::threadRunFunction()
    while (true)
    {
       // Wait for a timer or an event.
-      mWaitable.waitForTimerOrEvent();
+      mWaitable.waitForTimerOrSemaphore();
 
       // Test for thread termination.
       if (mTerminateFlag) break;
@@ -78,7 +78,7 @@ void BaseTimerThread::shutdownThread()
 {
    shutdownThreadPrologue();
    mTerminateFlag = true;
-   mWaitable.postEvent();
+   mWaitable.postSemaphore();
    BaseClass::waitForThreadTerminate();
 }
 

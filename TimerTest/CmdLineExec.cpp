@@ -3,6 +3,7 @@
 
 #include "someTestThread.h"
 #include "someThreadParms.h"
+#include "tsPrintThread.h"
 
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
@@ -32,6 +33,7 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("TP"))        Some::gTestThread->mTPFlag = aCmd->argBool(1);
+   if (aCmd->isCmd("1"))         executeGo1(aCmd);
    if (aCmd->isCmd("GO1"))       executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))       executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))       executeGo3(aCmd);
@@ -49,7 +51,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 101);
 
-   Some::gTestThread->mWaitable.postEvent();
+   Some::gTestThread->mWaitable.postSemaphore();
 }
 
 //******************************************************************************
@@ -58,11 +60,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   // Set defaults if no arguments were entered.
-   aCmd->setArgDefault(1,"something");
-
-   // Show arguments.
-   Prn::print(0,"Go2 %s %10.6f",aCmd->argString(1));
+   TS::print(0, "Go2");
 }
 
 //******************************************************************************
@@ -71,6 +69,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   TS::gPrintThread->mSemaphore.put();
 }
 
 //******************************************************************************

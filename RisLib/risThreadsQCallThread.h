@@ -7,7 +7,7 @@ QCall (Queued Function Call)
 A QCall is a function call that is invoked from a calling thread to a
 called thread. The calling thread encapsulates a function call and queues
 it to the called thread. The called thread dequeues the function call and
-executes it in its own context.
+executes it in its own thread context.
 
 This file contains class definitions for:
 1) QCalls
@@ -154,14 +154,20 @@ namespace Threads
 // to it's queue. Here the messages take the form of QCalls. 
 //
 // BaseQCallThread contains an mCallQue and a threadRunFunction that services
-// it. The mCallQue is a queue of QCall pointers and it contains a semaphore that 
-// the thread waits at. When a QCall pointer is written to the queue, the thread
-// wakes up, gets the QCall from the queue and and calls the QCall "execute" 
-// CallPointer, passing in the QCall arguments.
+// it. The mCallQue is a queue of QCall pointers and the thread waits on a
+// counting semaphore that is associated with the queue (the semaphore
+// count corresponds to the queue size). When a QCall pointer is written
+// to the queue, the thread wakes up, gets the QCall from the queue and 
+// calls the QCall "execute" CallPointer, passing in the QCall arguments.
 // 
-// BaseQCallThread supplies a shutdownThread that invokes a mTerminateQCall that
-// sets an mTerminateFlag. The threadRunFunction polls the mTerminateFlag
-// and exits the thread if it is true.
+// BaseQCallThread also waits on a periodic timer. When it is signaled,
+// it invokes an inheritors timer execution override function. This
+// provides the inheriting thread with periodic timer execution functionality.
+// 
+// BaseQCallThread supplies a shutdownThread that sets an mTerminateFlag.
+// and posts to the semaphore. When the threadRunFunction wakes up from
+// a wait on the timer or semaphore it tests the mTerminateFlag and exits
+// the thread if it is true.
 
 class BaseQCallThread : public Ris::Threads::BaseThread,public BaseQCallTarget
 {
@@ -171,14 +177,15 @@ public:
    //***************************************************************************
    // Members.
 
-   // Waitable timer or event. The thread run function contains a loop that
-   // waits on this for a timer or an event. The timer provides for
-   // periodic exectution and the event can signify that the call queue is
-   // ready or it can signify for thread termination.
+   // Waitable timer or counting semaphore. The thread run function contains
+   // a loop that waits on this for a periodic timer or a counting semaphore 
+   // to be signaled. The timer provides for periodic exectution and the
+   // semahore is used to either signify that the call queue is ready or 
+   // that the thread should be terminated.
    Ris::Threads::Waitable mWaitable;
 
    // If true the the thread will terminate at the next post to the waitable
-   // event.
+   // semaphore.
    bool mTerminateFlag;
 
    //***************************************************************************
@@ -235,7 +242,7 @@ public:
 
    // Thread run function. This is called by the base class immediately 
    // after the thread init function. It runs a loop that waits for the
-   // waitable timer or event.
+   // waitable timer or semaphore.
    void threadRunFunction() override;
 
    // Thread resource exit function. This is called by the base class
@@ -244,7 +251,7 @@ public:
    void threadResourceExitFunction() override;
 
    // Thread shutdown function. Set the termination flag, post to the 
-   // waitable event and wait for the thread to terminate.
+   // waitable semaphore and wait for the thread to terminate.
    virtual void shutdownThread() override;
 
    //***************************************************************************
@@ -254,7 +261,7 @@ public:
 
    // Try to write a qcall to the to the target queue. Return true if
    // successful. This is called by qcall invocations to enqueue a qcall.
-   // It writes to the call queue and posts to the waitable event, which
+   // It writes to the call queue and posts to the waitable semaphore, which
    // then wakes up the thread run function to process the call queue.
    bool tryWriteQCall(BaseQCall* aQCall) override;
 

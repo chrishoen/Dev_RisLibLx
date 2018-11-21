@@ -11,9 +11,9 @@
 
 void main_initialize(int argc,char** argv)
 {
-   printf("ThreadTest Program*********************************************BEGIN\n");
-   printf("ThreadTest Program*********************************************BEGIN\n");
-   printf("ThreadTest Program*********************************************BEGIN\n\n");
+   printf("TimerTest Program**********************************************BEGIN\n");
+   printf("TimerTest Program**********************************************BEGIN\n");
+   printf("TimerTest Program**********************************************BEGIN\n\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -21,7 +21,7 @@ void main_initialize(int argc,char** argv)
    // Initialize thread services.
 
    TS::reset();
-   TS::setProgramName("ThreadTest");
+   TS::setProgramName("TimerTest");
    TS::setProgramPrintLevel(TS::PrintLevel(3, 3));
    TS::initialize();
 
@@ -79,7 +79,7 @@ void main_finalize()
 
    // Done.
    printf("\n");
-   printf("ThreadTest Program*********************************************END\n\n");
+   printf("TimerTest Program***********************************************END\n\n");
 }
 
 //******************************************************************************

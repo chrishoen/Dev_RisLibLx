@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cmnPriorities_linux.cpp" />
     <ClCompile Include="procoMsg.cpp" />
     <ClCompile Include="procoMsgBase.cpp" />
     <ClCompile Include="procoMsgHelper.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cmnPriorities.h" />
     <ClInclude Include="procoMsg.h" />
     <ClInclude Include="procoMsgBase.h" />
     <ClInclude Include="procoMsgHelper.h" />

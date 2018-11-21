@@ -38,7 +38,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Waitable timer or event. The thread run function contains a loop that
+   // Waitable timer or semaphore. The thread run function contains a loop that
    // waits on this for a timer or a shutdown event.
    Ris::Threads::Waitable mWaitable;
 

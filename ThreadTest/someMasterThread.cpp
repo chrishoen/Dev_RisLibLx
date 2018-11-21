@@ -8,6 +8,7 @@ Description:
 
 #include "stdafx.h"
 
+#include "cmnPriorities.h"
 #include "someThreadParms.h"
 #include "someSlaveThread.h"
 
@@ -27,12 +28,13 @@ MasterThread::MasterThread()
    using namespace std::placeholders;
 
    // Set base class thread variables.
-   BaseClass::mShortThread->setThreadName("MasterShort");
-   BaseClass::mShortThread->setThreadPrintLevel(TS::PrintLevel(3, 3));
    BaseClass::mLongThread->setThreadName("MasterLong");
+   BaseClass::mLongThread->setThreadPriority(Cmn::gPriorities.mMasterLong);
    BaseClass::mLongThread->setThreadPrintLevel(TS::PrintLevel(3, 3));
 
-   BaseClass::mShortThread->setThreadPriorityHigh();
+   BaseClass::mShortThread->setThreadName("MasterShort");
+   BaseClass::mShortThread->setThreadPriority(Cmn::gPriorities.mMasterShort);
+   BaseClass::mShortThread->setThreadPrintLevel(TS::PrintLevel(3, 3));
    BaseClass::mShortThread->mTimerPeriod = 1000;
 
    // Set base class call pointers.
@@ -88,7 +90,7 @@ void MasterThread::executeOnTimer(int aTimerCount)
 
 void MasterThread::executeTest0()
 {
-   Prn::print(Prn::View22, "MasterThread::executeTest0");
+   Prn::print(Prn::View21, "MasterThread::executeTest0");
 }
 
 //******************************************************************************
