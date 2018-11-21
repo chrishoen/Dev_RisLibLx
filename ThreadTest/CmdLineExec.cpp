@@ -49,17 +49,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1, 101);
-
-   Some::gMasterThread->mTest1QCall(7, aCmd->argInt(1));
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, false);
@@ -72,13 +61,26 @@ void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 101);
+
+   Some::gMasterThread->mTest1QCall(7, aCmd->argInt(1));
+   return;
+
+   Some::gMasterThread->mTest0QCall();
+   return;
+
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   // Set defaults if no arguments were entered.
-   aCmd->setArgDefault(1,"something");
-
-   // Show arguments.
-   Prn::print(0,"Go2 %s %10.6f",aCmd->argString(1));
+   aCmd->setArgDefault(1, 101);
+   Some::gSlaveThread->mTest1QCall(6, aCmd->argInt(1));
 }
 
 //******************************************************************************

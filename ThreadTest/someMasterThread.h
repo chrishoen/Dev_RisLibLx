@@ -64,6 +64,17 @@ public:
    // Methods.qcalls.
 
    // Test qcall. It is invoked by the timer thread.
+   Ris::Threads::QCall0 mTest0QCall;
+
+   // Test function. This is bound to the qcall.
+   void executeTest0();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.qcalls.
+
+   // Test qcall. It is invoked by the timer thread.
    Ris::Threads::QCall2<int, int> mTest1QCall;
 
    // Test function. This is bound to the qcall.

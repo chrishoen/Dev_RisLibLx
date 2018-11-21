@@ -118,6 +118,9 @@ void Waitable::finalize()
    // Guard.
    if (!mValidFlag) return;
 
+   // Set invalid.
+   mValidFlag = false;
+   
    // Close the timer and event.
    close(mSpecific->mTimerFd);
    close(mSpecific->mEventFd);
@@ -125,8 +128,6 @@ void Waitable::finalize()
    mSpecific->mTimerFd = 0;
    mSpecific->mEventFd = 0;
 
-   // Set invalid.
-   mValidFlag = true;
 }
 
 //******************************************************************************

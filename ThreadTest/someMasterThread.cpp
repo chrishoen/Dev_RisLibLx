@@ -41,7 +41,8 @@ MasterThread::MasterThread()
    BaseClass::mShortThread->mThreadExecuteOnTimerCallPointer = std::bind(&MasterThread::executeOnTimer, this, _1);
 
    // Set qcalls.
-   mTest1QCall.bind (this->mLongThread, this,&MasterThread::executeTest1);
+   mTest0QCall.bind(this->mLongThread, this, &MasterThread::executeTest0);
+   mTest1QCall.bind(this->mLongThread, this, &MasterThread::executeTest1);
 
    // Set member variables.
    mTPFlag = true;
@@ -77,7 +78,17 @@ void MasterThread::threadExitFunction()
 void MasterThread::executeOnTimer(int aTimerCount)
 {
    if (!mTPFlag) return;
-   Prn::print(Prn::View11, "StatusCount %10d", mStatusCount1);
+// Prn::print(Prn::View11, "StatusCount %10d", mStatusCount1);
+   Prn::print(Prn::View11, "StatusCount %10d %10d", aTimerCount,mStatusCount1);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void MasterThread::executeTest0()
+{
+   Prn::print(Prn::View22, "MasterThread::executeTest0");
 }
 
 //******************************************************************************
@@ -88,18 +99,18 @@ void MasterThread::executeTest1(int aSource, int aCode)
 {
    try
    {
-      Prn::print(Prn::View22,"MasterThread::executeTest1 BEGIN",aCode);
+      Prn::print(Prn::View22, "MasterThread::executeTest1 BEGIN", aCode);
 
       BaseClass::resetNotify();
-      Ris::Threads::TwoThreadNotify tNotify(this,1);
-      gSlaveThread->mWorkRequestQCall(aCode,tNotify);
-      BaseClass::waitForNotify(-1,1);
+      Ris::Threads::TwoThreadNotify tNotify(this, 1);
+      gSlaveThread->mWorkRequestQCall(aCode, tNotify);
+      BaseClass::waitForNotify(-1, 1);
 
-      Prn::print(Prn::View22,"MasterThread::executeTest1 END");
+      Prn::print(Prn::View22, "MasterThread::executeTest1 END");
    }
-   catch(int aStatus)
+   catch (int aStatus)
    {
-      Prn::print(0, "Exception MasterThread::executeTest2 ABORTED  %d",aStatus);
+      Prn::print(0, "Exception MasterThread::executeTest2 ABORTED  %d", aStatus);
    }
 
    if (gThreadParms.mShowCode == 1 || aSource == 7)
