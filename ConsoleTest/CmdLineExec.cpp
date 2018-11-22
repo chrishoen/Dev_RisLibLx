@@ -1,52 +1,68 @@
 #include "stdafx.h"
 
-
+#include "conConsole.h"
 #include "CmdLineExec.h"
 
-#include "someTimerThread.h"
-
-//******************************************************************************
-//******************************************************************************
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
 }
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
 void CmdLineExec::reset()
 {
 }
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("TP"    ))  Some::gTimerThread->mTPFlag = aCmd->argBool(1);
-   if(aCmd->isCmd("GO1"   ))  executeGo1     (aCmd);
-   if(aCmd->isCmd("GO2"   ))  executeGo2     (aCmd);
-   if(aCmd->isCmd("GO3"   ))  executeGo3     (aCmd);
+   if(aCmd->isCmd("RESET"  ))  reset();
+   if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
+   if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
+   if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
+   if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
+   if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(Prn::View11, "GO1****************************");
-   while (true)
+   Con::gConsole.doTestLoop1();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   Con::gConsole.doTestLoop2();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,10);
+   int tN = aCmd->argInt(1);
+
+   for (int i = 0; i < tN; i++)
    {
-      int tChar = 0;
-      tChar = getc(stdin);
-//    tChar = getchar();
-      Prn::print(Prn::View11, "char %d", tChar);
-      if (tChar == 27)
-      {
-         Prn::print(Prn::View11, "escape");
-         break;
-      }
+      Prn::print(0, "%d",i);
+   }
+
+   Prn::print(0, "");
+
+   for (int i = tN-1; i >= 0; i--)
+   {
+      Prn::print(0, "%d",i);
    }
 }
 
@@ -54,34 +70,15 @@ void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(Prn::View11, "GO2****************************");
+   char tString[200];
 
-   char tLine[200];
-   int tChar;
    while (true)
    {
-      tChar = getc(stdin);
-      ungetc(tChar, stdin);
-      Prn::print(Prn::View11, "char %d",tChar);
-      if (tChar == '\n')
-      {
-         Prn::print(Prn::View11, "newline");
-         break;
-      }
-
-      fgets(tLine, 200, stdin);
-      my_trim_new_line(tLine);
-
-      int tLength = (int)strlen(tLine);
-      Prn::print(Prn::View11, "line %3d %s", tLength, tLine);
-
-      if (strcmp(tLine, "e") == 0)
-      {
-         Prn::print(Prn::View11, "exit");
-         break;
-      }
+      fgets(tString, 200, stdin);
+      printf("CMD %d %s", (int)strlen(tString),tString);
+      if (strcmp(tString, "e\n") == 0) break;
    }
 }
 
@@ -89,9 +86,7 @@ void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
 }
-
-
 

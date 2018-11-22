@@ -1,78 +1,57 @@
-#include "stdafx.h"
 
-#include "tsThreadServices.h"
+#include "stdafx.h"
 #include "risThreadsProcess.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize program resources.
+// Initialize
 
 void main_initialize(int argc,char** argv)
 {
-   printf("TimerThreadTest Program****************************************BEGIN\n");
-   printf("TimerThreadTest Program****************************************BEGIN\n");
-   printf("TimerThreadTest Program****************************************BEGIN\n\n");
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Initialize thread services.
-
-   TS::reset();
-   TS::setProgramName("Timer");
-   TS::setProgramPrintLevel(TS::PrintLevel(0, 3));
-   TS::initialize();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Enter process.
+   // Enter process
 
    Ris::Threads::enterProcessHigh();
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Initialize print facility.
-
-   // Initialize print.
+   // Initialize print facility
    Prn::resetPrint();
    Prn::useConsole(1);
    Prn::initializePrint();
 
-   // Initialize print filters.
-   Prn::setFilter(Prn::ThreadInit1, true);
-   Prn::setFilter(Prn::ThreadRun1, true);
-   Prn::setFilter(Prn::ThreadRun2, false);
-   Prn::setFilter(Prn::ThreadRun3, false);
-   Prn::setFilter(Prn::ThreadRun4, false);
+   // Initialize print filters
+   Prn::setFilter(Prn::ThreadRun1,  true);
+   Prn::setFilter(Prn::ThreadRun2,  false);
+   Prn::setFilter(Prn::ThreadRun3,  true);
+   Prn::setFilter(Prn::ThreadRun4,  true);
+
+   Prn::setFilter(Prn::ProcRun1,    true);
+   Prn::setFilter(Prn::ProcRun2,    true);
+   Prn::setFilter(Prn::ProcRun3,    false);
+   Prn::setFilter(Prn::ProcRun4,    true);
 
    Prn::setFilter(Prn::View11, true, 1);
    Prn::setFilter(Prn::View12, true, 1);
+
+   Prn::print(0,"Test*******************************************BEGIN");
+
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Finalize program resources.
+// Finalize
 
 void main_finalize()
 {
-   // Finalize print facility.
+   Prn::print(0,"Test*******************************************END");
+
+   // Close print
    Prn::finalizePrint();
 
-   // Exit process.
+   // Exit process
    Ris::Threads::exitProcess();
-
-   // Finalize thread services.
-   TS::finalize();
-
-   // Done.
-   printf("\n");
-   printf("TimerThreadTest Program****************************************END\n\n");
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
