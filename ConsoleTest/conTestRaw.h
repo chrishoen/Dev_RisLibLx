@@ -26,6 +26,7 @@ namespace Con
 
    // Run a test loop that prints raw key codes.
    void doTestLoopRaw();
+   void doTest1();
 
    // Raw input and output.
    int  readOneRaw();

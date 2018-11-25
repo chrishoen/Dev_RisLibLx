@@ -24,7 +24,7 @@ void initializeRaw()
 {
    tcgetattr(STDIN_FILENO, &gOriginalTermios);
    struct termios tNewTermios = gOriginalTermios;
-   tNewTermios.c_lflag &= ~(ECHO | ICANON);
+   tNewTermios.c_lflag &= ~(ECHO | ICANON | IXON);
    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tNewTermios);
 }
 
@@ -51,6 +51,12 @@ void writeOneRaw(int aChar)
    write(STDOUT_FILENO, &tChar, 1);
 }
 
+void writeStringRaw(char* aString)
+{
+   int tLength = (int)strlen(aString);
+   write(STDOUT_FILENO, aString, tLength);
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -63,22 +69,49 @@ void doTestLoopRaw()
    {
       int tChar = 0;
       tChar = readOneRaw();
-      if (tChar != 'n')
+      if (tChar == '1')
       {
-         writeOneRaw(tChar);
+         doTest1();
       }
       else
       {
-         writeOneRaw('\r');
+         writeOneRaw(tChar);
+         Prn::print(Prn::View11, "char %d", tChar);
       }
 
-      Prn::print(Prn::View11, "char %d", tChar);
       if (tChar == 'z')
       {
          Prn::print(Prn::View11, "exit");
+         printf("\nexit\n");
          break;
       }
    }
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Run a test loop that prints raw key codes.
+
+void doTest1()
+{
+   writeStringRaw("\e[6n");
+
+   char tString[40];
+   int tIndex = 0;
+   while (true)
+   {
+      char tChar = readOneRaw();
+      tString[tIndex++] = tChar;
+      if (tChar == 'R')break;
+   }
+   tString[tIndex] = 0;
+
+   int tRow = -1;
+   int tCol = -1;
+   sscanf(tString, "\e[%d;%dR", &tRow, &tCol);
+
+   Prn::print(Prn::View11, "Test1 cursor %4d %4d",tRow,tCol);
 };
 
 //******************************************************************************
