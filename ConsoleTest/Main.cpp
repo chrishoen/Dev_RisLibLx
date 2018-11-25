@@ -4,27 +4,19 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-void amain_init();
-
+#include "conTestRaw.h"
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 int main(int argc,char** argv)
 {
-   //--------------------------------------------------------------------
-   // Begin program.
-
    main_initialize(argc,argv);
 
-   //--------------------------------------------------------------------
-   // Start user command line executive,
-   // Wait for user to exit.
-
-   CmdLineExec* tExec = new CmdLineExec;
-	Ris::executeCmdLineConsoleThread(tExec);
-   delete tExec;
-
-   //--------------------------------------------------------------------
-   // End program.
+   Con::initializeRaw();
+   Con::doTestLoopRaw();
+   Con::finalizeRaw();
 
    main_finalize();
    return 0;

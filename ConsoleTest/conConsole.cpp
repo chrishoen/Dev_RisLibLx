@@ -9,7 +9,6 @@ Description:
 #include "stdafx.h"
 
 #include <ctype.h>
-
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
@@ -20,7 +19,7 @@ Description:
 namespace Con
 {
 
-struct termios gOriginalTermios;
+struct termios gOriginalTermios22;
 
 //******************************************************************************
 //******************************************************************************
@@ -38,8 +37,8 @@ Console::~Console()
 // Initialize the console for raw input.
 void Console::initialize()
 {
-   tcgetattr(STDIN_FILENO, &gOriginalTermios);
-   struct termios tNewTermios = gOriginalTermios;
+   tcgetattr(STDIN_FILENO, &gOriginalTermios22);
+   struct termios tNewTermios = gOriginalTermios22;
    tNewTermios.c_lflag &= ~(ECHO | ICANON);
    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tNewTermios);
 }
@@ -47,7 +46,7 @@ void Console::initialize()
 // Restore the console from raw input.
 void Console::finalize()
 {
-   tcsetattr(STDIN_FILENO, TCSAFLUSH, &gOriginalTermios);
+   tcsetattr(STDIN_FILENO, TCSAFLUSH, &gOriginalTermios22);
 }
 
 //******************************************************************************
@@ -67,12 +66,12 @@ void Console::doTestLoop1()
 
       if (tChar != 'n')
       {
-         write(STDIN_FILENO, &tChar, 1);
+         //write(STDIN_FILENO, &tChar, 1);
       }
       else
       {
-         char tTempChar = '\r';
-         write(STDIN_FILENO, &tTempChar, 1);
+         char tTempChar = 'H';
+         //write(STDIN_FILENO, &tTempChar, 1);
       }
 
 

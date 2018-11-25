@@ -6,11 +6,13 @@
     <ClCompile Include="MainInit.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="conConsole.cpp" />
+    <ClCompile Include="conTestRaw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLineExec.h" />
     <ClInclude Include="MainInit.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="conConsole.h" />
+    <ClInclude Include="conTestRaw.h" />
   </ItemGroup>
 </Project>
