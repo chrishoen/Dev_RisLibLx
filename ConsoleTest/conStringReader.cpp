@@ -122,7 +122,10 @@ void StringReader::onKey_Ignore()
 
 void StringReader::onKey_Enter()
 {
+   // Start a newline.
+   gKeyReader.writeString("\r\n");
    mCursor = 0;
+   mInputString[0] = 0;
 }
 
 //******************************************************************************
