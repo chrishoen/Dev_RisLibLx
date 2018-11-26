@@ -91,17 +91,6 @@ void KeyReader::writeString(char* aString)
    write(STDOUT_FILENO, aString, tLength);
 }
 
-void KeyReader::writeNewLine()
-{
-   char tChar = '\n';
-   write(STDOUT_FILENO, &tChar, 1);
-}
-
-void KeyReader::writeLeftOne()
-{
-   writeString("\e[1D");
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

@@ -106,10 +106,6 @@ public:
 
    // Write a string to the console.
    void writeString(char* aString);
-
-   // Write special characters to the console.
-   void writeNewLine();
-   void writeLeftOne();
 };
 
 //******************************************************************************

@@ -89,17 +89,16 @@ public:
    void onKey_Printable();
    void onKey_Special();
    void onKey_Ignore();
-   void doTouchCursor();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Write the output string to the console output.
+   // Write the input string to the console output and position the cursor.
+   // This takes mInputString and mCursor and echos to the console output
+   // appropriately.
    void echoInput();
-
-   void delay();
 };
 
 //******************************************************************************

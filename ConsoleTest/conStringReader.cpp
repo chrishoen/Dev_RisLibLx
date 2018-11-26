@@ -44,11 +44,6 @@ void StringReader::finalize()
    gKeyReader.finalize();
 }
 
-void StringReader::delay()
-{
-   Ris::portableSleep(100);
-}
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -72,7 +67,7 @@ void StringReader::doTestLoop1()
       if (mKeyIn.mIsEndOfRead)
       {
          Prn::print(Prn::View11, "end of read");
-         gKeyReader.writeNewLine();
+         gKeyReader.writeString("\r\n");
          break;
       }
 
@@ -267,6 +262,9 @@ void StringReader::onKey_Printable()
 
 void StringReader::echoInput()
 {
+   // Hide the cursor.
+   gKeyReader.writeString("\e[?25l");
+
    // Goto the beginning of the line and delete the entire line.
    gKeyReader.writeString("\r\e[2K");
 
@@ -286,8 +284,15 @@ void StringReader::echoInput()
       sprintf(mOutputString, "\r\e[%dC", mCursor);
    }
 
-   // Write the output string.
+   // Write the cursor output string.
    gKeyReader.writeString(mOutputString);
+
+   // Show the cursor.
+   gKeyReader.writeString("\e[?25h");
+
+   // Sleep.
+   Ris::portableSleep(50);
+
 }
 
 
