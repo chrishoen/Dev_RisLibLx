@@ -43,14 +43,10 @@ public:
 
    // Cursor postion.
    int mCursor;
-   int mLastCursor;
-   int mDeltaCursor;
 
    // Input string.
    char mInputString[cMaxStringSize];
    int mInputLength;
-   int mLastInputLength;
-   int mDeltaInputLength;
 
    // Output string.
    char mOutputString[cMaxStringSize];

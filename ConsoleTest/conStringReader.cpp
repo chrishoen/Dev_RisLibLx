@@ -29,11 +29,7 @@ StringReader::StringReader()
 void StringReader::resetVariables()
 {
    mCursor = 0;
-   mLastCursor = 0;
-   mDeltaCursor = 0;
    mInputLength = 0;
-   mLastInputLength = 0;
-   mDeltaInputLength = 0;
    mInputString[0] = 0;
    mOutputString[0] = 0;
 }
@@ -66,24 +62,21 @@ void StringReader::doTestLoop1()
 
    while (true)
    {
-      mLastInputLength = mInputLength;
-      mLastCursor = mCursor;
-
+      // Read the next keyboard input.
       gKeyReader.readKey(&mKeyIn);
 
+      // Update the current input string length.
+      mInputLength = (int)strlen(mInputString);
+
+      // Test the input key.
       if (mKeyIn.mIsEndOfRead)
       {
          Prn::print(Prn::View11, "end of read");
          gKeyReader.writeNewLine();
          break;
       }
-#if 0
-      Prn::print(Prn::View11, "mKeyIn %4d %c",
-         mKeyIn.mCode,
-         mKeyIn.mChar);
 
-      continue;
-#endif
+      // Test the input key.
       switch (mKeyIn.mCode)
       {
       case cKey_Ignore:     onKey_Ignore(); break;
@@ -100,42 +93,19 @@ void StringReader::doTestLoop1()
       case cKey_Special:    onKey_Special(); break;
       }
 
-      mDeltaCursor = mCursor - mLastCursor;
+      // Update the updated input string length.
       mInputLength = (int)strlen(mInputString);
-      mDeltaInputLength = mInputLength - mLastInputLength;
 
-      Prn::print(Prn::View11, "mInput %3d $ %4d $  %3d %s", 
+      // Echo the input string.
+      echoInput();
+
+      Prn::print(Prn::View11, "mInput %3d $ %4d $  %3d %s",
          mCursor, 
          mKeyIn.mCode, 
          mInputLength,
          mInputString);
    }
 };
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void StringReader::doTouchCursor()
-{
-   return;
-   if (mInputLength < 2) return;
-   if (mCursor == 0)
-   {
-      gKeyReader.writeOne(mInputString[0]);
-      gKeyReader.writeLeftOne();
-   }
-   else if (mCursor == mInputLength)
-   {
-      gKeyReader.writeLeftOne();
-      gKeyReader.writeOne(mInputString[mCursor - 1]);
-   }
-   else
-   {
-      gKeyReader.writeLeftOne();
-      gKeyReader.writeOne(mInputString[mCursor - 1]);
-   }
-}
 
 //******************************************************************************
 //******************************************************************************
@@ -163,7 +133,6 @@ void StringReader::onKey_Enter()
 void StringReader::onKey_BackSpace()
 { 
    if (mCursor == 0) return;
-   gKeyReader.writeLeftOne();
    mCursor--;
    onKey_Delete();
 }
@@ -177,27 +146,18 @@ void StringReader::onKey_BackSpace()
 
 void StringReader::onKey_Delete()
 { 
-   // If at the end then exit.
+   // If the cursor is at the end of the input string then exit.
    if (mCursor == mInputLength) return;
 
-   // Shift the input string from the cursor to the end left by one
-   // and write it out. This over writes the character at the cursor.
+   // Shift the input string from the cursor to the end left by one.
+   // This over writes the character at the cursor.
    for (int i = mCursor; i < mInputLength; i++)
    {
       mInputString[i] = mInputString[i + 1];
-      gKeyReader.writeOne(mInputString[i]);
    }
-   mInputString[mInputLength - 1] = 0;
-   mInputLength--;
-   // Erase the last character.
-   gKeyReader.writeOne(' ');
 
-   // Go back from the end to the cursor.
-   int tCount = mInputLength - mCursor + 2;
-   for (int i = 0; i < tCount; i++)
-   {
-      gKeyReader.writeLeftOne();
-   }
+   // Update the end of the input string.
+   mInputString[mInputLength - 1] = 0;
 }
 
 //******************************************************************************
@@ -208,15 +168,7 @@ void StringReader::onKey_Delete()
 void StringReader::onKey_LeftArrow()
 {
    if (mCursor == 0) return;
-   gKeyReader.writeLeftOne();
    mCursor--;
-   return;
-
-   if (mCursor == 0) return;
-   mCursor--;
-   echoInput();
-   return;
-
 }
 
 //******************************************************************************
@@ -227,17 +179,8 @@ void StringReader::onKey_LeftArrow()
 
 void StringReader::onKey_RightArrow()
 { 
-   if (mCursor < mInputLength)
-   {
-      gKeyReader.writeOne(mInputString[mCursor]);
-      mCursor++;
-   }
-   return;
-
+   if (mCursor == mInputLength) return;
    mCursor++;
-   echoInput();
-   return;
-
 }
 
 //******************************************************************************
@@ -264,8 +207,6 @@ void StringReader::onKey_DownArrow()
 
 void StringReader::onKey_Home()
 { 
-   if (mCursor == 0) return;
-   gKeyReader.writeOne(13);
    mCursor = 0;
 }
 
@@ -277,11 +218,7 @@ void StringReader::onKey_Home()
 
 void StringReader::onKey_End()
 {
-   while (mCursor < mInputLength)
-   {
-      gKeyReader.writeOne(mInputString[mCursor]);
-      mCursor++;
-   }
+   mCursor = mInputLength;
 }
 
 //******************************************************************************
@@ -292,7 +229,7 @@ void StringReader::onKey_End()
 
 void StringReader::onKey_Special()
 {
-   gKeyReader.writeOne(77);
+   gKeyReader.writeString("\r\e[2K");
 }
 
 //******************************************************************************
@@ -305,64 +242,49 @@ void StringReader::onKey_Special()
 void StringReader::onKey_Printable()
 { 
    // Shift right by one all keys at and to the right of the cursor.
-   mInputLength = (int)strlen(mInputString);
    for (int i = mInputLength; i > mCursor; i--)
    {
       mInputString[i] = mInputString[i - 1];
    }
    mInputString[mInputLength + 1] = 0;
-   mInputLength++;
 
    // Set the input key at the cursor.
    mInputString[mCursor] = mKeyIn.mChar;
 
-   // Write the new string from the cursor to the end.
-   for (int i = mCursor; i < mInputLength; i++)
-   {
-      gKeyReader.writeOne(mInputString[i]);
-   }
-
-   // Set the new cursor and go back to it.
+   // Update the cursor.
    mCursor++;
-   for (int i = mCursor; i < mInputLength; i++)
-   {
-      gKeyReader.writeLeftOne();
-   }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Write the output string to the console output.
+// Write the input string to the console output and position the cursor.
+// This takes mInputString and mCursor and echos to the console output
+// appropriately.
 
 void StringReader::echoInput()
 {
-   // Get the input string length.
-   mInputLength = (int)strlen(mInputString);
+   // Goto the beginning of the line and delete the entire line.
+   gKeyReader.writeString("\r\e[2K");
 
-   // If the input string length did not change.
-   if (mDeltaInputLength == 0)
+   // Output the input string from the beginning of the line.
+   gKeyReader.writeString(mInputString);
+
+   // If the cursor is at zero.
+   if (mCursor == 0)
    {
-      // Write the input string from the beginning of the line to the
-      // end of the string.
-      strcpy(mOutputString, "\r");
-      strncat(mOutputString, mInputString, cMaxStringSize);
-      gKeyReader.writeString(mOutputString);
-
-      // Write the input string from the beginning of the line to the
-      // cursor.
-      if (mCursor < mInputLength)
-      {
-         // Write the input string from the beginning of the line to the
-         // cursor.
-         strcpy(mOutputString, "\r");
-         strncat(mOutputString, mInputString, cMaxStringSize);
-         mOutputString[mCursor] = 0;
-         gKeyReader.writeString(mOutputString);
-      }
-
+      // Move the cursor to the beginning of the line.
+      sprintf(mOutputString, "\r");
+   }
+   else
+   {
+      // Move the cursor to the beginning of the line and then to the
+      // right by the cursor number.
+      sprintf(mOutputString, "\r\e[%dC", mCursor);
    }
 
+   // Write the output string.
+   gKeyReader.writeString(mOutputString);
 }
 
 

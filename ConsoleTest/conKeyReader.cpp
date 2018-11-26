@@ -148,7 +148,7 @@ void KeyReader::readKey(KeyRecord* aRecord)
    }
 
    // Test the input for enter.
-   if (tKeyIn == 's')
+   if (tKeyIn == 'S')
    {
       aRecord->mCode = cKey_Special;
       return;
