@@ -1,15 +1,13 @@
 #pragma once
 
 /*==============================================================================
-Console Services.
+KeyReader Services.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include <stdio.h>
-#include "tsThreadLocal.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -21,16 +19,57 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This is a record that describes single keyboard inputs.
+
+class KeyRecord
+{
+public:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   int  mCode;
+   char mChar;
+   bool mIsPrintable;
+   bool mIsEndOfRead;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   KeyRecord();
+   void reset();
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constants.
 
-   static const int cMaxStringSize = 400;
+static const int cKey_Ignore      = 0;
+static const int cKey_EndOfRead   = -1;
+static const int cKey_Printable   = 1;
+static const int cKey_Special     = 2;
+
+static const int cKey_Enter       = 1000;
+static const int cKey_BackSpace   = 1001;
+static const int cKey_Delete      = 1002;
+static const int cKey_LeftArrow   = 1003;
+static const int cKey_RightArrow  = 1004;
+static const int cKey_UpArrow     = 1005;
+static const int cKey_DownArrow   = 1006;
+static const int cKey_Home        = 1007;
+static const int cKey_End         = 1008;
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // This class provides global program console i/o facility.
 
-class Console
+class KeyReader
 {
 public:
    //***************************************************************************
@@ -44,11 +83,9 @@ public:
    // Methods.
 
    // Constructor.
-   Console();
-   ~Console();
+   KeyReader();
 
-
-   // Initialize the console for raw input.
+   // Initialize.
    void initialize();
    void finalize();
 
@@ -57,9 +94,22 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Run test loop.
-   void doTestLoop1();
-   void doTestLoop2();
+   // Read a single console keyboard input. Return it in the input record.
+   // Return true if successful.
+   void readKey(KeyRecord* aRecord);
+
+   // Read a single character from the console.
+   int readOne();
+
+   // Write a single character to the console.
+   void writeOne(char aChar);
+
+   // Write a string to the console.
+   void writeString(char* aString);
+
+   // Write special characters to the console.
+   void writeNewLine();
+   void writeLeftOne();
 };
 
 //******************************************************************************
@@ -67,10 +117,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _CONCONSOLE_CPP_
-          Console gConsole;
+#ifdef _CONKEYREADER_CPP_
+          KeyReader gKeyReader;
 #else
-   extern Console gConsole;
+   extern KeyReader gKeyReader;
 #endif
 
 //******************************************************************************

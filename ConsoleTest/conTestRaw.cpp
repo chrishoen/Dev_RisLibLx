@@ -18,19 +18,19 @@ Description:
 namespace Con
 {
 
-struct termios gOriginalTermios;
+struct termios gRawOriginalTermios;
 
 void initializeRaw()
 {
-   tcgetattr(STDIN_FILENO, &gOriginalTermios);
-   struct termios tNewTermios = gOriginalTermios;
+   tcgetattr(STDIN_FILENO, &gRawOriginalTermios);
+   struct termios tNewTermios = gRawOriginalTermios;
    tNewTermios.c_lflag &= ~(ECHO | ICANON | IXON);
    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tNewTermios);
 }
 
 void finalizeRaw()
 {
-   tcsetattr(STDIN_FILENO, TCSAFLUSH, &gOriginalTermios);
+   tcsetattr(STDIN_FILENO, TCSAFLUSH, &gRawOriginalTermios);
 }
 
 //******************************************************************************

@@ -24,16 +24,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CmdLineExec.cpp" />
-    <ClCompile Include="conConsole.cpp" />
+    <ClCompile Include="conKeyReader.cpp" />
+    <ClCompile Include="conStringReader.cpp" />
     <ClCompile Include="conTestRaw.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainInit.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CmdLineExec.h" />
-    <ClInclude Include="conConsole.h" />
+    <ClInclude Include="conKeyReader.h" />
+    <ClInclude Include="conStringReader.h" />
     <ClInclude Include="conTestRaw.h" />
     <ClInclude Include="MainInit.h" />
     <ClInclude Include="stdafx.h" />
