@@ -20,8 +20,6 @@ namespace Con
 //******************************************************************************
 // Constants.
 
-   static const int cMaxStringSize = 400;
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -33,21 +31,27 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constants.
+
+   static const int cStringSize = 400;
+   static const int cArraySize = 4;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
 
-   // Cursor postion.
-   int mCursor;
-   int mLastCursor;
-   int mDeltaCursor;
+   // Array of strings.
+   char mStringArray[cArraySize][cStringSize];
 
-   // Input string.
-   char mInputString[cMaxStringSize];
-   int mInputLength;
-   int mLastInputLength;
-   int mDeltaInputLength;
+   // Array of pointers into the array of strings.
+   char* mPtr[cArraySize];
 
-   // Output string.
-   char mOutputString[cMaxStringSize];
+   // Array indices.
+   int mOldest;            // The oldest string in the array.
+   int mNewest;            // The newest string in the array.
+   int mNextNewest;        // The next newest string will go here.  
+   int mSize;              // Number of strings in the array.
 
    //***************************************************************************
    //***************************************************************************
@@ -63,8 +67,25 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Run test loop.
-   void doTestLoop1();
+   // Put a string to the array for when enter is entered at 
+   // the console input.
+   void putStringForEnter(char* aInputString);
+
+   // Get a string from the array for when an up arrow is entered at
+   // the console input.
+   void getStringForUpArrow(char* aInputString);
+
+   // Get a string from the array for when a down arrow is entered at
+   // the console input.
+   void getStringForDownArrow(char* aInputString);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Show.
+   void show();
 };
 
 //******************************************************************************

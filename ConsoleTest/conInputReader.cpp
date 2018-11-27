@@ -32,6 +32,7 @@ void InputReader::resetVariables()
    mInputLength = 0;
    mInputString[0] = 0;
    mOutputString[0] = 0;
+   mInputHistory.resetVariables();
 }
 
 void InputReader::initialize()
@@ -117,6 +118,10 @@ void InputReader::onKey_Ignore()
 
 void InputReader::onKey_Enter()
 {
+   // Put the current input string to the input string history.
+   mInputHistory.putStringForEnter(mInputString);
+   mInputHistory.show();
+
    // Start a newline.
    gKeyReader.writeString("\r\n");
 

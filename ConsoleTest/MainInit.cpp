@@ -19,6 +19,7 @@ void main_initialize(int argc,char** argv)
    // Initialize print facility
    Prn::resetPrint();
    Prn::useConsole(1);
+   Prn::useConsole(2);
    Prn::initializePrint();
 
    // Initialize print filters
@@ -32,8 +33,10 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ProcRun3,    false);
    Prn::setFilter(Prn::ProcRun4,    true);
 
-   Prn::setFilter(Prn::View11, true, 1);
-   Prn::setFilter(Prn::View12, true, 1);
+   Prn::setFilter(Prn::View11,      true, 1);
+   Prn::setFilter(Prn::View12,      true, 1);
+   Prn::setFilter(Prn::View21,      true, 2);
+   Prn::setFilter(Prn::View22,      true, 2);
 
    Prn::print(0,"Console Test*******************************************BEGIN");
 
