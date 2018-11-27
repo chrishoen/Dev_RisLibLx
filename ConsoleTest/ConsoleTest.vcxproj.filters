@@ -6,13 +6,15 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="conTestRaw.cpp" />
     <ClCompile Include="conKeyReader.cpp" />
-    <ClCompile Include="conStringReader.cpp" />
+    <ClCompile Include="conInputHistory.cpp" />
+    <ClCompile Include="conInputReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainInit.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="conTestRaw.h" />
     <ClInclude Include="conKeyReader.h" />
-    <ClInclude Include="conStringReader.h" />
+    <ClInclude Include="conInputHistory.h" />
+    <ClInclude Include="conInputReader.h" />
   </ItemGroup>
 </Project>

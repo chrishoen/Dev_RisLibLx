@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-StringReader Services.
+InputReader Services.
 ==============================================================================*/
 
 //******************************************************************************
@@ -30,7 +30,7 @@ namespace Con
 //******************************************************************************
 // This class provides global program console i/o facility.
 
-class StringReader
+class InputReader
 {
 public:
    //***************************************************************************
@@ -57,7 +57,7 @@ public:
    // Methods.
 
    // Constructor.
-   StringReader();
+   InputReader();
    void resetVariables();
 
    // Initialize.
@@ -107,9 +107,9 @@ public:
 // Global singular instance.
 
 #ifdef _CONSTRINGREADER_CPP_
-          StringReader gStringReader;
+          InputReader gInputReader;
 #else
-   extern StringReader gStringReader;
+   extern InputReader gInputReader;
 #endif
 
 //******************************************************************************

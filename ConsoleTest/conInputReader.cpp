@@ -11,7 +11,7 @@ Description:
 #include <ctype.h>
 
 #define  _CONSTRINGREADER_CPP_
-#include "conStringReader.h"
+#include "conInputReader.h"
 
 namespace Con
 {
@@ -21,12 +21,12 @@ namespace Con
 //******************************************************************************
 // Constructor.
 
-StringReader::StringReader()
+InputReader::InputReader()
 {
    resetVariables();
 }
 
-void StringReader::resetVariables()
+void InputReader::resetVariables()
 {
    mCursor = 0;
    mInputLength = 0;
@@ -34,12 +34,12 @@ void StringReader::resetVariables()
    mOutputString[0] = 0;
 }
 
-void StringReader::initialize()
+void InputReader::initialize()
 {
    gKeyReader.initialize();
 }
 
-void StringReader::finalize()
+void InputReader::finalize()
 {
    gKeyReader.finalize();
 }
@@ -49,7 +49,7 @@ void StringReader::finalize()
 //******************************************************************************
 // Run test loop.
 
-void StringReader::doTestLoop1()
+void InputReader::doTestLoop1()
 {
    Prn::print(Prn::View11, "doTestLoop1****************************");
 
@@ -106,7 +106,7 @@ void StringReader::doTestLoop1()
 //******************************************************************************
 //******************************************************************************
 
-void StringReader::onKey_Ignore()
+void InputReader::onKey_Ignore()
 {
 }
 
@@ -115,12 +115,16 @@ void StringReader::onKey_Ignore()
 //******************************************************************************
 // Set the cursor fro the beginning.
 
-void StringReader::onKey_Enter()
+void InputReader::onKey_Enter()
 {
    // Start a newline.
    gKeyReader.writeString("\r\n");
-   mCursor = 0;
+
+   // Empty the input string.
    mInputString[0] = 0;
+
+   // Set the cursor to the beginning of the empty input string.
+   mCursor = 0;
 }
 
 //******************************************************************************
@@ -128,8 +132,9 @@ void StringReader::onKey_Enter()
 //******************************************************************************
 // Move the cursor left by one (backspace) and delete the character there. 
 
-void StringReader::onKey_BackSpace()
+void InputReader::onKey_BackSpace()
 { 
+   // Move the cursor left by one and delete the character there.
    if (mCursor == 0) return;
    mCursor--;
    onKey_Delete();
@@ -142,7 +147,7 @@ void StringReader::onKey_BackSpace()
 // the character at the cursor with the one after it and reduces the length of
 // the input string by one.
 
-void StringReader::onKey_Delete()
+void InputReader::onKey_Delete()
 { 
    // If the cursor is at the end of the input string then exit.
    if (mCursor == mInputLength) return;
@@ -163,8 +168,9 @@ void StringReader::onKey_Delete()
 //******************************************************************************
 // Write one backspace. This moves the cursor left by one.
 
-void StringReader::onKey_LeftArrow()
+void InputReader::onKey_LeftArrow()
 {
+   // Move the cursor left by one.
    if (mCursor == 0) return;
    mCursor--;
 }
@@ -175,8 +181,9 @@ void StringReader::onKey_LeftArrow()
 // Write the input string character at the cursor. This moves the cursor to
 // the right by one.
 
-void StringReader::onKey_RightArrow()
+void InputReader::onKey_RightArrow()
 { 
+   // Move the cursor right by one.
    if (mCursor == mInputLength) return;
    mCursor++;
 }
@@ -185,7 +192,7 @@ void StringReader::onKey_RightArrow()
 //******************************************************************************
 //******************************************************************************
 
-void StringReader::onKey_UpArrow()
+void InputReader::onKey_UpArrow()
 { 
 }
 
@@ -193,7 +200,7 @@ void StringReader::onKey_UpArrow()
 //******************************************************************************
 //******************************************************************************
 
-void StringReader::onKey_DownArrow()
+void InputReader::onKey_DownArrow()
 { 
 }
 
@@ -203,8 +210,9 @@ void StringReader::onKey_DownArrow()
 // Write a line feed to move the cursor to the beginning and set the cursor
 // to zero.
 
-void StringReader::onKey_Home()
+void InputReader::onKey_Home()
 { 
+   // Set the cursor to the beginning of the input string.
    mCursor = 0;
 }
 
@@ -214,8 +222,9 @@ void StringReader::onKey_Home()
 // Move the cursor to the end by writing the input string from the cursor
 // to the end.
 
-void StringReader::onKey_End()
+void InputReader::onKey_End()
 {
+   // Set the cursor to the end of the input string.
    mCursor = mInputLength;
 }
 
@@ -225,7 +234,7 @@ void StringReader::onKey_End()
 // Move the cursor to the end by writing the input string from the cursor
 // to the end.
 
-void StringReader::onKey_Special()
+void InputReader::onKey_Special()
 {
    gKeyReader.writeString("\r\e[2K");
 }
@@ -237,7 +246,7 @@ void StringReader::onKey_Special()
 // new string, including the new character, from the cursor to the end.
 // Go back from the end to the new cursor.
 
-void StringReader::onKey_Printable()
+void InputReader::onKey_Printable()
 { 
    // Shift right by one all keys at and to the right of the cursor.
    for (int i = mInputLength; i > mCursor; i--)
@@ -260,7 +269,7 @@ void StringReader::onKey_Printable()
 // This takes mInputString and mCursor and echos to the console output
 // appropriately.
 
-void StringReader::echoInput()
+void InputReader::echoInput()
 {
    // Hide the cursor.
    gKeyReader.writeString("\e[?25l");
@@ -291,7 +300,7 @@ void StringReader::echoInput()
    gKeyReader.writeString("\e[?25h");
 
    // Sleep.
-   Ris::portableSleep(50);
+   Ris::portableSleep(25);
 
 }
 
