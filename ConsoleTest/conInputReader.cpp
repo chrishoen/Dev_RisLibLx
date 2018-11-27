@@ -53,6 +53,7 @@ void InputReader::finalize()
 void InputReader::doTestLoop1()
 {
    Prn::print(Prn::View11, "doTestLoop1****************************");
+   Prn::print(Prn::View21, "doTestLoop1****************************");
 
    resetVariables();
 
@@ -120,7 +121,6 @@ void InputReader::onKey_Enter()
 {
    // Put the current input string to the input string history.
    mInputHistory.putStringForEnter(mInputString);
-   mInputHistory.show();
 
    // Start a newline.
    gKeyReader.writeString("\r\n");
@@ -130,6 +130,32 @@ void InputReader::onKey_Enter()
 
    // Set the cursor to the beginning of the empty input string.
    mCursor = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void InputReader::onKey_UpArrow()
+{
+   // Get the input string from the input string history.
+   mInputHistory.getStringForUpArrow(mInputString);
+
+   // Set the cursor to the end of the new input string.
+   mCursor = strlen(mInputString);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void InputReader::onKey_DownArrow()
+{
+   // Get the input string from the input string history.
+   mInputHistory.getStringForDownArrow(mInputString);
+
+   // Set the cursor to the end of the new input string.
+   mCursor = strlen(mInputString);
 }
 
 //******************************************************************************
@@ -191,22 +217,6 @@ void InputReader::onKey_RightArrow()
    // Move the cursor right by one.
    if (mCursor == mInputLength) return;
    mCursor++;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void InputReader::onKey_UpArrow()
-{ 
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void InputReader::onKey_DownArrow()
-{ 
 }
 
 //******************************************************************************
