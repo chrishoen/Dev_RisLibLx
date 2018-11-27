@@ -52,8 +52,7 @@ public:
    int mNewest;            // The newest string in the array.
    int mNextNewest;        // The next newest string will go here.  
    int mSize;              // Number of strings in the array.
-   int mGetIndex;          // Current index to get from.
-   int mUpCount;           // Number of ups - downs.
+   int mUpCount;           // Number of up arrows - down arrows.
 
    //***************************************************************************
    //***************************************************************************

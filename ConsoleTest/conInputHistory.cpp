@@ -37,19 +37,17 @@ void InputHistory::resetVariables()
    mNewest = 0;
    mNextNewest = 0;
    mSize = 0;
-   mGetIndex = 0;
    mUpCount = 0;
 }
 
 void InputHistory::show()
 {
-   Prn::print(Prn::View21, "History     %3d $ %3d %3d %3d $ %3d %3d",
+   Prn::print(Prn::View21, "History     %3d $ %3d %3d %3d $ %3d",
       mSize,
       mNewest,
       mNextNewest,
       mOldest,
-      mUpCount,
-      mGetIndex);
+      mUpCount);
 };
 
 //******************************************************************************
@@ -69,8 +67,7 @@ void InputHistory::putStringForEnter(char* aInputString)
    // Set the newest index so that it is at the most recent.
    mNewest = mNextNewest;
 
-   // Set the get index so that it is one above the most recent.
-   mGetIndex = my_index_add(mNewest, 1, cArraySize);
+   // Reset up count.
    mUpCount = 0;
 
    // Increment the next newest index,
@@ -103,12 +100,14 @@ void InputHistory::getStringForUpArrow(char* aOutputString)
    if (mSize == 0) return;
    if (mUpCount == mSize) return;
 
-   // Decrement the get index, wrap around the array.
-   mGetIndex = my_index_sub(mGetIndex, 1, cArraySize);
+   // Increment the up count.
    mUpCount++;
 
-   // Copy the array string at the current get index to the output string.
-   my_strncpy(aOutputString, mPtr[mGetIndex], cStringSize);
+   // Calculate the get index, wrap around the array.
+   int tGetIndex = my_index_sub(mNewest, mUpCount - 1, cArraySize);
+
+   // Copy the array string at the get index to the output string.
+   my_strncpy(aOutputString, mPtr[tGetIndex], cStringSize);
 
    // Done.
    show();
@@ -124,14 +123,24 @@ void InputHistory::getStringForDownArrow(char* aOutputString)
 {
    // Guard.
    if (mSize == 0) return;
-   if (mUpCount < 2) return;
+   if (mUpCount == 0) return;
 
-   // Increment the get index, wrap around the array.
-   mGetIndex = my_index_add(mGetIndex, 1, cArraySize);
+   // Decrement the up count.
    mUpCount--;
 
-   // Copy the array string at the current get index to the output string.
-   my_strncpy(aOutputString, mPtr[mGetIndex], cStringSize);
+   // If the up count is zero.
+   if (mUpCount == 0)
+   {
+      // Return an empty string.
+      aOutputString[0] = 0;
+      return;
+   }
+
+   // Calculate the get index, wrap around the array.
+   int tGetIndex = my_index_sub(mNewest, mUpCount - 1, cArraySize);
+
+   // Copy the array string at the get index to the output string.
+   my_strncpy(aOutputString, mPtr[tGetIndex], cStringSize);
 
    // Done.
    show();
