@@ -52,6 +52,8 @@ void InputReader::finalize()
 
 void InputReader::doTestLoop1()
 {
+   bool tFound = false;
+
    Prn::print(Prn::View11, "doTestLoop1****************************");
    Prn::print(Prn::View21, "doTestLoop1****************************");
 
@@ -74,20 +76,25 @@ void InputReader::doTestLoop1()
       }
 
       // Test the input key.
+      tFound = false;
       switch (mKeyIn.mCode)
       {
-      case cKey_Ignore:     onKey_Ignore(); break;
-      case cKey_Enter:      onKey_Enter(); break;
-      case cKey_BackSpace:  onKey_BackSpace(); break;
-      case cKey_Delete:     onKey_Delete(); break;
-      case cKey_LeftArrow:  onKey_LeftArrow(); break;
-      case cKey_RightArrow: onKey_RightArrow(); break;
-      case cKey_UpArrow:    onKey_UpArrow(); break;
-      case cKey_DownArrow:  onKey_DownArrow(); break;
-      case cKey_Home:       onKey_Home(); break;
-      case cKey_End:        onKey_End(); break;
-      case cKey_Printable:  onKey_Printable(); break;
-      case cKey_Special:    onKey_Special(); break;
+      case cKey_Enter:      onKey_Enter();      tFound = true; break;
+      case cKey_BackSpace:  onKey_BackSpace();  tFound = true; break;
+      case cKey_Delete:     onKey_Delete();     tFound = true; break;
+      case cKey_LeftArrow:  onKey_LeftArrow();  tFound = true; break;
+      case cKey_RightArrow: onKey_RightArrow(); tFound = true; break;
+      case cKey_UpArrow:    onKey_UpArrow();    tFound = true; break;
+      case cKey_DownArrow:  onKey_DownArrow();  tFound = true; break;
+      case cKey_Home:       onKey_Home();       tFound = true; break;
+      case cKey_End:        onKey_End();        tFound = true; break;
+      case cKey_Printable:  onKey_Printable();  tFound = true; break;
+      case cKey_Control:    onKey_Control();    tFound = true; break;
+      }
+      if (!tFound)
+      {
+         Prn::print(Prn::View11, "InputReader ERROR not found");
+         break;
       }
 
       // Update the updated input string length.
@@ -103,14 +110,6 @@ void InputReader::doTestLoop1()
          mInputString);
    }
 };
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void InputReader::onKey_Ignore()
-{
-}
 
 //******************************************************************************
 //******************************************************************************
@@ -246,12 +245,13 @@ void InputReader::onKey_End()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Move the cursor to the end by writing the input string from the cursor
-// to the end.
+// Write to the input string and set the cursor to the beginning.
 
-void InputReader::onKey_Special()
+void InputReader::onKey_Control()
 {
-   gKeyReader.writeString("\r\e[2K");
+// sprintf(mInputString, "control%c", mKeyIn.mChar);
+   sprintf(mInputString, "control");
+   mCursor = 0;
 }
 
 //******************************************************************************

@@ -69,7 +69,7 @@ void doTestLoopRaw()
    {
       int tChar = 0;
       tChar = readOneRaw();
-      if (tChar == '1')
+      if (tChar == '1' && false)
       {
          doTest1();
       }

@@ -32,6 +32,7 @@ public:
    int  mCode;
    char mChar;
    bool mIsPrintable;
+   bool mIsControl;
    bool mIsEndOfRead;
 
    //***************************************************************************
@@ -49,10 +50,9 @@ public:
 //******************************************************************************
 // Constants.
 
-static const int cKey_Ignore      = 0;
 static const int cKey_EndOfRead   = -1;
 static const int cKey_Printable   = 1;
-static const int cKey_Special     = 2;
+static const int cKey_Control     = 2;
 
 static const int cKey_Enter       = 1000;
 static const int cKey_BackSpace   = 1001;
@@ -95,8 +95,12 @@ public:
    // Methods.
 
    // Read a single console keyboard input. Return it in the input record.
-   // Return true if successful.
    void readKey(KeyRecord* aRecord);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    // Read a single character from the console.
    int readOne();
@@ -106,6 +110,18 @@ public:
 
    // Write a string to the console.
    void writeString(char* aString);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   void onKey_EndOfRead  (int aKeyIn, KeyRecord* aRecord);
+   void onKey_Enter      (int aKeyIn, KeyRecord* aRecord);
+   void onKey_BackSpace  (int aKeyIn, KeyRecord* aRecord);
+   void onKey_Printable  (int aKeyIn, KeyRecord* aRecord);
+   void onKey_Control    (int aKeyIn, KeyRecord* aRecord);
+   bool onKey_Escape(int aKeyIn, KeyRecord* aRecord);
 };
 
 //******************************************************************************

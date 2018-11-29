@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <ctype.h>
 
 #include "CmdLineExec.h"
 
@@ -47,7 +48,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    int tN = '\e';
-   Prn::print(0, "Go1 %d", tN);
+   Prn::print(0, "Go1 %d %d", isprint(tN), iscntrl(tN));
 }
 
 //******************************************************************************

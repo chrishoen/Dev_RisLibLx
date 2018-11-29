@@ -42,6 +42,7 @@ void InputHistory::resetVariables()
 
 void InputHistory::show()
 {
+   return;
    Prn::print(Prn::View21, "History     %3d $ %3d %3d %3d $ %3d",
       mSize,
       mNewest,

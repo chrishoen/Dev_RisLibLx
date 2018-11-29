@@ -90,8 +90,7 @@ public:
    void onKey_Home();
    void onKey_End();
    void onKey_Printable();
-   void onKey_Special();
-   void onKey_Ignore();
+   void onKey_Control();
 
    //***************************************************************************
    //***************************************************************************

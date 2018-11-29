@@ -34,6 +34,7 @@ void KeyRecord::reset()
    mCode = 0;
    mChar = 0;
    mIsPrintable = false;
+   mIsControl = false;
    mIsEndOfRead = false;
 }
 
@@ -111,121 +112,173 @@ void KeyReader::readKey(KeyRecord* aRecord)
    //***************************************************************************
    // Local variables.
 
-   int tKeyIn = 0;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Read and test.
+   // Read an input key.
 
-   // Read the input key.
-   tKeyIn = readOne();
-   Prn::print(Prn::View14, "READ101 %4d", tKeyIn);
-
-   // Test the input for end of read.
-   if (tKeyIn == 'z')
+   while (true)
    {
-      aRecord->mIsEndOfRead = true;
-      aRecord->mCode = cKey_EndOfRead;
-   }
+      // Read the input key.
+      int tKeyIn = readOne();
+      Prn::print(Prn::View14, "READ101 %4d", tKeyIn);
 
-   // Test the input for enter.
-   if (tKeyIn == 13)
-   {
-      aRecord->mCode = cKey_Enter;
-      return;
-   }
+      // Test the input for end of read.
+      if (tKeyIn == 'z')
+      {
+         onKey_EndOfRead(tKeyIn,aRecord);
+         return;
+      }
 
-   // Test the input for enter.
-   if (tKeyIn == 'S')
-   {
-      aRecord->mCode = cKey_Special;
-      return;
-   }
+      // Test the input for back space.
+      if (tKeyIn == 8)
+      {
+         onKey_BackSpace(tKeyIn, aRecord);
+         return;
+      }
 
-   // Test the input for back space.
-   if (tKeyIn == 8)
-   {
-      aRecord->mCode = cKey_BackSpace;
-      return;
-   }
+      // Test the input for enter.
+      if (tKeyIn == 10)
+      {
+         onKey_Enter(tKeyIn, aRecord);
+         return;
+      }
 
-   // Test the input for enter.
-   if (tKeyIn == 10)
-   {
-      aRecord->mCode = cKey_Enter;
-      return;
-   }
-
-   // Test the input for not special.
-   if (tKeyIn != 27)
-   {
       // Test the input for printable.
       if (isprint(tKeyIn))
       {
-         aRecord->mIsPrintable = true;
-         aRecord->mCode = cKey_Printable;
-         aRecord->mChar = tKeyIn;
+         onKey_Printable(tKeyIn, aRecord);
          return;
       }
-      // Not special and not printable.
-      else
-      {
-         aRecord->mCode = cKey_Ignore;
-         return;
-      }
-   }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Read again and test.
+      // Test the input for control.
+      if (1 <= tKeyIn && tKeyIn <= 26)
+      {
+         onKey_Control(tKeyIn, aRecord);
+         return;
+      }
+
+      // Test the input for escape.
+      if (tKeyIn == 27)
+      {
+         if (onKey_Escape(tKeyIn, aRecord)) return;
+      }
+
+      //***************************************************************************
+      //***************************************************************************
+      //***************************************************************************
+      // The first key was Escape. Read again and test.
+
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void KeyReader::onKey_EndOfRead(int aKeyIn, KeyRecord* aRecord)
+{
+   aRecord->mIsEndOfRead = true;
+   aRecord->mCode = cKey_EndOfRead;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void KeyReader::onKey_Enter(int aKeyIn, KeyRecord* aRecord)
+{
+   aRecord->mCode = cKey_Enter;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void KeyReader::onKey_BackSpace(int aKeyIn, KeyRecord* aRecord)
+{
+   aRecord->mCode = cKey_BackSpace;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void KeyReader::onKey_Printable(int aKeyIn, KeyRecord* aRecord)
+{
+   aRecord->mIsPrintable = true;
+   aRecord->mCode = cKey_Printable;
+   aRecord->mChar = aKeyIn;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void KeyReader::onKey_Control(int aKeyIn, KeyRecord* aRecord)
+{
+   aRecord->mIsControl = true;
+   aRecord->mCode = cKey_Control;
+   aRecord->mChar = 96 + aKeyIn;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
+{
+   // Locals.
+   int  tKeyIn = 0;
+   bool tFound = false;
 
    // Read the second key.
    tKeyIn = readOne();
-   Prn::print(Prn::View14, "READ102 %4d", tKeyIn);
+   Prn::print(Prn::View14, "READ201 %4d", tKeyIn);
 
-   // Test if second key not 91 .
+   // Test if the second key is not 91 .
    if (tKeyIn != 91)
    {
-      aRecord->mCode = cKey_Ignore;
-      return;
+      Prn::print(Prn::View14, "READ202 IGNORE %4d", tKeyIn);
+      // Ignore the key.
+      return false;
    }
 
-   // Second key is 91. Read the third key.
+   // The second key is 91. Read the third key.
    tKeyIn = readOne();
-   Prn::print(Prn::View14, "READ103 %4d", tKeyIn);
+   Prn::print(Prn::View14, "READ203 %4d", tKeyIn);
 
-   // Test the third key for arrow key.
+   // Test the third key for an arrow key.
+   tFound = false;
    switch (tKeyIn)
    {
-   case  65: aRecord->mCode = cKey_UpArrow; return;
-   case  66: aRecord->mCode = cKey_DownArrow; return;
-   case  67: aRecord->mCode = cKey_RightArrow; return;
-   case  68: aRecord->mCode = cKey_LeftArrow; return;
+   case  65: aRecord->mCode = cKey_UpArrow;    tFound = true; break;
+   case  66: aRecord->mCode = cKey_DownArrow;  tFound = true; break;
+   case  67: aRecord->mCode = cKey_RightArrow; tFound = true; break;
+   case  68: aRecord->mCode = cKey_LeftArrow;  tFound = true; break;
    }
+   if (tFound) return true;
 
    // Test the third key for other keys.
+   tFound = false;
    switch (tKeyIn)
    {
-   case  49: aRecord->mCode = cKey_Home; break;
-   case  52: aRecord->mCode = cKey_End; break;
-   case  51: aRecord->mCode = cKey_Delete; break;
-   default : aRecord->mCode = cKey_Ignore; return;
+   case  49: aRecord->mCode = cKey_Home;   tFound = true; break;
+   case  52: aRecord->mCode = cKey_End;    tFound = true; break;
+   case  51: aRecord->mCode = cKey_Delete; tFound = true; break;
    }
+   if (!tFound) return false;
 
    // Read the fourth key.
    tKeyIn = readOne();
-   Prn::print(Prn::View14, "READ104 %4d", tKeyIn);
+   Prn::print(Prn::View14, "READ204 %4d", tKeyIn);
 
    // Test if the fourth key is 126.
-   if (tKeyIn == 126)
-   {
-      return;
-   }
+   if (tKeyIn == 126) return true;
 
    // The third key was not 126.
-   aRecord->mCode = cKey_Ignore;
+   Prn::print(Prn::View11, "**************** READ ERROR 101 %4d", tKeyIn);
+   return false;
 }
 
 //******************************************************************************
