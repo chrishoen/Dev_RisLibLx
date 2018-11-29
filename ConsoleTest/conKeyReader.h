@@ -32,7 +32,11 @@ public:
    int  mCode;
    char mChar;
    bool mIsPrintable;
+   bool mIsShift;
    bool mIsControl;
+   bool mIsAlt;
+   bool mIsControlShift;
+   bool mIsAltShift;
    bool mIsFunction;
    bool mIsEndOfRead;
 

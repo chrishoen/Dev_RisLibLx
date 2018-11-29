@@ -263,6 +263,13 @@ void InputReader::onKey_Control()
 void InputReader::onKey_Function()
 {
    sprintf(mInputString, "function%d", mKeyIn.mChar);
+
+   if (mKeyIn.mIsShift)            sprintf(mInputString, "shift_function%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsAlt)         sprintf(mInputString, "alt_function%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsControl)     sprintf(mInputString, "cntl_function%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsAltShift)    sprintf(mInputString, "alt_shift_function%d", mKeyIn.mChar);
+   else if(mKeyIn.mIsControlShift) sprintf(mInputString, "cntl_shift_function%d", mKeyIn.mChar);
+   else                            sprintf(mInputString, "function%d", mKeyIn.mChar);
    mCursor = 0;
 }
 

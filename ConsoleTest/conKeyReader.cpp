@@ -36,7 +36,11 @@ void KeyRecord::reset()
    mCode = 0;
    mChar = 0;
    mIsPrintable = false;
+   mIsShift = false;
+   mIsAlt = false;
    mIsControl = false;
+   mIsControlShift = false;
+   mIsAltShift = false;
    mIsFunction = false;
    mIsEndOfRead = false;
 }
@@ -251,6 +255,11 @@ void KeyReader::onKey_Control(int aKeyIn, KeyRecord* aRecord)
 
 bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
 {
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Do this first.
+
    Prn::print(Prn::View24, "READ200*******************");
 
    // Locals.
@@ -258,9 +267,16 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
    int  tKeyIn3 = 0;
    int  tKeyIn4 = 0;
    int  tKeyIn5 = 0;
+   int  tKeyIn6 = 0;
+   int  tKeyIn7 = 0;
+   int  tCount = 1;
    bool tFound = false;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Test for not an escape sequence.
+
    if (getReadAvailable() == 0)
    {
       // This is not an escape sequence.
@@ -268,10 +284,16 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
       aRecord->mCode = cKey_Escape;
       return true;
    }
-   Prn::print(Prn::View24, "READ201   27");
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This is an escape sequence. Read the second key.
+
+   Prn::print(Prn::View24, "READ201 %4d", 27);
+
    tKeyIn2 = readOne();
+   tCount = 2;
    Prn::print(Prn::View24, "READ202 %4d", tKeyIn2);
 
    // Test if the second key is not 91 .
@@ -282,106 +304,158 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
       return false;
    }
 
-   // The second key is 91. Read the third key.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test for sequences that do not end in 126.
+
+   // Read the third key.
    tKeyIn3 = readOne();
+   tCount = 3;
    Prn::print(Prn::View24, "READ203 %4d", tKeyIn3);
 
-   // Test the third key for an arrow key.
    tFound = false;
-   switch (tKeyIn3)
-   {
-   case  65: aRecord->mCode = cKey_UpArrow;    tFound = true; break;
-   case  66: aRecord->mCode = cKey_DownArrow;  tFound = true; break;
-   case  67: aRecord->mCode = cKey_RightArrow; tFound = true; break;
-   case  68: aRecord->mCode = cKey_LeftArrow;  tFound = true; break;
-   }
+   if (tKeyIn3 == 65) { aRecord->mCode = cKey_UpArrow; tFound = true; }
+   if (tKeyIn3 == 66) { aRecord->mCode = cKey_DownArrow; tFound = true; }
+   if (tKeyIn3 == 67) { aRecord->mCode = cKey_RightArrow; tFound = true; }
+   if (tKeyIn3 == 68) { aRecord->mCode = cKey_LeftArrow; tFound = true; }
+
    if (tFound) return true;
 
-   // Test the third key for 49.
-   if (tKeyIn3 == 49)
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Read sequences that end in 126.
+
+   // Read keys until a 126 is found.
+   tFound = false;
+   if (!tFound)
    {
-      // Read the fourth key after the 49
       tKeyIn4 = readOne();
+      tCount = 4;
+      if (tKeyIn4 == 126)  tFound = true;
       Prn::print(Prn::View24, "READ204 %4d", tKeyIn4);
-
-      // Test the fourth key after the 49
-      if (tKeyIn4 == 126)
-      {
-         aRecord->mCode = cKey_Home;
-         return true;
-      }
-
-      // Test the fourth key after the 49
-      tFound = false;
-      switch (tKeyIn4)
-      {
-      case  49: aRecord->mCode = cKey_Function;  aRecord->mChar = 1; tFound = true; break;
-      case  50: aRecord->mCode = cKey_Function;  aRecord->mChar = 2; tFound = true; break;
-      case  51: aRecord->mCode = cKey_Function;  aRecord->mChar = 3; tFound = true; break;
-      case  52: aRecord->mCode = cKey_Function;  aRecord->mChar = 4; tFound = true; break;
-      case  53: aRecord->mCode = cKey_Function;  aRecord->mChar = 5; tFound = true; break;
-      case  55: aRecord->mCode = cKey_Function;  aRecord->mChar = 6; tFound = true; break;
-      case  56: aRecord->mCode = cKey_Function;  aRecord->mChar = 7; tFound = true; break;
-      case  57: aRecord->mCode = cKey_Function;  aRecord->mChar = 8; tFound = true; break;
-      }
-      if (!tFound) return false;
-
-      // Read the fifth key.
+   }
+   if (!tFound)
+   {
       tKeyIn5 = readOne();
+      tCount = 5;
+      if (tKeyIn5 == 126)  tFound = true;
       Prn::print(Prn::View24, "READ205 %4d", tKeyIn5);
-      // Test if the fifth key is 126.
-      return tKeyIn5 == 126;
+   }
+   if (!tFound)
+   {
+      tKeyIn6 = readOne();
+      tCount = 6;
+      if (tKeyIn6 == 126)  tFound = true;
+      Prn::print(Prn::View24, "READ206 %4d", tKeyIn6);
+   }
+   if (!tFound)
+   {
+      tKeyIn7 = readOne();
+      tCount = 7;
+      if (tKeyIn7 == 126)  tFound = true;
+      Prn::print(Prn::View24, "READ207 %4d", tKeyIn7);
    }
 
-   // Test the third key for 50.
-   if (tKeyIn3 == 50)
+   if (!tFound)
    {
-      // Read the fourth key after the 50.
-      tKeyIn4 = readOne();
-      Prn::print(Prn::View24, "READ204 %4d", tKeyIn4);
+      printf("ESCAPE ERROR no 126\n");
+      return false;
+   }
 
-      // Test the fourth key after the 50.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test for count is 4.
+
+   if (tCount == 4)
+   {
       tFound = false;
-      switch (tKeyIn4)
+      if (tKeyIn3 == 49) { aRecord->mCode = cKey_Home; tFound = true; }
+      if (tKeyIn3 == 51) { aRecord->mCode = cKey_Delete; tFound = true; }
+      if (tKeyIn3 == 52) { aRecord->mCode = cKey_End; tFound = true; }
+
+      if (!tFound)
       {
-      case  48: aRecord->mCode = cKey_Function;  aRecord->mChar =  9; tFound = true; break;
-      case  49: aRecord->mCode = cKey_Function;  aRecord->mChar = 10; tFound = true; break;
-      case  51: aRecord->mCode = cKey_Function;  aRecord->mChar = 11; tFound = true; break;
-      case  52: aRecord->mCode = cKey_Function;  aRecord->mChar = 12; tFound = true; break;
+         printf("ESCAPE ERROR 401 %d\n",tKeyIn3);
+         return false;
       }
-      if (!tFound) return false;
-
-      // Read the fifth key.
-      tKeyIn5 = readOne();
-      Prn::print(Prn::View24, "READ205 %4d", tKeyIn5);
-      // Test if the fifth key is 126.
-      return tKeyIn5 == 126;
+      return true;
    }
 
-   // Test the third key for 51.
-   if (tKeyIn3 == 51)
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test for count is 5.
+
+   if (tCount == 5)
    {
-      // Read the fourth key after the 51.
-      tKeyIn4 = readOne();
-      Prn::print(Prn::View24, "READ204 %4d", tKeyIn4);
+      tFound = false;
+      if (tKeyIn3 == 49 && tKeyIn4 == 49) { aRecord->mCode = cKey_Function;  aRecord->mChar = 1; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 50) { aRecord->mCode = cKey_Function;  aRecord->mChar = 2; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 51) { aRecord->mCode = cKey_Function;  aRecord->mChar = 3; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 52) { aRecord->mCode = cKey_Function;  aRecord->mChar = 4; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 53) { aRecord->mCode = cKey_Function;  aRecord->mChar = 5; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 55) { aRecord->mCode = cKey_Function;  aRecord->mChar = 6; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 56) { aRecord->mCode = cKey_Function;  aRecord->mChar = 7; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 57) { aRecord->mCode = cKey_Function;  aRecord->mChar = 8; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 48) { aRecord->mCode = cKey_Function;  aRecord->mChar = 9; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 49) { aRecord->mCode = cKey_Function;  aRecord->mChar = 10; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 51) { aRecord->mCode = cKey_Function;  aRecord->mChar = 11; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 52) { aRecord->mCode = cKey_Function;  aRecord->mChar = 12; tFound = true; }
 
-      // Test the fourth key after the 51.
-      aRecord->mCode = cKey_Delete;
-      return tKeyIn4 == 126;
+      if (!tFound)
+      {
+         printf("ESCAPE ERROR 501\n");
+         return false;
+      }
+      return true;
    }
 
-   // Test the third key for 52.
-   if (tKeyIn3 == 52)
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test for count is 7.
+
+   if (tCount == 7)
    {
-      // Read the fourth key after the 51.
-      tKeyIn4 = readOne();
-      Prn::print(Prn::View24, "READ204 %4d", tKeyIn4);
+      tFound = false;
+      if (tKeyIn3 == 49 && tKeyIn4 == 49) { aRecord->mCode = cKey_Function;  aRecord->mChar = 1; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 50) { aRecord->mCode = cKey_Function;  aRecord->mChar = 2; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 51) { aRecord->mCode = cKey_Function;  aRecord->mChar = 3; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 52) { aRecord->mCode = cKey_Function;  aRecord->mChar = 4; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 53) { aRecord->mCode = cKey_Function;  aRecord->mChar = 5; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 55) { aRecord->mCode = cKey_Function;  aRecord->mChar = 6; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 56) { aRecord->mCode = cKey_Function;  aRecord->mChar = 7; tFound = true; }
+      if (tKeyIn3 == 49 && tKeyIn4 == 57) { aRecord->mCode = cKey_Function;  aRecord->mChar = 8; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 48) { aRecord->mCode = cKey_Function;  aRecord->mChar = 9; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 49) { aRecord->mCode = cKey_Function;  aRecord->mChar = 10; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 52) { aRecord->mCode = cKey_Function;  aRecord->mChar = 11; tFound = true; }
+      if (tKeyIn3 == 50 && tKeyIn4 == 53) { aRecord->mCode = cKey_Function;  aRecord->mChar = 12; tFound = true; }
 
-      // Test the fourth key after the 51.
-      aRecord->mCode = cKey_End;
-      return tKeyIn4 == 126;
+      if (!tFound)
+      {
+         printf("ESCAPE ERROR 701\n");
+         return false;
+      }
+
+      tFound = false;
+      if (tKeyIn5 == 59 && tKeyIn6 == 50) { aRecord->mIsShift = true; tFound = true; }
+      if (tKeyIn5 == 59 && tKeyIn6 == 51) { aRecord->mIsAlt = true; tFound = true; }
+      if (tKeyIn5 == 59 && tKeyIn6 == 52) { aRecord->mIsControl = true; tFound = true; }
+      if (tKeyIn5 == 59 && tKeyIn6 == 53) { aRecord->mIsAltShift = true; tFound = true; }
+      if (tKeyIn5 == 59 && tKeyIn6 == 54) { aRecord->mIsControlShift = true; tFound = true; }
+
+      if (!tFound)
+      {
+         printf("ESCAPE ERROR 702\n");
+         return false;
+      }
+      return true;
    }
 
+   printf("ESCAPE ERROR 801 %d\n",tCount);
    return false;
 }
 
