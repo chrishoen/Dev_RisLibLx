@@ -33,6 +33,7 @@ public:
    char mChar;
    bool mIsPrintable;
    bool mIsControl;
+   bool mIsFunction;
    bool mIsEndOfRead;
 
    //***************************************************************************
@@ -53,6 +54,7 @@ public:
 static const int cKey_EndOfRead   = -1;
 static const int cKey_Printable   = 1;
 static const int cKey_Control     = 2;
+static const int cKey_Function    = 3;
 
 static const int cKey_Enter       = 1000;
 static const int cKey_BackSpace   = 1001;

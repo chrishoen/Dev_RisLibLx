@@ -40,6 +40,9 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::View21,      true, 2);
    Prn::setFilter(Prn::View22,      true, 2);
 
+   Prn::setFilter(Prn::View23,      true, 2);
+   Prn::setFilter(Prn::View24,      true, 2);
+
    Prn::print(0,"Console Test*******************************************BEGIN");
 
 }
