@@ -91,6 +91,7 @@ void InputReader::doTestLoop1()
       case cKey_Printable:  onKey_Printable();  tFound = true; break;
       case cKey_Control:    onKey_Control();    tFound = true; break;
       case cKey_Function:   onKey_Function();   tFound = true; break;
+      case cKey_Escape:     onKey_Escape();     tFound = true; break;
       }
       if (!tFound)
       {
@@ -262,6 +263,17 @@ void InputReader::onKey_Control()
 void InputReader::onKey_Function()
 {
    sprintf(mInputString, "function%d", mKeyIn.mChar);
+   mCursor = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write to the input string and set the cursor to the beginning.
+
+void InputReader::onKey_Escape()
+{
+   strcpy(mInputString, "escape");
    mCursor = 0;
 }
 

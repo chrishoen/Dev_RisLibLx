@@ -65,6 +65,7 @@ static const int cKey_UpArrow     = 1005;
 static const int cKey_DownArrow   = 1006;
 static const int cKey_Home        = 1007;
 static const int cKey_End         = 1008;
+static const int cKey_Escape      = 1009;
 
 //******************************************************************************
 //******************************************************************************
@@ -106,6 +107,9 @@ public:
 
    // Read a single character from the console.
    int readOne();
+
+   // Return the number of characters that are available to be read.
+   int getReadAvailable();
 
    // Write a single character to the console.
    void writeOne(char aChar);

@@ -12,6 +12,8 @@ Description:
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
 
 #define  _CONKEYREADER_CPP_
 #include "conKeyReader.h"
@@ -78,6 +80,23 @@ int KeyReader::readOne()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return the number of characters that are available to be read.
+
+int KeyReader::getReadAvailable()
+{
+   int tBytesAvailable = 0;
+   int tRet = ioctl(STDIN_FILENO, FIONREAD, &tBytesAvailable);
+   if (tRet < 0)
+   {
+      printf("KeyReader::getReadAvailable ERROR %d\n", errno);
+      return 0;
+   }
+   return tBytesAvailable;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Write one char.
 
 void KeyReader::writeOne(char aChar)
@@ -122,7 +141,10 @@ void KeyReader::readKey(KeyRecord* aRecord)
    {
       // Read the input key.
       int tKeyIn = readOne();
-      Prn::print(Prn::View24, "READ101 %4d", tKeyIn);
+      if (tKeyIn != 27)
+      {
+         Prn::print(Prn::View24, "READ101 %4d", tKeyIn);
+      }
 
       // Test the input for end of read.
       if (tKeyIn == 'z')
@@ -230,6 +252,7 @@ void KeyReader::onKey_Control(int aKeyIn, KeyRecord* aRecord)
 bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
 {
    Prn::print(Prn::View24, "READ200*******************");
+
    // Locals.
    int  tKeyIn2 = 0;
    int  tKeyIn3 = 0;
@@ -237,7 +260,17 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
    int  tKeyIn5 = 0;
    bool tFound = false;
 
-   // Read the second key.
+   // Test for not an escape sequence.
+   if (getReadAvailable() == 0)
+   {
+      // This is not an escape sequence.
+      Prn::print(Prn::View24, "READ201   escape");
+      aRecord->mCode = cKey_Escape;
+      return true;
+   }
+   Prn::print(Prn::View24, "READ201   27");
+
+   // This is an escape sequence. Read the second key.
    tKeyIn2 = readOne();
    Prn::print(Prn::View24, "READ202 %4d", tKeyIn2);
 
