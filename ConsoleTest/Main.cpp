@@ -14,7 +14,7 @@ int main(int argc,char** argv)
 {
    main_initialize(argc,argv);
 
-   if (true)
+   if (false)
    {
       Con::gInputReader.initialize();
       Con::gInputReader.doTestLoop1();
@@ -23,7 +23,7 @@ int main(int argc,char** argv)
    else
    {
       Con::initializeRaw();
-      Con::doTestLoopRaw();
+      Con::doTestLoopRaw1();
       Con::finalizeRaw();
    }
 

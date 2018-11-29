@@ -62,20 +62,49 @@ void writeStringRaw(char* aString)
 //******************************************************************************
 // Run a test loop that prints raw key codes.
 
-void doTestLoopRaw()
+void doTestLoopRaw1()
+{
+   printf("doTestLoopRaw1****************************\n");
+   while (true)
+   {
+      int tChar = 0;
+      tChar = readOneRaw();
+      if (tChar == ' ')
+      {
+         printf("\n****************************\n");
+      }
+      else
+      {
+         printf(" %3d", tChar);
+      }
+
+      if (tChar == 'z')
+      {
+         printf("\nexit\n");
+         break;
+      }
+   }
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Run a test loop that prints raw key codes.
+
+void doTestLoopRaw2()
 {
    Prn::print(Prn::View11, "doTestLoopRaw****************************");
    while (true)
    {
       int tChar = 0;
       tChar = readOneRaw();
-      if (tChar == '1' && false)
+      if (tChar == ' ')
       {
-         doTest1();
+         Prn::print(Prn::View11, "***********************************");
       }
       else
       {
-         writeOneRaw(tChar);
+         //       writeOneRaw(tChar);
          Prn::print(Prn::View11, "char %d", tChar);
       }
 

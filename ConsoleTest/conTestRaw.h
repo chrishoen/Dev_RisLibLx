@@ -25,7 +25,8 @@ namespace Con
    void finalizeRaw();
 
    // Run a test loop that prints raw key codes.
-   void doTestLoopRaw();
+   void doTestLoopRaw1();
+   void doTestLoopRaw2();
    void doTest1();
 
    // Raw input and output.
