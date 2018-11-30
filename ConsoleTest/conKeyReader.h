@@ -38,7 +38,6 @@ public:
    bool mIsControlShift;
    bool mIsAltShift;
    bool mIsFunction;
-   bool mIsEndOfRead;
 
    //***************************************************************************
    //***************************************************************************
@@ -55,7 +54,7 @@ public:
 //******************************************************************************
 // Constants.
 
-static const int cKey_EndOfRead   = -1;
+static const int cKey_NoCode      = 0;
 static const int cKey_Printable   = 1;
 static const int cKey_Control     = 2;
 static const int cKey_Function    = 3;
@@ -129,7 +128,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   void onKey_EndOfRead  (int aKeyIn, KeyRecord* aRecord);
+   void onKey_ControlC   (int aKeyIn, KeyRecord* aRecord);
    void onKey_Enter      (int aKeyIn, KeyRecord* aRecord);
    void onKey_BackSpace  (int aKeyIn, KeyRecord* aRecord);
    void onKey_Printable  (int aKeyIn, KeyRecord* aRecord);

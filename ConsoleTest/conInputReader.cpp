@@ -23,6 +23,7 @@ namespace Con
 
 InputReader::InputReader()
 {
+   mPF = true;;
    resetVariables();
 }
 
@@ -54,8 +55,8 @@ void InputReader::doTestLoop1()
 {
    bool tFound = false;
 
-   Prn::print(Prn::View11, "doTestLoop1****************************");
-   Prn::print(Prn::View21, "doTestLoop1****************************");
+   if (mPF) Prn::print(Prn::View11, "doTestLoop1****************************");
+   if (mPF) Prn::print(Prn::View21, "doTestLoop1****************************");
 
    resetVariables();
 
@@ -66,14 +67,6 @@ void InputReader::doTestLoop1()
 
       // Update the current input string length.
       mInputLength = (int)strlen(mInputString);
-
-      // Test the input key.
-      if (mKeyIn.mIsEndOfRead)
-      {
-         Prn::print(Prn::View11, "end of read");
-         gKeyReader.writeString("\r\n");
-         break;
-      }
 
       // Test the input key.
       tFound = false;
@@ -93,9 +86,11 @@ void InputReader::doTestLoop1()
       case cKey_Function:   onKey_Function();   tFound = true; break;
       case cKey_Escape:     onKey_Escape();     tFound = true; break;
       }
+
+      // Guard.
       if (!tFound)
       {
-         Prn::print(Prn::View11, "InputReader ERROR not found");
+         printf("InputReader ERROR not found\n");
          break;
       }
 
@@ -105,7 +100,7 @@ void InputReader::doTestLoop1()
       // Echo the input string.
       echoInput();
 
-      Prn::print(Prn::View11, "mInput %3d $ %4d $  %3d %s",
+      if (mPF) Prn::print(Prn::View11, "mInput %3d $ %4d $  %3d %s",
          mCursor, 
          mKeyIn.mCode, 
          mInputLength,
@@ -346,7 +341,6 @@ void InputReader::echoInput()
 
    // Sleep.
    Ris::portableSleep(25);
-
 }
 
 

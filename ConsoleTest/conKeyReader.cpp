@@ -42,7 +42,6 @@ void KeyRecord::reset()
    mIsControlShift = false;
    mIsAltShift = false;
    mIsFunction = false;
-   mIsEndOfRead = false;
 }
 
 //******************************************************************************
@@ -135,27 +134,23 @@ void KeyReader::readKey(KeyRecord* aRecord)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Local variables.
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Read an input key.
 
    while (true)
    {
       // Read the input key.
       int tKeyIn = readOne();
+
+      // Test the input for control c.
+      if (tKeyIn == 'z')
+      {
+         onKey_ControlC(tKeyIn, aRecord);
+         return;
+      }
+
       if (tKeyIn != 27)
       {
          if(mPF) Prn::print(Prn::View24, "READ101 %4d", tKeyIn);
-      }
-
-      // Test the input for end of read.
-      if (tKeyIn == 'z')
-      {
-         onKey_EndOfRead(tKeyIn,aRecord);
-         return;
       }
 
       // Test the input for back space.
@@ -191,12 +186,6 @@ void KeyReader::readKey(KeyRecord* aRecord)
       {
          if (onKey_Escape(tKeyIn, aRecord)) return;
       }
-
-      //***************************************************************************
-      //***************************************************************************
-      //***************************************************************************
-      // The first key was Escape. Read again and test.
-
    }
 }
 
@@ -204,10 +193,11 @@ void KeyReader::readKey(KeyRecord* aRecord)
 //******************************************************************************
 //******************************************************************************
 
-void KeyReader::onKey_EndOfRead(int aKeyIn, KeyRecord* aRecord)
+void KeyReader::onKey_ControlC(int aKeyIn, KeyRecord* aRecord)
 {
-   aRecord->mIsEndOfRead = true;
-   aRecord->mCode = cKey_EndOfRead;
+   printf("\nexiting program from control-c\n");
+   finalize();
+   exit(1);
 }
 
 //******************************************************************************
