@@ -92,6 +92,9 @@ public:
    void onKey_DownArrow();
    void onKey_Home();
    void onKey_End();
+   void onKey_Insert();
+   void onKey_PageUp();
+   void onKey_PageDown();
    void onKey_Printable();
    void onKey_Control();
    void onKey_Function();

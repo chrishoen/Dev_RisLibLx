@@ -60,7 +60,9 @@ void KeyReader::initialize()
 {
    tcgetattr(STDIN_FILENO, &gKeyReaderOriginalTermios);
    struct termios tNewTermios = gKeyReaderOriginalTermios;
-   tNewTermios.c_lflag &= ~(ECHO | ICANON | IXON);
+// tNewTermios.c_lflag &= ~(ECHO | ICANON | IXON | ISIG | IEXTEN);
+   cfmakeraw(&tNewTermios);
+   tNewTermios.c_oflag = gKeyReaderOriginalTermios.c_oflag;
    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tNewTermios);
 }
 
@@ -142,7 +144,7 @@ void KeyReader::readKey(KeyRecord* aRecord)
       int tKeyIn = readOne();
 
       // Test the input for control c.
-      if (tKeyIn == 'z')
+      if (tKeyIn == 3)
       {
          onKey_ControlC(tKeyIn, aRecord);
          return;
@@ -161,8 +163,9 @@ void KeyReader::readKey(KeyRecord* aRecord)
       }
 
       // Test the input for enter.
-      if (tKeyIn == 10)
-      {
+//    if (tKeyIn == 10)
+      if (tKeyIn == 13)
+         {
          onKey_Enter(tKeyIn, aRecord);
          return;
       }
@@ -357,8 +360,11 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
       // Test the bytes.
       tFound = false;
       if (tB[3] == 49) { aRecord->mCode = cKey_Home; tFound = true; }
+      if (tB[3] == 50) { aRecord->mCode = cKey_Insert; tFound = true; }
       if (tB[3] == 51) { aRecord->mCode = cKey_Delete; tFound = true; }
       if (tB[3] == 52) { aRecord->mCode = cKey_End; tFound = true; }
+      if (tB[3] == 53) { aRecord->mCode = cKey_PageUp; tFound = true; }
+      if (tB[3] == 54) { aRecord->mCode = cKey_PageDown; tFound = true; }
 
       // Guard.
       if (!tFound)
@@ -486,8 +492,11 @@ escape sequence bytes.
 27 91 68                     left  arrow
 
 27 91 49 126                 home
+27 91 50 126                 insert
 27 91 51 126                 delete
 27 91 52 126                 end
+27 91 53 126                 page up
+27 91 54 126                 page down
 
 27 91 49 49       126   F1
 27 91 49 49 59 50 126   F1   shift

@@ -81,6 +81,9 @@ void InputReader::doTestLoop1()
       case cKey_DownArrow:  onKey_DownArrow();  tFound = true; break;
       case cKey_Home:       onKey_Home();       tFound = true; break;
       case cKey_End:        onKey_End();        tFound = true; break;
+      case cKey_Insert:     onKey_Insert();     tFound = true; break;
+      case cKey_PageUp:     onKey_PageUp();     tFound = true; break;
+      case cKey_PageDown:   onKey_PageDown();   tFound = true; break;
       case cKey_Printable:  onKey_Printable();  tFound = true; break;
       case cKey_Control:    onKey_Control();    tFound = true; break;
       case cKey_Function:   onKey_Function();   tFound = true; break;
@@ -237,6 +240,29 @@ void InputReader::onKey_End()
 {
    // Set the cursor to the end of the input string.
    mCursor = mInputLength;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write to the input string and set the cursor to the beginning.
+
+void InputReader::onKey_Insert()
+{
+   sprintf(mInputString, "insert");
+   mCursor = 0;
+}
+
+void InputReader::onKey_PageUp()
+{
+   sprintf(mInputString, "pageup");
+   mCursor = 0;
+}
+
+void InputReader::onKey_PageDown()
+{
+   sprintf(mInputString, "pagedown");
+   mCursor = 0;
 }
 
 //******************************************************************************

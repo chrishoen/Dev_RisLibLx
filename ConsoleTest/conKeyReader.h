@@ -59,16 +59,21 @@ static const int cKey_Printable   = 1;
 static const int cKey_Control     = 2;
 static const int cKey_Function    = 3;
 
-static const int cKey_Enter       = 1000;
-static const int cKey_BackSpace   = 1001;
-static const int cKey_Delete      = 1002;
-static const int cKey_LeftArrow   = 1003;
-static const int cKey_RightArrow  = 1004;
-static const int cKey_UpArrow     = 1005;
-static const int cKey_DownArrow   = 1006;
-static const int cKey_Home        = 1007;
-static const int cKey_End         = 1008;
-static const int cKey_Escape      = 1009;
+static const int cKey_Escape      = 1001;
+static const int cKey_Enter       = 1002;
+static const int cKey_BackSpace   = 1003;
+
+static const int cKey_Home        = 1004;
+static const int cKey_Insert      = 1005;
+static const int cKey_Delete      = 1006;
+static const int cKey_End         = 1007;
+static const int cKey_PageUp      = 1008;
+static const int cKey_PageDown    = 1009;
+
+static const int cKey_LeftArrow   = 1010;
+static const int cKey_RightArrow  = 1011;
+static const int cKey_UpArrow     = 1012;
+static const int cKey_DownArrow   = 1013;
 
 //******************************************************************************
 //******************************************************************************
