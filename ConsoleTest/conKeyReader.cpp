@@ -52,6 +52,7 @@ void KeyRecord::reset()
 
 KeyReader::KeyReader()
 {
+   mPF = true;;
 }
 
 struct termios gKeyReaderOriginalTermios;
@@ -147,7 +148,7 @@ void KeyReader::readKey(KeyRecord* aRecord)
       int tKeyIn = readOne();
       if (tKeyIn != 27)
       {
-         Prn::print(Prn::View24, "READ101 %4d", tKeyIn);
+         if(mPF) Prn::print(Prn::View24, "READ101 %4d", tKeyIn);
       }
 
       // Test the input for end of read.
@@ -260,7 +261,7 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
    //***************************************************************************
    // Do this first.
 
-   Prn::print(Prn::View24, "READ200*******************");
+   if (mPF) Prn::print(Prn::View24, "READ200*******************");
 
    // Byte count. 1..7. 1 is a single escape. More than 1 is an escape
    // sequence.
@@ -281,7 +282,7 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
    if (tCount == 1)
    {
       // This is not an escape sequence.
-      Prn::print(Prn::View24, "READ201   escape");
+      if (mPF) Prn::print(Prn::View24, "READ201   escape");
       aRecord->mCode = cKey_Escape;
       return true;
    }
@@ -291,7 +292,7 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
    //***************************************************************************
    // This is an escape sequence. Read all of the available bytes.
 
-   Prn::print(Prn::View24, "READ200 %4d", tCount);
+   if (mPF) Prn::print(Prn::View24, "READ200 %4d", tCount);
 
    // Read the available bytes that are after the 27.
    tB[0] = 0;  // Not used.
@@ -316,13 +317,13 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
       return false;
    }
 
-   if (tCount >= 1) Prn::print(Prn::View24, "READ201 %4d", tB[1]);
-   if (tCount >= 2) Prn::print(Prn::View24, "READ202 %4d", tB[2]);
-   if (tCount >= 3) Prn::print(Prn::View24, "READ203 %4d", tB[3]);
-   if (tCount >= 4) Prn::print(Prn::View24, "READ204 %4d", tB[4]);
-   if (tCount >= 5) Prn::print(Prn::View24, "READ205 %4d", tB[5]);
-   if (tCount >= 6) Prn::print(Prn::View24, "READ206 %4d", tB[6]);
-   if (tCount >= 7) Prn::print(Prn::View24, "READ207 %4d", tB[7]);
+   if (tCount >= 1) if (mPF) Prn::print(Prn::View24, "READ201 %4d", tB[1]);
+   if (tCount >= 2) if (mPF) Prn::print(Prn::View24, "READ202 %4d", tB[2]);
+   if (tCount >= 3) if (mPF) Prn::print(Prn::View24, "READ203 %4d", tB[3]);
+   if (tCount >= 4) if (mPF) Prn::print(Prn::View24, "READ204 %4d", tB[4]);
+   if (tCount >= 5) if (mPF) Prn::print(Prn::View24, "READ205 %4d", tB[5]);
+   if (tCount >= 6) if (mPF) Prn::print(Prn::View24, "READ206 %4d", tB[6]);
+   if (tCount >= 7) if (mPF) Prn::print(Prn::View24, "READ207 %4d", tB[7]);
 
    //***************************************************************************
    //***************************************************************************
