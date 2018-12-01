@@ -75,8 +75,9 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Run test loop.
-   void doTestLoop1();
+   // Read a string from the console input and copy it to the input
+   // argument.
+   void doReadString(char* aInputString);
 
    //***************************************************************************
    //***************************************************************************
@@ -97,6 +98,7 @@ public:
    void onKey_PageDown();
    void onKey_Printable();
    void onKey_Control();
+   void onKey_Alt();
    void onKey_Function();
    void onKey_Escape();
 
@@ -109,6 +111,14 @@ public:
    // This takes mInputString and mCursor and echos to the console output
    // appropriately.
    void echoInput();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Run test loop.
+   void doTestLoop1();
 };
 
 //******************************************************************************
@@ -116,7 +126,7 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _CONSTRINGREADER_CPP_
+#ifdef _CONINPUTREADER_CPP_
           InputReader gInputReader;
 #else
    extern InputReader gInputReader;

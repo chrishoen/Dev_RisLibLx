@@ -10,7 +10,7 @@ Description:
 
 #include <ctype.h>
 
-#define  _CONSTRINGREADER_CPP_
+#define  _CONINPUTREADER_CPP_
 #include "conInputReader.h"
 
 namespace Con
@@ -23,7 +23,6 @@ namespace Con
 
 InputReader::InputReader()
 {
-   mPF = true;;
    resetVariables();
 }
 
@@ -38,6 +37,8 @@ void InputReader::resetVariables()
 
 void InputReader::initialize()
 {
+   resetVariables();
+   gKeyReader.mPF = false;
    gKeyReader.initialize();
 }
 
@@ -49,16 +50,12 @@ void InputReader::finalize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Run test loop.
+// Read a string from the console input and copy it to the input
+// argument.
 
-void InputReader::doTestLoop1()
+void InputReader::doReadString(char* aInputString)
 {
-   bool tFound = false;
-
-   if (mPF) Prn::print(Prn::View11, "doTestLoop1****************************");
-   if (mPF) Prn::print(Prn::View21, "doTestLoop1****************************");
-
-   resetVariables();
+   int tFound = 0;
 
    while (true)
    {
@@ -69,52 +66,58 @@ void InputReader::doTestLoop1()
       mInputLength = (int)strlen(mInputString);
 
       // Test the input key.
-      tFound = false;
+      tFound = 0;
       switch (mKeyIn.mCode)
       {
-      case cKey_Enter:      onKey_Enter();      tFound = true; break;
-      case cKey_BackSpace:  onKey_BackSpace();  tFound = true; break;
-      case cKey_Delete:     onKey_Delete();     tFound = true; break;
-      case cKey_LeftArrow:  onKey_LeftArrow();  tFound = true; break;
-      case cKey_RightArrow: onKey_RightArrow(); tFound = true; break;
-      case cKey_UpArrow:    onKey_UpArrow();    tFound = true; break;
-      case cKey_DownArrow:  onKey_DownArrow();  tFound = true; break;
-      case cKey_Home:       onKey_Home();       tFound = true; break;
-      case cKey_End:        onKey_End();        tFound = true; break;
-      case cKey_Insert:     onKey_Insert();     tFound = true; break;
-      case cKey_PageUp:     onKey_PageUp();     tFound = true; break;
-      case cKey_PageDown:   onKey_PageDown();   tFound = true; break;
-      case cKey_Printable:  onKey_Printable();  tFound = true; break;
-      case cKey_Control:    onKey_Control();    tFound = true; break;
-      case cKey_Function:   onKey_Function();   tFound = true; break;
-      case cKey_Escape:     onKey_Escape();     tFound = true; break;
+      case cKey_BackSpace:  onKey_BackSpace();  tFound = 1; break;
+      case cKey_Delete:     onKey_Delete();     tFound = 1; break;
+      case cKey_LeftArrow:  onKey_LeftArrow();  tFound = 1; break;
+      case cKey_RightArrow: onKey_RightArrow(); tFound = 1; break;
+      case cKey_UpArrow:    onKey_UpArrow();    tFound = 1; break;
+      case cKey_DownArrow:  onKey_DownArrow();  tFound = 1; break;
+      case cKey_Home:       onKey_Home();       tFound = 1; break;
+      case cKey_End:        onKey_End();        tFound = 1; break;
+      case cKey_Insert:     onKey_Insert();     tFound = 1; break;
+      case cKey_PageUp:     onKey_PageUp();     tFound = 1; break;
+      case cKey_PageDown:   onKey_PageDown();   tFound = 1; break;
+      case cKey_Printable:  onKey_Printable();  tFound = 1; break;
+
+      case cKey_Enter:      onKey_Enter();      tFound = 2; break;
+      case cKey_Control:    onKey_Control();    tFound = 2; break;
+      case cKey_Alt:        onKey_Alt();        tFound = 2; break;
+      case cKey_Function:   onKey_Function();   tFound = 2; break;
+      case cKey_Escape:     onKey_Escape();     tFound = 2; break;
       }
 
-      // Guard.
-      if (!tFound)
-      {
-         printf("InputReader ERROR not found\n");
-         break;
-      }
-
-      // Update the updated input string length.
+      // Update the new input string length.
       mInputLength = (int)strlen(mInputString);
 
-      // Echo the input string.
-      echoInput();
+      // Guard.
+      if (tFound==0)
+      {
+         printf("InputReader ERROR not found\n");
+         return;
+      }
 
-      if (mPF) Prn::print(Prn::View11, "mInput %3d $ %4d $  %3d %s",
-         mCursor, 
-         mKeyIn.mCode, 
-         mInputLength,
-         mInputString);
+      // Echo the input string.
+      if (tFound == 1)
+      {
+         echoInput();
+      }
+
+      // Copy the input string to the argument input string
+      // and exit the loop.
+      if (tFound == 2)
+      {
+         strcpy(aInputString,mInputString);
+         return;
+      }
    }
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Set the cursor fro the beginning.
 
 void InputReader::onKey_Enter()
 {
@@ -125,7 +128,7 @@ void InputReader::onKey_Enter()
    gKeyReader.writeString("\r\n");
 
    // Empty the input string.
-   mInputString[0] = 0;
+// mInputString[0] = 0;
 
    // Set the cursor to the beginning of the empty input string.
    mCursor = 0;
@@ -272,7 +275,18 @@ void InputReader::onKey_PageDown()
 
 void InputReader::onKey_Control()
 {
-   sprintf(mInputString, "control%c", mKeyIn.mChar);
+   sprintf(mInputString, "cntl_%c", mKeyIn.mChar);
+   mCursor = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write to the input string and set the cursor to the beginning.
+
+void InputReader::onKey_Alt()
+{
+   sprintf(mInputString, "alt_%c", mKeyIn.mChar);
    mCursor = 0;
 }
 
@@ -369,6 +383,26 @@ void InputReader::echoInput()
    Ris::portableSleep(25);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Run test loop.
+
+void InputReader::doTestLoop1()
+{
+   Prn::print(Prn::View01, "InputReader::doTestLoop1****************************");
+   Prn::print(Prn::View11, "InputReader::doTestLoop1****************************");
+   Prn::print(Prn::View21, "InputReader::doTestLoop1****************************");
+
+   int tCount = 0;
+   char  tString[200];
+
+   while (true)
+   {
+      doReadString(tString);
+      Prn::print(Prn::View11, "%4d $ %4d %s", ++tCount, strlen(tString), tString);
+   }
+}
 
 //******************************************************************************
 //******************************************************************************

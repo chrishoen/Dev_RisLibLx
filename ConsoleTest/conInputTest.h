@@ -115,7 +115,7 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _CONSTRINGREADER_CPP_
+#ifdef _CONINPUTTEST_CPP_
           InputTest gInputTest;
 #else
    extern InputTest gInputTest;

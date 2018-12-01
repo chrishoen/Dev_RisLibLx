@@ -10,7 +10,7 @@ Description:
 
 #include <ctype.h>
 
-#define  _CONSTRINGREADER_CPP_
+#define  _CONINPUTTEST_CPP_
 #include "conInputTest.h"
 
 namespace Con
