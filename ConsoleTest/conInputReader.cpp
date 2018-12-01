@@ -31,7 +31,6 @@ void InputReader::resetVariables()
    mCursor = 0;
    mInputLength = 0;
    mInputString[0] = 0;
-   mOutputString[0] = 0;
    mInputHistory.resetVariables();
 }
 
@@ -56,6 +55,10 @@ void InputReader::finalize()
 void InputReader::doReadString(char* aInputString)
 {
    int tFound = 0;
+
+   mCursor = 0;
+   mInputLength = 0;
+   mInputString[0] = 0;
 
    while (true)
    {
@@ -351,6 +354,8 @@ void InputReader::onKey_Printable()
 
 void InputReader::echoInput()
 {
+   char tOutputString[200];
+
    // Hide the cursor.
    gKeyReader.writeString("\e[?25l");
 
@@ -364,17 +369,17 @@ void InputReader::echoInput()
    if (mCursor == 0)
    {
       // Move the cursor to the beginning of the line.
-      sprintf(mOutputString, "\r");
+      sprintf(tOutputString, "\r");
    }
    else
    {
       // Move the cursor to the beginning of the line and then to the
       // right by the cursor number.
-      sprintf(mOutputString, "\r\e[%dC", mCursor);
+      sprintf(tOutputString, "\r\e[%dC", mCursor);
    }
 
    // Write the cursor output string.
-   gKeyReader.writeString(mOutputString);
+   gKeyReader.writeString(tOutputString);
 
    // Show the cursor.
    gKeyReader.writeString("\e[?25h");

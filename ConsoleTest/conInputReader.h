@@ -48,14 +48,8 @@ public:
    char mInputString[cMaxStringSize];
    int mInputLength;
 
-   // Output string.
-   char mOutputString[cMaxStringSize];
-
    // Input string history.
    InputHistory mInputHistory;
-
-   // Print flag.
-   bool mPF;
 
    //***************************************************************************
    //***************************************************************************
