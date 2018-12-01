@@ -1,13 +1,15 @@
 #pragma once
 
 /*==============================================================================
-KeyReader Services.
+InputTest Services.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
+#include "conKeyReader.h"
+#include "conInputHistory.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -19,78 +21,38 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a record that describes single keyboard inputs.
-
-class KeyRecord
-{
-public:
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   int  mCode;
-   char mChar;
-   bool mIsPrintable;
-   bool mIsShift;
-   bool mIsControl;
-   bool mIsAlt;
-   bool mIsControlShift;
-   bool mIsAltShift;
-   bool mIsFunction;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Constructor.
-   KeyRecord();
-   void reset();
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Constants.
-
-static const int cKey_NoCode      = 0;
-static const int cKey_Printable   = 1;
-static const int cKey_Control     = 2;
-static const int cKey_Alt         = 3;
-static const int cKey_Function    = 4;
-
-static const int cKey_Escape      = 1001;
-static const int cKey_Enter       = 1002;
-static const int cKey_BackSpace   = 1003;
-
-static const int cKey_Home        = 1004;
-static const int cKey_Insert      = 1005;
-static const int cKey_Delete      = 1006;
-static const int cKey_End         = 1007;
-static const int cKey_PageUp      = 1008;
-static const int cKey_PageDown    = 1009;
-
-static const int cKey_LeftArrow   = 1010;
-static const int cKey_RightArrow  = 1011;
-static const int cKey_UpArrow     = 1012;
-static const int cKey_DownArrow   = 1013;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // This class provides global program console i/o facility.
 
-class KeyReader
+class InputTest
 {
 public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constants.
+
+   static const int cMaxStringSize = 400;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
 
-   // Print flag.
-   bool mPF;
+   // Keyboard input.
+   KeyRecord mKeyIn;
+
+   // Cursor postion.
+   int mCursor;
+
+   // Input string.
+   char mInputString[cMaxStringSize];
+   int mInputLength;
+
+   // Output string.
+   char mOutputString[cMaxStringSize];
+
+   // Input string history.
+   InputHistory mInputHistory;
 
    //***************************************************************************
    //***************************************************************************
@@ -98,7 +60,8 @@ public:
    // Methods.
 
    // Constructor.
-   KeyReader();
+   InputTest();
+   void resetVariables();
 
    // Initialize.
    void initialize();
@@ -109,37 +72,42 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Read a single console keyboard input. Return it in the input record.
-   void readKey(KeyRecord* aRecord);
+   // Run test loop.
+   void doTestLoop1();
+   void doTestLoop2();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Read a single character from the console.
-   int readOne();
-
-   // Return the number of characters that are available to be read.
-   int getReadAvailable();
-
-   // Write a single character to the console.
-   void writeOne(char aChar);
-
-   // Write a string to the console.
-   void writeString(char* aString);
+   void onKey_Enter();
+   void onKey_BackSpace();
+   void onKey_Delete();
+   void onKey_LeftArrow();
+   void onKey_RightArrow();
+   void onKey_UpArrow();
+   void onKey_DownArrow();
+   void onKey_Home();
+   void onKey_End();
+   void onKey_Insert();
+   void onKey_PageUp();
+   void onKey_PageDown();
+   void onKey_Printable();
+   void onKey_Control();
+   void onKey_Alt();
+   void onKey_Function();
+   void onKey_Escape();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   void onKey_ControlC   (int aKeyIn, KeyRecord* aRecord);
-   void onKey_Enter      (int aKeyIn, KeyRecord* aRecord);
-   void onKey_BackSpace  (int aKeyIn, KeyRecord* aRecord);
-   void onKey_Printable  (int aKeyIn, KeyRecord* aRecord);
-   void onKey_Control    (int aKeyIn, KeyRecord* aRecord);
-   bool onKey_Escape     (int aKeyIn, KeyRecord* aRecord);
+   // Write the input string to the console output and position the cursor.
+   // This takes mInputString and mCursor and echos to the console output
+   // appropriately.
+   void echoInput();
 };
 
 //******************************************************************************
@@ -147,10 +115,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _CONKEYREADER_CPP_
-          KeyReader gKeyReader;
+#ifdef _CONSTRINGREADER_CPP_
+          InputTest gInputTest;
 #else
-   extern KeyReader gKeyReader;
+   extern InputTest gInputTest;
 #endif
 
 //******************************************************************************

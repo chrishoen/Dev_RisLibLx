@@ -272,6 +272,7 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
    // Test for not an escape sequence, for a single escape.
 
    tCount = getReadAvailable() + 1;
+
    if (tCount == 1)
    {
       // This is not an escape sequence.
@@ -297,16 +298,9 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
 
    // Guard. This is done after reading the available bytes,
    // so that the bytes are read from the buffer.
-   if (tCount < 3 || tCount > 7)
+   if (tCount > 7)
    {
       printf("ESCAPE ERROR bad count %d\n", tCount);
-      return false;
-   }
-
-   // Guard.
-   if (tB[2] != 91)
-   {
-      printf("ESCAPE ERROR not 91 %d\n", tB[2]);
       return false;
    }
 
@@ -321,7 +315,29 @@ bool KeyReader::onKey_Escape(int aKeyIn, KeyRecord* aRecord)
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Test for sequences of length 2.
+
+   if (tCount == 2)
+   {
+      // Store the bytes.
+      aRecord->mCode = cKey_Alt;
+      aRecord->mChar = tB[2];
+
+      // Done.
+      return true;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Test for sequences of length 3.
+
+   // Guard.
+   if (tB[2] != 91)
+   {
+      printf("ESCAPE ERROR not 91 %d\n", tB[2]);
+      return false;
+   }
 
    if (tCount == 3)
    {
