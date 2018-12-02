@@ -66,11 +66,9 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 
       if (strlen(tCommandLine)==0)
       {
-         printf("\n");
       }
       else if (strcmp(tCommandLine, "enter") == 0)
       {
-         printf("\n");
       }
       else if (strcmp(tCommandLine, "escape") == 0)
       {
