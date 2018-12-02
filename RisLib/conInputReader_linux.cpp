@@ -10,6 +10,10 @@ Description:
 
 #include <ctype.h>
 
+#include "my_functions.h"
+#include "prnPrint.h"
+#include "risPortableCalls.h"
+
 #define  _CONINPUTREADER_CPP_
 #include "conInputReader_linux.h"
 

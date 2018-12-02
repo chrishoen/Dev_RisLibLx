@@ -14,6 +14,11 @@ Description:
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <errno.h>
+
+#include "my_functions.h"
+#include "prnPrint.h"
+#include "risPortableCalls.h"
 
 #define  _CONKEYREADER_CPP_
 #include "conKeyReader_linux.h"

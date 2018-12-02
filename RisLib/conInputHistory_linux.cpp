@@ -8,6 +8,9 @@ Description:
 
 #include "stdafx.h"
 
+#include "my_functions.h"
+#include "prnPrint.h"
+
 #include <ctype.h>
 
 #include "conInputHistory_linux.h"
