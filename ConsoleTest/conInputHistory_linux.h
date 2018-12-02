@@ -1,15 +1,8 @@
 #pragma once
 
 /*==============================================================================
-InputReader Services.
+Console input history.
 ==============================================================================*/
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-#include "conKeyReader.h"
-#include "conInputHistory.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -21,9 +14,14 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constants.
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This class provides global program console i/o facility.
 
-class InputReader
+class InputHistory
 {
 public:
    //***************************************************************************
@@ -31,25 +29,26 @@ public:
    //***************************************************************************
    // Constants.
 
-   static const int cMaxStringSize = 400;
+   static const int cStringSize = 400;
+   static const int cArraySize = 4;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // Keyboard input.
-   KeyRecord mKeyIn;
+   // Array of strings.
+   char mStringArray[cArraySize][cStringSize];
 
-   // Cursor postion.
-   int mCursor;
+   // Array of pointers into the array of strings.
+   char* mPtr[cArraySize];
 
-   // Input string.
-   char mInputString[cMaxStringSize];
-   int mInputLength;
-
-   // Input string history.
-   InputHistory mInputHistory;
+   // Array indices.
+   int mOldest;            // The oldest string in the array.
+   int mNewest;            // The newest string in the array.
+   int mNextNewest;        // The next newest string will go here.  
+   int mSize;              // Number of strings in the array.
+   int mUpCount;           // Number of up arrows - down arrows.
 
    //***************************************************************************
    //***************************************************************************
@@ -57,77 +56,34 @@ public:
    // Methods.
 
    // Constructor.
-   InputReader();
+   InputHistory();
    void resetVariables();
 
-   // Initialize.
-   void initialize();
-   void finalize();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Put a string to the array for when enter is entered at 
+   // the console input.
+   void putStringForEnter(char* aInputString);
+
+   // Get a string from the array for when an up arrow is entered at
+   // the console input.
+   void getStringForUpArrow(char* aInputString);
+
+   // Get a string from the array for when a down arrow is entered at
+   // the console input.
+   void getStringForDownArrow(char* aInputString);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Read a string from the console input and copy it to the input
-   // argument.
-   void doReadString(char* aInputString);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   void onKey_Enter();
-   void onKey_BackSpace();
-   void onKey_Delete();
-   void onKey_LeftArrow();
-   void onKey_RightArrow();
-   void onKey_UpArrow();
-   void onKey_DownArrow();
-   void onKey_Home();
-   void onKey_End();
-   void onKey_Insert();
-   void onKey_PageUp();
-   void onKey_PageDown();
-   void onKey_Printable();
-   void onKey_Control();
-   void onKey_Alt();
-   void onKey_Function();
-   void onKey_Escape();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Write the input string to the console output and position the cursor.
-   // This takes mInputString and mCursor and echos to the console output
-   // appropriately.
-   void echoInput();
-
-   // Write an empty string to the console output.
-   void echoEmpty();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Run test loop.
-   void doTestLoop1();
+   // Show.
+   void show();
 };
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Global singular instance.
-
-#ifdef _CONINPUTREADER_CPP_
-          InputReader gInputReader;
-#else
-   extern InputReader gInputReader;
-#endif
 
 //******************************************************************************
 //******************************************************************************

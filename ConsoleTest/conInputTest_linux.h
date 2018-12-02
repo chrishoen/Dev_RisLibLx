@@ -1,12 +1,15 @@
 #pragma once
 
 /*==============================================================================
-Console input history.
+InputTest Services.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+#include "conKeyReader_linux.h"
+#include "conInputHistory_linux.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -18,14 +21,9 @@ namespace Con
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constants.
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // This class provides global program console i/o facility.
 
-class InputHistory
+class InputTest
 {
 public:
    //***************************************************************************
@@ -33,26 +31,28 @@ public:
    //***************************************************************************
    // Constants.
 
-   static const int cStringSize = 400;
-   static const int cArraySize = 4;
+   static const int cMaxStringSize = 400;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // Array of strings.
-   char mStringArray[cArraySize][cStringSize];
+   // Keyboard input.
+   KeyRecord mKeyIn;
 
-   // Array of pointers into the array of strings.
-   char* mPtr[cArraySize];
+   // Cursor postion.
+   int mCursor;
 
-   // Array indices.
-   int mOldest;            // The oldest string in the array.
-   int mNewest;            // The newest string in the array.
-   int mNextNewest;        // The next newest string will go here.  
-   int mSize;              // Number of strings in the array.
-   int mUpCount;           // Number of up arrows - down arrows.
+   // Input string.
+   char mInputString[cMaxStringSize];
+   int mInputLength;
+
+   // Output string.
+   char mOutputString[cMaxStringSize];
+
+   // Input string history.
+   InputHistory mInputHistory;
 
    //***************************************************************************
    //***************************************************************************
@@ -60,34 +60,66 @@ public:
    // Methods.
 
    // Constructor.
-   InputHistory();
+   InputTest();
    void resetVariables();
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Put a string to the array for when enter is entered at 
-   // the console input.
-   void putStringForEnter(char* aInputString);
-
-   // Get a string from the array for when an up arrow is entered at
-   // the console input.
-   void getStringForUpArrow(char* aInputString);
-
-   // Get a string from the array for when a down arrow is entered at
-   // the console input.
-   void getStringForDownArrow(char* aInputString);
+   // Initialize.
+   void initialize();
+   void finalize();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Show.
-   void show();
+   // Run test loop.
+   void doTestLoop1();
+   void doTestLoop2();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   void onKey_Enter();
+   void onKey_BackSpace();
+   void onKey_Delete();
+   void onKey_LeftArrow();
+   void onKey_RightArrow();
+   void onKey_UpArrow();
+   void onKey_DownArrow();
+   void onKey_Home();
+   void onKey_End();
+   void onKey_Insert();
+   void onKey_PageUp();
+   void onKey_PageDown();
+   void onKey_Printable();
+   void onKey_Control();
+   void onKey_Alt();
+   void onKey_Function();
+   void onKey_Escape();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Write the input string to the console output and position the cursor.
+   // This takes mInputString and mCursor and echos to the console output
+   // appropriately.
+   void echoInput();
 };
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Global singular instance.
+
+#ifdef _CONINPUTTEST_CPP_
+          InputTest gInputTest;
+#else
+   extern InputTest gInputTest;
+#endif
 
 //******************************************************************************
 //******************************************************************************

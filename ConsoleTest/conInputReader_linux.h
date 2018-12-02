@@ -1,15 +1,15 @@
 #pragma once
 
 /*==============================================================================
-InputTest Services.
+InputReader Services.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "conKeyReader.h"
-#include "conInputHistory.h"
+#include "conKeyReader_linux.h"
+#include "conInputHistory_linux.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -23,7 +23,7 @@ namespace Con
 //******************************************************************************
 // This class provides global program console i/o facility.
 
-class InputTest
+class InputReader
 {
 public:
    //***************************************************************************
@@ -48,9 +48,6 @@ public:
    char mInputString[cMaxStringSize];
    int mInputLength;
 
-   // Output string.
-   char mOutputString[cMaxStringSize];
-
    // Input string history.
    InputHistory mInputHistory;
 
@@ -60,7 +57,7 @@ public:
    // Methods.
 
    // Constructor.
-   InputTest();
+   InputReader();
    void resetVariables();
 
    // Initialize.
@@ -72,9 +69,12 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Run test loop.
-   void doTestLoop1();
-   void doTestLoop2();
+   // Read a string from the console input and copy it to the input
+   // argument.
+   void doReadString(char* aInputString);
+
+   // Wait for a press enter at the console input.
+   void doWaitForPressEnter();
 
    //***************************************************************************
    //***************************************************************************
@@ -108,6 +108,17 @@ public:
    // This takes mInputString and mCursor and echos to the console output
    // appropriately.
    void echoInput();
+
+   // Write an empty string to the console output.
+   void echoEmpty();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Run test loop.
+   void doTestLoop1();
 };
 
 //******************************************************************************
@@ -115,10 +126,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _CONINPUTTEST_CPP_
-          InputTest gInputTest;
+#ifdef _CONINPUTREADER_CPP_
+          InputReader gInputReader;
 #else
-   extern InputTest gInputTest;
+   extern InputReader gInputReader;
 #endif
 
 //******************************************************************************

@@ -19,33 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RisLib\RisLib.vcxproj">
-      <Project>{3fe48eb7-b04f-47f6-b02d-7427908f02bf}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="conInputHistory_linux.cpp" />
-    <ClCompile Include="conInputReader_linux.cpp" />
-    <ClCompile Include="conInputTest_linux.cpp" />
-    <ClCompile Include="conInput_linux.cpp" />
-    <ClCompile Include="conKeyReader_linux.cpp" />
+    <ClCompile Include="CmdLineExec.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainInit.cpp" />
+    <ClCompile Include="someTimerThread.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="conInput.h" />
-    <ClInclude Include="conInputHistory_linux.h" />
-    <ClInclude Include="conInputReader_linux.h" />
-    <ClInclude Include="conInputTest_linux.h" />
-    <ClInclude Include="conKeyReader_linux.h" />
+    <ClInclude Include="CmdLineExec.h" />
     <ClInclude Include="MainInit.h" />
+    <ClInclude Include="someTimerThread.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RisLib\RisLib.vcxproj">
+      <Project>{d38a069e-c0fb-4fd4-a072-be0fe77b5314}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5646d9e0-11dd-4959-9e40-b5eab24ad9ac}</ProjectGuid>
+    <ProjectGuid>{fb360df4-d7e6-4360-a08a-583013d48d3f}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>TimerThreadTest</RootNamespace>
+    <RootNamespace>Test</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -83,7 +77,6 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <LibraryDependencies>pthread</LibraryDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

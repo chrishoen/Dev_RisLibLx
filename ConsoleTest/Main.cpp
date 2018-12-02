@@ -2,8 +2,8 @@
 
 #include "MainInit.h"
 
-#include "conInputReader.h"
-#include "conInputTest.h"
+#include "conInputReader_linux.h"
+#include "conInputTest_linux.h"
 
 //******************************************************************************
 //******************************************************************************

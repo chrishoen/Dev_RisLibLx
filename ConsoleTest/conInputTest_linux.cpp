@@ -11,7 +11,7 @@ Description:
 #include <ctype.h>
 
 #define  _CONINPUTTEST_CPP_
-#include "conInputTest.h"
+#include "conInputTest_linux.h"
 
 namespace Con
 {

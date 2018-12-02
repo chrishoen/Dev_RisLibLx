@@ -16,7 +16,7 @@ Description:
 #include <sys/ioctl.h>
 
 #define  _CONKEYREADER_CPP_
-#include "conKeyReader.h"
+#include "conKeyReader_linux.h"
 
 namespace Con
 {

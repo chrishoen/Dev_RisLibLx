@@ -10,7 +10,7 @@ Description:
 
 #include <ctype.h>
 
-#include "conInputHistory.h"
+#include "conInputHistory_linux.h"
 
 namespace Con
 {

@@ -11,7 +11,7 @@ Description:
 #include <ctype.h>
 
 #define  _CONINPUTREADER_CPP_
-#include "conInputReader.h"
+#include "conInputReader_linux.h"
 
 namespace Con
 {
@@ -401,6 +401,17 @@ void InputReader::echoEmpty()
 {
    // Goto the beginning of the line and delete the entire line.
    gKeyReader.writeString("\r\e[2K");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Wait for a press enter at the console input.
+
+void InputReader::doWaitForPressEnter()
+{
+   // Read the next keyboard input.
+   gKeyReader.readKey(&mKeyIn);
 }
 
 //******************************************************************************
