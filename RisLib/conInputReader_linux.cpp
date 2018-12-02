@@ -310,12 +310,12 @@ void InputReader::onKey_Alt()
 
 void InputReader::onKey_Function()
 {
-   if (mKeyIn.mIsShift)            sprintf(mInputString, "shift_fn%d", mKeyIn.mChar);
-   else if (mKeyIn.mIsAlt)         sprintf(mInputString, "alt_fn%d", mKeyIn.mChar);
-   else if (mKeyIn.mIsControl)     sprintf(mInputString, "cntl_fn%d", mKeyIn.mChar);
-   else if (mKeyIn.mIsAltShift)    sprintf(mInputString, "alt_shift_fn%d", mKeyIn.mChar);
-   else if(mKeyIn.mIsControlShift) sprintf(mInputString, "cntl_shift_fn%d", mKeyIn.mChar);
-   else                            sprintf(mInputString, "fn%d", mKeyIn.mChar);
+   if (mKeyIn.mIsShift)            sprintf(mInputString, "shift_fn_%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsAlt)         sprintf(mInputString, "alt_fn_%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsControl)     sprintf(mInputString, "cntl_fn_%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsAltShift)    sprintf(mInputString, "alt_shift_fn_%d", mKeyIn.mChar);
+   else if(mKeyIn.mIsControlShift) sprintf(mInputString, "cntl_shift_fn_%d", mKeyIn.mChar);
+   else                            sprintf(mInputString, "fn_%d", mKeyIn.mChar);
    mCursor = 0;
 }
 

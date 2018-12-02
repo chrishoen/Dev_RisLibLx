@@ -30,7 +30,7 @@ public:
    // Constants.
 
    static const int cStringSize = 400;
-   static const int cArraySize = 4;
+   static const int cArraySize = 40;
 
    //***************************************************************************
    //***************************************************************************
