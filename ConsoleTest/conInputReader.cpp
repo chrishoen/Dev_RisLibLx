@@ -86,10 +86,10 @@ void InputReader::doReadString(char* aInputString)
       case cKey_Printable:  onKey_Printable();  tFound = 1; break;
 
       case cKey_Enter:      onKey_Enter();      tFound = 2; break;
-      case cKey_Control:    onKey_Control();    tFound = 2; break;
-      case cKey_Alt:        onKey_Alt();        tFound = 2; break;
-      case cKey_Function:   onKey_Function();   tFound = 2; break;
-      case cKey_Escape:     onKey_Escape();     tFound = 2; break;
+      case cKey_Control:    onKey_Control();    tFound = 3; break;
+      case cKey_Alt:        onKey_Alt();        tFound = 3; break;
+      case cKey_Function:   onKey_Function();   tFound = 3; break;
+      case cKey_Escape:     onKey_Escape();     tFound = 3; break;
       }
 
       // Update the new input string length.
@@ -115,6 +115,15 @@ void InputReader::doReadString(char* aInputString)
          strcpy(aInputString,mInputString);
          return;
       }
+
+      // Copy the input string to the argument input string
+      // and exit the loop.
+      if (tFound == 3)
+      {
+         echoEmpty();
+         strcpy(aInputString, mInputString);
+         return;
+      }
    }
 };
 
@@ -129,9 +138,6 @@ void InputReader::onKey_Enter()
 
    // Start a newline.
    gKeyReader.writeString("\r\n");
-
-   // Empty the input string.
-// mInputString[0] = 0;
 
    // Set the cursor to the beginning of the empty input string.
    mCursor = 0;
@@ -300,14 +306,12 @@ void InputReader::onKey_Alt()
 
 void InputReader::onKey_Function()
 {
-   sprintf(mInputString, "function%d", mKeyIn.mChar);
-
-   if (mKeyIn.mIsShift)            sprintf(mInputString, "shift_function%d", mKeyIn.mChar);
-   else if (mKeyIn.mIsAlt)         sprintf(mInputString, "alt_function%d", mKeyIn.mChar);
-   else if (mKeyIn.mIsControl)     sprintf(mInputString, "cntl_function%d", mKeyIn.mChar);
-   else if (mKeyIn.mIsAltShift)    sprintf(mInputString, "alt_shift_function%d", mKeyIn.mChar);
-   else if(mKeyIn.mIsControlShift) sprintf(mInputString, "cntl_shift_function%d", mKeyIn.mChar);
-   else                            sprintf(mInputString, "function%d", mKeyIn.mChar);
+   if (mKeyIn.mIsShift)            sprintf(mInputString, "shift_fn%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsAlt)         sprintf(mInputString, "alt_fn%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsControl)     sprintf(mInputString, "cntl_fn%d", mKeyIn.mChar);
+   else if (mKeyIn.mIsAltShift)    sprintf(mInputString, "alt_shift_fn%d", mKeyIn.mChar);
+   else if(mKeyIn.mIsControlShift) sprintf(mInputString, "cntl_shift_fn%d", mKeyIn.mChar);
+   else                            sprintf(mInputString, "fn%d", mKeyIn.mChar);
    mCursor = 0;
 }
 
@@ -386,6 +390,17 @@ void InputReader::echoInput()
 
    // Sleep.
    Ris::portableSleep(25);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Write an empty string to the console output.
+
+void InputReader::echoEmpty()
+{
+   // Goto the beginning of the line and delete the entire line.
+   gKeyReader.writeString("\r\e[2K");
 }
 
 //******************************************************************************
