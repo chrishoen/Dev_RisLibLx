@@ -13,6 +13,7 @@
 #include "my_functions.h"
 #include "tsThreadServices.h"
 #include "prnPrint.h"
+#include "conInput.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
 #include "risCmdLineConsole.h"
@@ -24,82 +25,107 @@ namespace Ris
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
 // This enters a loop that reads console input and applies a command line 
 // executive to each line that is entered by a user. The loop terminates when
 // the user exits.
 
 void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 {            
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize console input.
+
    TS::print(1, "");
    TS::print(1, "Command Line Executive BEGIN");
 
-   // Locals
-   char tCommandLine[200];
+   // Initialize console input.
+   Con::initializeInput();
+
+   // Reset the executive.
+   aExec->reset();
+
+   // Locals.
+   char tCommandLine[Con::cMaxStringSize];
    CmdLineCmd  tCmd;
 
-   // Reset the executive
-   aExec->reset();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Loop for console input.
 
    while(true)
    {
-      // Read console input
-	   if (fgets(tCommandLine, 200, stdin) == 0)
-	   {
-         TS::print(1, "Command Line Executive END");
-         return;
-	   }
+      // Read console input.
+      Con::doReadInputString(tCommandLine);
 
-      // Remove cr/lf at end of line
-      my_trimCRLF(tCommandLine);
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Test for specific commands.
 
-      // Test for toggle suppress print
-      if (strcmp(tCommandLine,"p")==0)
+      if (strlen(tCommandLine)==0)
       {
-         Prn::toggleSuppressPrint();
+         printf("\n");
       }
-      // Process command line 
+      else if (strcmp(tCommandLine, "enter") == 0)
+      {
+         printf("\n");
+      }
+      else if (strcmp(tCommandLine, "escape") == 0)
+      {
+         break;
+      }
+      else if (strcmp(tCommandLine, "alt_p") == 0)
+      {
+         Prn::unsuppressPrint();
+      }
+      else if (strcmp(tCommandLine, "alt_o") == 0)
+      {
+         Prn::suppressPrint();
+      }
+
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Process command line.
+
       else
       {
-         // Special case, nickname
-         // Exit
-         if (strcmp(tCommandLine,"e")==0)
-         {
-            TS::print(1, "Command Line Executive END");
-            return;
-         }
-
-         // Parse buffer to get command line command
+         // Parse command line input string to get command line command.
          tCmd.parseCmdLine(tCommandLine);
 
-         // Test for valid command line command
+         // Test for valid command line command.
          if (tCmd.mValidFlag)
          {
-            // Test for exit
+            // Test for exit.
             if(tCmd.isCmd("EXIT"))
             {
-               TS::print(1, "Command Line Executive END");
-               return;;
+               break;
             }
             // Not exit
             else
             {
-               // execute the command line command with the given executive
+               // Execute the command line command with the given executive.
                aExec->execute(&tCmd);
 
-               // Test for bad command
-               // This is true if the executive didn't accept the command
+               // Test for bad command. This is true if the executive didn't
+               // accept the command.
                if(tCmd.isBadCmd()) printf("INVALID COMMAND\n");
             }
          }
-         // Invalid command line command
+         // Invalid command line command.
          else
          {
             printf("INVALID COMMAND\n");
          }
       }
    }
+
+   // Done.
+   Con::finalizeInput();
    TS::print(1, "Command Line Executive END");
+   return;
 }
 
 //******************************************************************************
