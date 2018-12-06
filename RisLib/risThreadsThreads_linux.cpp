@@ -14,6 +14,7 @@
 #include <time.h>
 #include <errno.h>
 #include <assert.h>
+#include <functional>
 
 #include "tsThreadServices.h"
 
@@ -30,7 +31,6 @@ namespace Threads
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
 // This is a c-function that is used to execute the thread function of 
 // a base thread object. It is passed to CreateThread to indirectly call
 // the thread function because CreateThread can't use member function
@@ -41,6 +41,20 @@ void* BaseThread_Execute (void* argument)
    BaseThread* someThread = (BaseThread*)argument;
    someThread->threadFunction();
    return 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a c-function that is called if a thread is cancelled. It calls
+// the thread exit function.
+
+void BaseThread_Cleanup(void* argument)
+{
+   BaseThread* someThread = (BaseThread*)argument;
+   TS::print(1, "threadExitFunction from cleanup BEGIN");
+   someThread->threadExitFunction();
+   TS::print(1, "threadExitFunction from cleanup END");
 }
 
 //******************************************************************************
@@ -246,6 +260,10 @@ void BaseThread::threadFunction()
    // run function.
    mThreadRunProcessor = getThreadProcessorNumber();
 
+   // Push the thread cleanup function. This is called if a thread is 
+   // cancelled. It calls the thread exit function.
+   pthread_cleanup_push(BaseThread_Cleanup, this);
+
    // Thread execution
    try
    {
@@ -281,11 +299,11 @@ void BaseThread::threadFunction()
       // Exception section, overload provided by inheritors
       threadExceptionFunction(aStr);
    }
-   catch (...)
-   {
-      // Exception section, overload provided by inheritors
-      threadExceptionFunction("UNKNOWN");
-   }
+
+   // Pop the thread cleanup function without executing it. This is the
+   // normal execution path, where the thread is cancelled. If the thread
+   // is cancelled, this does not execute.
+   pthread_cleanup_pop(0);
 
    // Set the run state.
    mThreadRunState = cThreadRunState_Terminated;

@@ -85,6 +85,10 @@ void TestThread::shutdownThread()
 {
    BaseClass::shutdownThreadPrologue();
 
+   BaseClass::forceTerminateThread();
+   BaseClass::waitForThreadTerminate();
+   return;
+
    BaseClass::mTerminateFlag = true;
    mWaitable.postSemaphore();
    BaseClass::waitForThreadTerminate();
