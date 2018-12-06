@@ -26,8 +26,8 @@ TestThread::TestThread()
    BaseClass::setThreadPriorityHigh();
 
    mTimerPeriod = gThreadParms.mTimerThreadPeriod;
-   mTimerPeriod = 0;
    mTimerPeriod = 4000;
+   mTimerPeriod = 0;
    mTPFlag = false;
 }
 
