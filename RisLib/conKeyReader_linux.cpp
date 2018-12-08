@@ -61,6 +61,11 @@ KeyReader::KeyReader()
 
 struct termios gKeyReaderOriginalTermios;
 
+void restore_term_settings()
+{
+   tcsetattr(STDIN_FILENO, TCSAFLUSH, &gKeyReaderOriginalTermios);
+}
+
 void KeyReader::initialize()
 {
    tcgetattr(STDIN_FILENO, &gKeyReaderOriginalTermios);
@@ -69,6 +74,7 @@ void KeyReader::initialize()
    cfmakeraw(&tNewTermios);
    tNewTermios.c_oflag = gKeyReaderOriginalTermios.c_oflag;
    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tNewTermios);
+   atexit(restore_term_settings);
 }
 
 void KeyReader::finalize()

@@ -44,7 +44,7 @@ void print(int aLevel, const char* aFormat, ...)
    //*************************************************************************
    // Guard against having too many prints that are at or above level 4.
 
-   if (aLevel >= 4)
+   if (aLevel >= 4 && false)
    {
       // Increment.
       tls()->mPrintCount4++;
