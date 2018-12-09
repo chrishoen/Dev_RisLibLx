@@ -32,15 +32,26 @@ static char* r_myStrtok(char* aString,char* aDelimiters,int* aIndexPtr);
 
 CmdLineCmd::CmdLineCmd()
 {
-   mGoodCmd=false;
-   strcpy(mDelimiters," \t");
+   reset();
+}
 
-   for (int i=0;i<MaxNumOfArgs;i++)
+void CmdLineCmd::reset()
+{
+   mGoodCmd = false;
+   strcpy(mDelimiters, " \t");
+
+   for (int i = 0; i < MaxNumOfArgs; i++)
    {
       mArgPtr[i] = &mArgStore[i][0];
    }
 
    mNestedAnchor = 0;
+}
+
+CmdLineCmd::CmdLineCmd(const char* aCommandLine)
+{
+   reset();
+   parseCmdLine(aCommandLine);
 }
 
 //******************************************************************************
@@ -51,7 +62,7 @@ CmdLineCmd::CmdLineCmd()
 //******************************************************************************
 // Parse command line string into command and argument members.
 
-void CmdLineCmd::parseCmdLine(char* aCommandLine)
+void CmdLineCmd::parseCmdLine(const char* aCommandLine)
 {
    //---------------------------------------------------------------------------
    // Locals
@@ -120,7 +131,7 @@ void CmdLineCmd::parseCmdLine(char* aCommandLine)
    if (mArgNum == 0) return;
 
    int tCmdLength = (int)strlen(mArgPtr[0]);
-   char* tArgWholePtr = &aCommandLine[0] + tCmdLength + 1;
+   const char* tArgWholePtr = &aCommandLine[0] + tCmdLength + 1;
    my_strncpy(mArgWhole, tArgWholePtr, 200);
 }
 

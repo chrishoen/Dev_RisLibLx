@@ -68,6 +68,8 @@ public:
 
    // Constructor
    CmdLineCmd();
+   CmdLineCmd(const char* aCommandLine);
+   void reset();
 
    //***************************************************************************
    //***************************************************************************
@@ -77,7 +79,7 @@ public:
    // Parse a command line string into the command object.
    // This inputs a command line string and parses it into the command and
    // argument members which can then be accessed via the extraction methods.
-   void parseCmdLine (char* aCommandLine);
+   void parseCmdLine (const char* aCommandLine);
 
    //***************************************************************************
    //***************************************************************************
