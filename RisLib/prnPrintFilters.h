@@ -126,6 +126,8 @@ namespace Prn
    static const int  Show2             = 106;
    static const int  Show3             = 107;
    static const int  Show4             = 108;
+   static const int  Show5             = 109;
+   static const int  Show6             = 110;
 
    static const int  CalcInit1         = 200;
    static const int  CalcInit2         = 201;
