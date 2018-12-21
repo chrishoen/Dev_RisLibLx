@@ -30,17 +30,30 @@ void Console::resetVariables()
 {
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 void Console::initialize()
 {
+   // Initialize ncurses.
+   initscr();
+   cbreak();
+   noecho();
+   keypad(stdscr, TRUE);
 }
 
 void Console::finalize()
 {
+   // Finalize ncurses.
+   endwin();
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 int Console::readOne()
 {
-   return 0;
+   return getch();
 }
 void Console::writeString(const char* aString)
 {
@@ -53,7 +66,7 @@ void Console::writeString(const char* aString)
 
 void Console::doTestLoop1()
 {
-   Prn::print(Prn::View11, "doTestLoop1****************************");
+   Prn::print(Prn::View11, "Console::doTestLoop1****************************");
 
    while (true)
    {

@@ -19,7 +19,6 @@ void main_initialize(int argc,char** argv)
    // Initialize print facility
    Prn::resetPrint();
    Prn::useConsole(1);
-   Prn::useConsole(2);
    Prn::initializePrint();
 
    // Initialize print filters
@@ -35,15 +34,10 @@ void main_initialize(int argc,char** argv)
 
    Prn::setFilter(Prn::View11,      true, 1);
    Prn::setFilter(Prn::View12,      true, 1);
-   Prn::setFilter(Prn::View13,      false,1);
+   Prn::setFilter(Prn::View13,      true, 1);
    Prn::setFilter(Prn::View14,      true, 1);
-   Prn::setFilter(Prn::View21,      true, 2);
-   Prn::setFilter(Prn::View22,      true, 2);
 
-   Prn::setFilter(Prn::View23,      true, 2);
-   Prn::setFilter(Prn::View24,      true, 2);
-
-   Prn::print(0,"Console Test*******************************************BEGIN");
+   Prn::print(0,"NCurses*******************************************BEGIN");
 
 }
 
@@ -54,7 +48,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"Console Test*******************************************END");
+   Prn::print(0,"NCurses*******************************************END");
 
    // Close print
    Prn::finalizePrint();
