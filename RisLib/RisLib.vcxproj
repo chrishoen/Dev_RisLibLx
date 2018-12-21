@@ -19,10 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="conInputHistory_linux.cpp" />
-    <ClCompile Include="conInputReader_linux.cpp" />
-    <ClCompile Include="conInput_linux.cpp" />
-    <ClCompile Include="conKeyReader_linux.cpp" />
     <ClCompile Include="logFiles.cpp" />
     <ClCompile Include="my_functions.cpp" />
     <ClCompile Include="prnPrintFilterTable.cpp" />
@@ -80,10 +76,6 @@
     <ClCompile Include="tsThreadServices_tls.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="conInput.h" />
-    <ClInclude Include="conInputHistory_linux.h" />
-    <ClInclude Include="conInputReader_linux.h" />
-    <ClInclude Include="conKeyReader_linux.h" />
     <ClInclude Include="logFiles.h" />
     <ClInclude Include="my_defs.h" />
     <ClInclude Include="my_functions.h" />

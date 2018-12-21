@@ -13,7 +13,6 @@
 #include "my_functions.h"
 #include "tsThreadServices.h"
 #include "prnPrint.h"
-#include "conInput.h"
 
 #define  _RISCMDLINECONSOLE_CPP_
 #include "risCmdLineConsole.h"
@@ -39,14 +38,11 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
    TS::print(1, "");
    TS::print(1, "Command Line Executive BEGIN");
 
-   // Initialize console input.
-   Con::initializeInput();
-
    // Reset the executive.
    aExec->reset();
 
    // Locals.
-   char tCommandLine[Con::cMaxStringSize];
+   char tCommandLine[200];
    CmdLineCmd  tCmd;
 
    //***************************************************************************
@@ -56,8 +52,19 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 
    while(true)
    {
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
       // Read console input.
-      Con::doReadInputString(tCommandLine);
+
+      if (fgets(tCommandLine, 200, stdin) == 0)
+      {
+         TS::print(1, "Command Line Executive END");
+         return;
+      }
+
+      // Remove cr/lf at end of line.
+      my_trimCRLF(tCommandLine);
 
       //************************************************************************
       //************************************************************************
@@ -66,21 +73,22 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
 
       if (strlen(tCommandLine)==0)
       {
+         // Ignore empty command.
       }
-      else if (strcmp(tCommandLine, "enter") == 0)
+      else if (strcmp(tCommandLine, "e") == 0)
       {
-      }
-      else if (strcmp(tCommandLine, "escape") == 0)
-      {
+         // Exit.
          break;
       }
-      else if (strcmp(tCommandLine, "alt_p") == 0)
+      else if (strcmp(tCommandLine, "o") == 0)
       {
-         Prn::unsuppressPrint();
-      }
-      else if (strcmp(tCommandLine, "alt_o") == 0)
-      {
+         // Turn off console prints.
          Prn::suppressPrint();
+      }
+      else if (strcmp(tCommandLine, "p") == 0)
+      {
+         // Turn on console prints.
+         Prn::unsuppressPrint();
       }
 
       //************************************************************************
@@ -121,7 +129,6 @@ void CmdLineConsole::execute (BaseCmdLineExec* aExec)
    }
 
    // Done.
-   Con::finalizeInput();
    TS::print(1, "Command Line Executive END");
    return;
 }
