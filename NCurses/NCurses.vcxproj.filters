@@ -4,11 +4,11 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainInit.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="conInputTest_linux.cpp" />
+    <ClCompile Include="conConsole_linux.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainInit.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="conInputTest_linux.h" />
+    <ClInclude Include="conConsole.h" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 #include "MainInit.h"
 
-#include "conInputTest_linux.h"
+#include "conConsole.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -22,15 +22,15 @@ int main(int argc,char** argv)
 
    if (tCode == 1)
    {
-      Con::gInputTest.initialize();
-      Con::gInputTest.doTestLoop1();
-      Con::gInputTest.finalize();
+      Con::gConsole.initialize();
+      Con::gConsole.doTestLoop1();
+      Con::gConsole.finalize();
    }
    else if (tCode == 2)
    {
-      Con::gInputTest.initialize();
-      Con::gInputTest.doTestLoop2();
-      Con::gInputTest.finalize();
+      Con::gConsole.initialize();
+      Con::gConsole.doTestLoop2();
+      Con::gConsole.finalize();
    }
 
    main_finalize();

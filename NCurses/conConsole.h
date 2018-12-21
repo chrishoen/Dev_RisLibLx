@@ -1,15 +1,12 @@
 #pragma once
 
 /*==============================================================================
-InputTest Services.
+Console Services.
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-#include "conKeyReader_linux.h"
-#include "conInputHistory_linux.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -23,7 +20,7 @@ namespace Con
 //******************************************************************************
 // This class provides global program console i/o facility.
 
-class InputTest
+class Console
 {
 public:
    //***************************************************************************
@@ -38,21 +35,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // Keyboard input.
-   KeyRecord mKeyIn;
-
-   // Cursor postion.
-   int mCursor;
-
-   // Input string.
-   char mInputString[cMaxStringSize];
-   int mInputLength;
-
-   // Output string.
-   char mOutputString[cMaxStringSize];
-
-   // Input string history.
-   InputHistory mInputHistory;
 
    //***************************************************************************
    //***************************************************************************
@@ -60,7 +42,7 @@ public:
    // Methods.
 
    // Constructor.
-   InputTest();
+   Console();
    void resetVariables();
 
    // Initialize.
@@ -81,33 +63,8 @@ public:
    //***************************************************************************
    // Methods.
 
-   void onKey_Enter();
-   void onKey_BackSpace();
-   void onKey_Delete();
-   void onKey_LeftArrow();
-   void onKey_RightArrow();
-   void onKey_UpArrow();
-   void onKey_DownArrow();
-   void onKey_Home();
-   void onKey_End();
-   void onKey_Insert();
-   void onKey_PageUp();
-   void onKey_PageDown();
-   void onKey_Printable();
-   void onKey_Control();
-   void onKey_Alt();
-   void onKey_Function();
-   void onKey_Escape();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Write the input string to the console output and position the cursor.
-   // This takes mInputString and mCursor and echos to the console output
-   // appropriately.
-   void echoInput();
+   int readOne();
+   void writeString(const char* aString);
 };
 
 //******************************************************************************
@@ -115,10 +72,10 @@ public:
 //******************************************************************************
 // Global singular instance.
 
-#ifdef _CONINPUTTEST_CPP_
-          InputTest gInputTest;
+#ifdef _CONCONSOLE_CPP_
+          Console gConsole;
 #else
-   extern InputTest gInputTest;
+   extern Console gConsole;
 #endif
 
 //******************************************************************************
