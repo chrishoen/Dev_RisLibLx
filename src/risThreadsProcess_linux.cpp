@@ -6,12 +6,7 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include <pthread.h>
-#include <sched.h>
-#include <unistd.h>
-#include <errno.h>
-#include <assert.h>
-
+#include <signal.h>
 #include <pthread.h>
 #include <sched.h>
 #include <semaphore.h>
@@ -50,6 +45,8 @@ int  getProcessTimerResolution()
 
 void enterProcessHigh()
 {
+   signal(SIGPIPE, SIG_IGN);
+
    return;
    sched_param param;
    param.sched_priority = sched_get_priority_max(SCHED_FIFO);

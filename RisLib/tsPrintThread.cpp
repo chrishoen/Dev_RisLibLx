@@ -111,6 +111,24 @@ void PrintThread::threadInitFunction()
 
 void  PrintThread::threadExitFunction()
 {
+   // Print any remaining strings. 
+   while (true)
+   {
+      // Try to read a string from the queue.
+      if (PrintString* tString = (PrintString*)mStringQueue.tryRead())
+      {
+         // print the string and then delete it.
+         printString(tString);
+      }
+      else
+      {
+         break;
+      }
+   }
+
+   // Disable prints.
+   gShare.mPrintEnableFlag = false;
+
    // Finalize the string queue.
    mStringQueue.finalize();
 

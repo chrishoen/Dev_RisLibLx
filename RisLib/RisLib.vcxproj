@@ -56,6 +56,7 @@
     <ClCompile Include="risSerialSettings.cpp" />
     <ClCompile Include="risSockets_linux.cpp" />
     <ClCompile Include="risStatistics.cpp" />
+    <ClCompile Include="risThreadsNotify.cpp" />
     <ClCompile Include="risThreadsPriorities_linux.cpp" />
     <ClCompile Include="risThreadsProcess_linux.cpp" />
     <ClCompile Include="risThreadsQCallThread.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="risSerialSettings.h" />
     <ClInclude Include="risSockets.h" />
     <ClInclude Include="risStatistics.h" />
+    <ClInclude Include="risThreadsNotify.h" />
     <ClInclude Include="risThreadsPriorities.h" />
     <ClInclude Include="risThreadsProcess.h" />
     <ClInclude Include="risThreadsQCall.h" />

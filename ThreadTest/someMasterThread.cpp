@@ -103,16 +103,15 @@ void MasterThread::executeTest1(int aSource, int aCode)
    {
       Prn::print(Prn::View22, "MasterThread::executeTest1 BEGIN", aCode);
 
-      BaseClass::resetNotify();
-      Ris::Threads::TwoThreadNotify tNotify(this, 1);
-      gSlaveThread->mWorkRequestQCall(aCode, tNotify);
-      BaseClass::waitForNotify(-1, 1);
+      mNotify.setMaskOne("SlaveCompletion", 1);
+      gSlaveThread->mWorkRequestQCall(aCode, Ris::Threads::NotifyWrapper(&mNotify, 1));
+      mNotify.wait(-1);
 
       Prn::print(Prn::View22, "MasterThread::executeTest1 END");
    }
-   catch (int aStatus)
+   catch (int aException)
    {
-      Prn::print(0, "Exception MasterThread::executeTest2 ABORTED  %d", aStatus);
+      Prn::print(Prn::View11, "EXCEPTION TestQCallThread::executeTest1 %d %s", aException, mNotify.mException);
    }
 
    if (gThreadParms.mShowCode == 1 || aSource == 7)

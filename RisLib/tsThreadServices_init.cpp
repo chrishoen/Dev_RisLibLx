@@ -75,9 +75,6 @@ void finalize()
    TS::print(1, "");
    TS::print(1, "ThreadServices finalize");
 
-   // Disable prints.
-   gShare.mPrintEnableFlag = false;
-
    // Let things settle.
 // Ris::Threads::threadSleep(500);
 

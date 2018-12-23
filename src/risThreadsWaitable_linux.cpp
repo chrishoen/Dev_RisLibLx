@@ -33,12 +33,12 @@ class Waitable::Specific
 {
 public:
    int mTimerFd;
-   int mEventFd;
+   int mSemaphoreFd;
 
    Specific()
    {
       mTimerFd = 0;
-      mEventFd = 0;
+      mSemaphoreFd = 0;
    }
 };
 
@@ -52,7 +52,7 @@ Waitable::Waitable()
    // Initialize members.
    mTimerCount = 0;
    mWasTimerFlag = false;
-   mWasEventFlag = false;
+   mWasSemaphoreFlag = false;
    mValidFlag = false;
 
    // Create new specific implementation.
@@ -75,7 +75,7 @@ void Waitable::initialize (int aTimerPeriod)
    // Initialize variables.
    mTimerCount = 0;
    mWasTimerFlag = false;
-   mWasEventFlag = false;
+   mWasSemaphoreFlag = false;
 
    // If using the timer.
    if (aTimerPeriod > 0)
@@ -102,8 +102,8 @@ void Waitable::initialize (int aTimerPeriod)
       mSpecific->mTimerFd = -1;
    }
 
-   // Create the event.
-   mSpecific->mEventFd = eventfd(0, EFD_SEMAPHORE);
+   // Create the semaphore.
+   mSpecific->mSemaphoreFd = eventfd(0, EFD_SEMAPHORE);
 
    // Set valid.
    mValidFlag = true;
@@ -118,12 +118,12 @@ void Waitable::finalize()
    // Guard.
    if (!mValidFlag) return;
 
-   // Close the timer and event.
+   // Close the timer and semaphore.
    close(mSpecific->mTimerFd);
-   close(mSpecific->mEventFd);
+   close(mSpecific->mSemaphoreFd);
 
    mSpecific->mTimerFd = 0;
-   mSpecific->mEventFd = 0;
+   mSpecific->mSemaphoreFd = 0;
 
    // Set invalid.
    mValidFlag = true;
@@ -132,25 +132,25 @@ void Waitable::finalize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Wait for timer or event.
+// Wait for timer or semaphore.
 
-void Waitable::waitForTimerOrEvent()
+void Waitable::waitForTimerOrSemaphore()
 {
    // Reset variables.
    mWasTimerFlag = false;
-   mWasEventFlag = false;
+   mWasSemaphoreFlag = false;
 
    // Guard.
    if (!mValidFlag) return;
 
-   TS::print(5, "Waitable waitForTimerOrEvent*******************************BEGIN");
+   TS::print(5, "Waitable waitForTimerOrSemaphore*******************************BEGIN");
 
-   // Add the timer and event fds to a read set.
+   // Add the timer and semaphore fds to a read set.
    int tRet;
    fd_set  tReadSet;
    FD_ZERO(&tReadSet);
    FD_SET(mSpecific->mTimerFd, &tReadSet);
-   FD_SET(mSpecific->mEventFd, &tReadSet);
+   FD_SET(mSpecific->mSemaphoreFd, &tReadSet);
 
    // Select on the readset. This blocks until one of the handles is readable.
    TS::print(5, "Waitable wait select");
@@ -169,39 +169,39 @@ void Waitable::waitForTimerOrEvent()
       mWasTimerFlag = true;
    }
 
-   // Test if the event is ready to be read.
-   if (FD_ISSET(mSpecific->mEventFd, &tReadSet))
+   // Test if the semaphore is ready to be read.
+   if (FD_ISSET(mSpecific->mSemaphoreFd, &tReadSet))
    {
-      // Read the event. Because of the select this should not be blocked.
-      TS::print(5, "Waitable wait read event>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      // Read the semaphore. Because of the select this should not be blocked.
+      TS::print(5, "Waitable wait read semaphore>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       unsigned long long tValue = 0;
-      read(mSpecific->mEventFd, &tValue, sizeof(tValue));
+      read(mSpecific->mSemaphoreFd, &tValue, sizeof(tValue));
       // Set the flag.
-      mWasEventFlag = true;
+      mWasSemaphoreFlag = true;
    }
 
-   TS::print(5, "Waitable waitForTimerOrEvent*******************************END");
+   TS::print(5, "Waitable waitForTimerOrSemaphore*******************************END");
 }
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 bool Waitable::wasTimer() { return mWasTimerFlag; }
-bool Waitable::wasEvent() { return mWasEventFlag; }
+bool Waitable::wasSemaphore() { return mWasSemaphoreFlag; }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Post to the event. This will unblock any pending waits.
+// Post to the semaphore. This will unblock any pending waits.
 
-void Waitable::postEvent()
+void Waitable::postSemaphore()
 {
    // Guard.
    if (!mValidFlag) return;
 
-   // Write to the event semaphore, increment by one.
+   // Write to the semaphore, increment by one.
    unsigned long long tValue = 1;
-   write(mSpecific->mEventFd, &tValue, sizeof(tValue));
+   write(mSpecific->mSemaphoreFd, &tValue, sizeof(tValue));
 }
 
 //******************************************************************************

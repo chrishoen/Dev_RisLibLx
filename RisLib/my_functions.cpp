@@ -124,6 +124,11 @@ void my_trimCRLF(char* aString)
    // Remove cr/lf at end of line
    unsigned tStringLen = (unsigned)strlen(aString);
 
+   if (tStringLen == 1)
+   {
+      if (aString[0] == 0xa) aString[0] = 0;
+      if (aString[0] == 0xd) aString[0] = 0;
+   }
    if (tStringLen >= 2)
    {
       if (aString[tStringLen - 1] == 0xa)

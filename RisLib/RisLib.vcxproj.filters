@@ -56,6 +56,7 @@
     <ClCompile Include="risThreadsWaitable_linux.cpp" />
     <ClCompile Include="tsDefs.cpp" />
     <ClCompile Include="risThreadsPriorities_linux.cpp" />
+    <ClCompile Include="risThreadsNotify.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logFiles.h" />
@@ -119,5 +120,6 @@
     <ClInclude Include="risThreadsWaitable.h" />
     <ClInclude Include="tsDefs.h" />
     <ClInclude Include="risThreadsPriorities.h" />
+    <ClInclude Include="risThreadsNotify.h" />
   </ItemGroup>
 </Project>

@@ -70,7 +70,7 @@ void SlaveThread::executeOnTimer(int aCurrentTimeCount)
 //******************************************************************************
 //******************************************************************************
 
-void SlaveThread::executeWorkRequest (int aParm1,Ris::Threads::TwoThreadNotify aCompletionNotify)
+void SlaveThread::executeWorkRequest (int aParm1,Ris::Threads::NotifyWrapper aCompletionNotify)
 {
    int tDelay = mRandomDis(mRandomGen);
    BaseClass::threadSleep(tDelay);

@@ -10,7 +10,7 @@
 #include <random>
 
 #include "risThreadsQCallThread.h"
-#include "risThreadsTwoThread.h"
+#include "risThreadsNotify.h"
 
 namespace Some
 {
@@ -76,10 +76,10 @@ public:
    // Methods.
 
    // Work request qcall from master thread.
-   Ris::Threads::QCall2<int,Ris::Threads::TwoThreadNotify> mWorkRequestQCall;
+   Ris::Threads::QCall2<int,Ris::Threads::NotifyWrapper> mWorkRequestQCall;
 
    // Work request function. This is bound to the qcall.
-   void executeWorkRequest (int aParm1,Ris::Threads::TwoThreadNotify aCompletionNotify);
+   void executeWorkRequest (int aParm1,Ris::Threads::NotifyWrapper aCompletionNotify);
 };
 
 //******************************************************************************
