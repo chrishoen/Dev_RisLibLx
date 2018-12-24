@@ -313,7 +313,7 @@ void Notify::testException()
    {
       clearFlags();
       mExceptionCode = cAbortException;
-      sprintf(mException, "aborted");
+      sprintf(mException, "aborted %s %d", mLabel, mErrorCode);
       throw cAbortException;
    }
 
@@ -331,7 +331,7 @@ void Notify::testException()
    {
       clearFlags();
       mExceptionCode = cErrorException;
-      sprintf(mException, "error %s %d", mLabel,mErrorCode);
+      sprintf(mException, "error %s %d", mLabel, mErrorCode);
       throw cErrorException;
    }
 }
@@ -371,8 +371,11 @@ void Notify::waitForTimer(int aTimeout)
    // Reset all variables.
    reset();
 
-   // Wait for the semaphore to timeout.
-   wait(aTimeout);
+   // Set the label.
+   my_strncpy(mLabel, "waitForTimer", cMaxStringSize);
+
+   // Wait for the event. Only an abort should signal the event. 
+   mEventSem.get(aTimeout);
 
    // Test for exception conditions.
    testException();
