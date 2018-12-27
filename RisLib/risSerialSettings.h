@@ -67,7 +67,7 @@ public:
    Ris::Threads::QCall1<std::string*> mRxStringQCall;
 
    // Receive string callback function.
-   std::function<void(std::string*)> mRxStringFunction;
+   std::function<void(std::string*)> mRxStringCallback;
 
    //***************************************************************************
    //***************************************************************************
