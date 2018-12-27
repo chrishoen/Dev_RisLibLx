@@ -9,6 +9,7 @@ Byte content message serial port class.
 //******************************************************************************
 
 #include <string>
+#include <functional>
 
 #include "risByteContent.h"
 #include "risByteMsgMonkey.h"
@@ -64,6 +65,9 @@ public:
 
    // Receive string callback qcall.
    Ris::Threads::QCall1<std::string*> mRxStringQCall;
+
+   // Receive string callback function.
+   std::function<void(std::string*)> mRxStringFunction;
 
    //***************************************************************************
    //***************************************************************************
