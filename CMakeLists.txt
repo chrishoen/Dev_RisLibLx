@@ -24,6 +24,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-function")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-value")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-variable")
 
+add_definitions(-DNDEBUG)
+
 add_subdirectory ("AlphaTest")
 add_subdirectory ("CancelTest")
 add_subdirectory ("CmdLineTest1")
