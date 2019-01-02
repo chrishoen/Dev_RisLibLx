@@ -11,9 +11,9 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(RisLib Threads::Threads)
 
-install(FILES ${INC_FILES} DESTINATION "/var/tmp/install/include/RisLib")
-install(FILES "/var/tmp/Dev_RisLibLx/build/RisLib/libRisLib.a" DESTINATION "/var/tmp/install/lib")
-#install(TARGETS RisLib DESTINATION "/var/tmp/install/lib")
-install(FILES RisLibConfig.cmake DESTINATION "/var/tmp/install/lib/cmake/RisLib")
+install(FILES ${INC_FILES} DESTINATION "/usr/local/include/RisLib")
+install(FILES "/var/tmp/Dev_RisLibLx/build/RisLib/libRisLib.a" DESTINATION "/usr/local/lib")
+#install(TARGETS RisLib DESTINATION "//usr/local/lib")
+install(FILES RisLibConfig.cmake DESTINATION "/usr/local/lib/cmake/RisLib")
 
 
