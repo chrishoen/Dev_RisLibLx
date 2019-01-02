@@ -2,6 +2,8 @@
 
 project ("Dev_RisLibLx")
 
+set(CMAKE_INSTALL_PREFIX "/var/tmp/install")
+
 set(CMAKE_CXX_FLAGS "")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")

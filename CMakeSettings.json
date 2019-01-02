@@ -10,7 +10,7 @@
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\build",
       "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\install",
       "remoteBuildRoot": "/var/tmp/${name}/build",
-      "remoteInstallRoot": "/var/tmp/${name}/install",
+      "remoteInstallRoot": "/var/tmp/install",
       "remoteCopySources": true,
       "remoteCopySourcesOutputVerbosity": "Normal",
       "remoteCopySourcesConcurrentCopies": "10",
