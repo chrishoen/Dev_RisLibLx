@@ -129,6 +129,11 @@ namespace Prn
    static const int  Show5             = 109;
    static const int  Show6             = 110;
 
+   static const int  State1            = 111;
+   static const int  State2            = 112;
+   static const int  State3            = 113;
+   static const int  State4            = 114;
+
    static const int  CalcInit1         = 200;
    static const int  CalcInit2         = 201;
    static const int  CalcInit3         = 202;
