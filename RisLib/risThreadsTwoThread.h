@@ -141,7 +141,7 @@ public:
 
    // Launch, shutdown the two threads.
    void launchThreads(); 
-   void shutdownThreads();
+   virtual void shutdownThreads();
 
    //***************************************************************************
    //***************************************************************************
