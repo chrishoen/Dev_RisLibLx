@@ -89,7 +89,7 @@ class AlphaResetClass
 public:
    AlphaResetClass()
    {
-      strcpy(rAlphaDirPath, "/home/linaro/alpha/");
+      strcpy(rAlphaDirPath, "/opt/alpha/");
    }
 };
 
